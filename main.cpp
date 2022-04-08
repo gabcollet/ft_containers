@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/08 16:56:52 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/08 17:24:26 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <vector>
 #include "vector.hpp"
 #include "iterator.hpp"
+#include "utils.hpp"
 
 int main(){
 

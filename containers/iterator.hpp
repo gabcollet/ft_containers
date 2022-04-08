@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 11:24:59 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/08 16:45:22 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/08 17:24:40 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,52 +73,4 @@ namespace ft
 		typedef _Tp*									pointer;
 		typedef _Tp&									reference;
 	};
-
-	//* ============================= Is_integral =============================
-	
-	template < bool _Value, typename _Tp >
-	struct result_type
-	{
-		typedef _Tp			type;
-		static const bool	value = _Value;
-	};
-	
-	template < typename >
-	struct _is_integral_result : public result_type<false, bool> {};
-	
-	template <>
-	struct _is_integral_result<bool> : public result_type<true, bool> {};
-	
-	template <>
-	struct _is_integral_result<char> : public result_type<true, char> {};
-	
-	template <>
-	struct _is_integral_result<signed char> : public result_type<true, signed char> {};
-	
-	template <>
-	struct _is_integral_result<unsigned char> : public result_type<true, unsigned char> {};
-	
-	template <>
-	struct _is_integral_result<wchar_t> : public result_type<true, wchar_t> {};
-	
-	template <>
-	struct _is_integral_result<short> : public result_type<true, short> {};
-	
-	template <>
-	struct _is_integral_result<unsigned short> : public result_type<true, unsigned short> {};
-	
-	template <>
-	struct _is_integral_result<int> : public result_type<true, int> {};
-	
-	template <>
-	struct _is_integral_result<unsigned int> : public result_type<true, unsigned int> {};
-
-	template <>
-	struct _is_integral_result<long> : public result_type<true, long> {};
-	
-	template <>
-	struct _is_integral_result<unsigned long> : public result_type<true, unsigned long> {};
-
-	template <typename _Tp>
-	struct is_integral : public _is_integral_result<_Tp> {};
 }
