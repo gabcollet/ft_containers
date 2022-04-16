@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/04/07 22:49:33 by gcollet          ###   ########.fr        #
+#    Updated: 2022/04/16 16:03:22 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,8 @@ $(OBJS_PATH):
 
 all:	$(NAME)
 
-debug:	CFLAGS += -g -fstandalone-debug  -DDEBUG=1 -fno-limit-debug-info
+debug:	CFLAGS = -Wall -Werror -Wextra -Wpedantic -std=c++98 -g\
+				-fstandalone-debug -DDEBUG=1 -fno-limit-debug-info
 debug:	$(NAME)
 
 clean:

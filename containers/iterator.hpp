@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 11:24:59 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/11 16:12:47 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/12 13:49:53 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,12 @@ namespace ft
         typedef typename _traits_type::pointer          pointer;
         typedef typename _traits_type::reference        reference;
         
-        //Constructor
+        //Default Constructor
         normal_iterator() : _Elem(Iterator()) {}
+        
+        //Copy Constructor
         normal_iterator(const Iterator& elem) : _Elem(elem) {}
+        
         //iterator to const_iterator conversion
         template < typename Iter >
         normal_iterator(const normal_iterator<Iter, typename enable_if
@@ -142,7 +145,7 @@ namespace ft
         normal_iterator operator-(difference_type n) const
         { return normal_iterator(_Elem - n); }
        
-        const _Iterator& base() const { return _Elem; }
+        const Iterator& base() const { return _Elem; }
         
     };
     //non-member overloading operator
