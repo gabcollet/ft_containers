@@ -35,18 +35,28 @@ int main(){
 //	typedef ft::vector<std::string>::iterator stringIterator;
 
 	ft::vector<std::string> vector;
+	ft::vector<int> vector2;
 	ft::vector<std::string> vector_fill(5, "hello");
-//	ft::vector<std::string> vector_range(vector[0], vector[2]);
 //	ft::vector<std::string> vector_copy(vector_fill);
-	
 
-	vector.push_back("hello");
+    vector.push_back("hello");
 	vector.push_back(" ");
 	vector.push_back("world");
 	vector.push_back("!");
 
+    vector2.push_back(1);
+    vector2.push_back(2);
+    vector2.push_back(3);
+	vector2.push_back(4);
+
+    ft::vector<std::string> vector_range(&vector[0], &vector[3]);
+//    ft::vector<int> vector_range2(5, 3);
+
+
     printVector(vector);
+    printVector(vector2);
     printVector(vector_fill);
-//    printVector(vector_range);
-	return 0;
+    printVector(vector_range);
+//    printVector(vector_range2);
+    return 0;
 }

@@ -12,6 +12,35 @@
 
 #pragma once
 
+#include "iterator.hpp"
+
+static class nullptr_t
+{
+    public:
+        /*
+        ** @brief For conversion to any type
+        ** of null non-member pointer.
+        */
+        template<class T>
+        operator T*() const { return (0); }
+
+        /*
+        ** @brief For conversion to any type of null
+        ** member pointer.
+        */
+        template<class C, class T>
+        operator T C::*() const { return (0); }
+
+    private:
+
+        /*
+        ** @brief It's imposible to get an address of
+        ** a nullptr.
+        */
+        void operator&() const;
+
+} u_nullptr = {};
+
 namespace ft
 {
     //* ========================== Integral_constant ==========================
@@ -20,7 +49,7 @@ namespace ft
 	struct integral_constant 
 	{
 		typedef integral_constant   type;
-		typedef T                 value_type;
+		typedef T                   value_type;
 		static const bool           value = Val;
 	};
 
@@ -70,16 +99,16 @@ namespace ft
 
     //* ============================== enable_if ==============================
 
-    template < bool, typename >
+    template<bool B, class T = void >
     struct enable_if {};
 
-    template < typename T >
+    template<class T>
     struct enable_if<true, T>
-    { 
-        typedef T _type;
+    {
+        typedef T type;
     };
 
-     //* ============================== are_same ==============================
+    //* ============================== are_same ===============================
      
     template < typename, typename >
     struct are_same
@@ -94,4 +123,17 @@ namespace ft
         enum {_value = 1};
         typedef true_type _type;
     };
+
+    //* ================================ range ================================
+
+    template < typename InputIterator >
+    ptrdiff_t range (InputIterator first, InputIterator last)
+    {
+        ptrdiff_t n = 0;
+        while (first != last){
+            first++;
+            n++;
+        }
+        return (n);
+    }
 }

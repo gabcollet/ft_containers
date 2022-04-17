@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/16 11:27:14 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/17 11:10:57 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,57 @@ namespace ft
         explicit vector (const allocator_type& alloc = allocator_type()) :
             _alloc(alloc), _start(nullptr), _end(nullptr), _capacity(nullptr) {}
 
+        //empty constructor
+
+
         //fill constructor
         explicit vector (size_t n, const value_type& val = value_type(),
                           const allocator_type& alloc = allocator_type()) :
-            _alloc(alloc), _start(nullptr), _end(nullptr), _capacity(nullptr)
+            _alloc(alloc)
         {
-            for (size_t i = 0; i < n; i++)
-                push_back(val);
+            _start = _alloc.allocate(n);
+            _end = _start;
+            _capacity = _start + n;
+            for (size_t i = 0; i != n; i++){
+                _alloc.construct(_end, val);
+                _end++;
+            }
         }
 
         //range constructor
-/*        template < typename InputIterator >
-        vector (InputIterator first, InputIterator last,
+        template < typename InputIterator >
+        vector (InputIterator first,
+                typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type last,
                 const allocator_type& alloc = allocator_type()) :
-            _alloc(alloc), _start(nullptr), _end(nullptr), _capacity(nullptr)
+            _alloc(alloc)
         {
-            // Check whether it's an integral type.  If so, it's not an iterator.
-            typedef typename ft::is_integral<InputIterator>::type integral;
-
-        }*/
+            difference_type n = range(first, last);
+            _start = _alloc.allocate(n);
+            _end = _start;
+            _capacity = _start + n;
+            for (long i = 0; i != n; i++){
+                _alloc.construct(_end, *first++);
+                _end++;
+            }
+        }
 
         //copy constructor
 //        vector (const vector& x) {}
 
         //member overload
 //        vector& operator= (const vector& x) { return }
+
+        allocator_type get_allocator() const {return _alloc;}
+
+        //* ========================= Element access ==========================
+
+
+
+        //* ============================ Iterators ============================
+
+
+
+        //* ============================ Capacity =============================
 
         size_t size() const {return _end - _start;}
 
@@ -117,9 +143,5 @@ namespace ft
         pointer             _start;
         pointer             _end;
         pointer             _capacity;
-
-        //* ======================== Private functions ========================
-/*        template <typename Integer>
-        void _initialize_dispatch(Integer n, Integer value, true_type)*/
 	};
 }

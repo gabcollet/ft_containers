@@ -22,7 +22,7 @@ BLUE			=	\033[34;1m
 END				=	\033[0m
 
 CC 				=	clang++
-CFLAGS			=	-Wall -Werror -Wextra -Wpedantic -std=c++98 -O3
+CFLAGS			=	-Wall -Werror -Wextra -Wpedantic -std=c++98
 RM				=	rm -rf
 
 SRCS_FILES		=	main.cpp
@@ -43,8 +43,7 @@ $(OBJS_PATH):
 
 all:	$(NAME)
 
-debug:	CFLAGS = -Wall -Werror -Wextra -Wpedantic -std=c++98 -g\
-				-fstandalone-debug -DDEBUG=1 -fno-limit-debug-info
+debug:	CFLAGS += -g
 debug:	$(NAME)
 
 clean:
