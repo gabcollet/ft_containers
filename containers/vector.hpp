@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/17 11:10:57 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/19 14:36:28 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <memory>
 #include <cstddef>
-#include "iterator.hpp"
+#include <iterator.hpp>
 
 namespace ft
 {
@@ -39,21 +39,21 @@ namespace ft
 
         //* ========================= Member functions =========================
         //default constructor
-        explicit vector (const allocator_type& alloc = allocator_type()) :
-            _alloc(alloc), _start(nullptr), _end(nullptr), _capacity(nullptr) {}
+        vector() : _alloc(), _start(), _end(), _capacity() {}
 
         //empty constructor
-
+        explicit vector (const allocator_type& alloc) :
+            _alloc(alloc), _start(), _end(), _capacity() {}
 
         //fill constructor
-        explicit vector (size_t n, const value_type& val = value_type(),
+        explicit vector (size_type n, const value_type& val = value_type(),
                           const allocator_type& alloc = allocator_type()) :
             _alloc(alloc)
         {
             _start = _alloc.allocate(n);
             _end = _start;
             _capacity = _start + n;
-            for (size_t i = 0; i != n; i++){
+            for (size_type i = 0; i != n; i++){
                 _alloc.construct(_end, val);
                 _end++;
             }
@@ -62,22 +62,20 @@ namespace ft
         //range constructor
         template < typename InputIterator >
         vector (InputIterator first,
-                typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type last,
+                typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last,
                 const allocator_type& alloc = allocator_type()) :
-            _alloc(alloc)
+            _alloc(alloc), _start(), _end(), _capacity()
         {
-            difference_type n = range(first, last);
-            _start = _alloc.allocate(n);
-            _end = _start;
-            _capacity = _start + n;
-            for (long i = 0; i != n; i++){
-                _alloc.construct(_end, *first++);
-                _end++;
-            }
+            typedef typename iterator_traits<InputIterator>::iterator_category category;
+
+            _range_construct(first, last, category());
         }
 
         //copy constructor
-//        vector (const vector& x) {}
+        vector (const vector& x) : _alloc(x._alloc)
+        {
+            
+        }
 
         //member overload
 //        vector& operator= (const vector& x) { return }
@@ -85,6 +83,10 @@ namespace ft
         allocator_type get_allocator() const {return _alloc;}
 
         //* ========================= Element access ==========================
+
+        reference operator[] (size_type n) {return *(_start + n);}
+
+        const_reference  operator[] (size_type n) const {return *(_start + n);}
 
 
 
@@ -94,26 +96,27 @@ namespace ft
 
         //* ============================ Capacity =============================
 
-        size_t size() const {return _end - _start;}
+        size_type size() const {return _end - _start;}
 
-        size_t max_size() const {return _alloc.max_size();}
+        size_type max_size() const {return _alloc.max_size();}
 
-        size_t capacity() const {return _capacity - _start;}
+        size_type capacity() const {return _capacity - _start;}
 
-        void reserve (size_t n)
+        void reserve (size_type n)
         {
             if (n > max_size())
                 throw std::length_error("vector::reserve");
             if (n > capacity()){
                 pointer oldStart = _start;
                 pointer oldEnd = _end;
-                size_t oldCapacity = capacity();
+                size_type oldCapacity = capacity();
 
                 _start = _alloc.allocate(n);
                 _end = _start;
                 _capacity = _start + n;
                 while (oldStart != oldEnd){
                     _alloc.construct(_end, *oldStart);
+                    _alloc.destroy(oldStart);
                     _end++;
                     oldStart++;
                 }
@@ -121,13 +124,12 @@ namespace ft
             }
         }
 
-        reference operator[] (size_t n) {return *(_start + n);}
-        const_reference  operator[] (size_t n) const {return *(_start + n);}
+        //* ============================ Modifier =============================
 
         void push_back (const value_type& val)
         {
             if (_end == _capacity){
-                size_t newCapacity;
+                size_type newCapacity;
                 if (size() > 0)
                     newCapacity = size() * 2;
                 else
@@ -143,5 +145,27 @@ namespace ft
         pointer             _start;
         pointer             _end;
         pointer             _capacity;
+
+        //* ========================= range_construct =========================
+
+        template < typename InputIterator >
+        void _range_construct(InputIterator first, InputIterator last, std::input_iterator_tag)
+        {
+            for (; first != last; ++first)
+                push_back(*first);
+        }
+
+        template < typename ForwardIterator >
+        void _range_construct(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag)
+        {
+            difference_type n = std::distance(first, last);
+            _start = _alloc.allocate(n);
+            _end = _start;
+            _capacity = _start + n;
+            for (long i = 0; i != n; i++){
+                _alloc.construct(_end, *first++);
+                _end++;
+            }
+        }
 	};
 }

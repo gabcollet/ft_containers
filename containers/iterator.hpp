@@ -13,19 +13,10 @@
 #pragma once
 
 #include <cstddef>
-#include "utils.hpp"
+#include <utils.hpp>
 
 namespace ft
 {
-
-    //* ============================ Iterator tag =============================
-
-    struct input_iterator_tag {};
-    struct output_iterator_tag {};
-    struct forward_iterator_tag : public input_iterator_tag {};
-    struct bidirectional_iterator_tag : public forward_iterator_tag {};
-    struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-    
     //* ======================= Basic iterator template =======================
     
     template < typename Category, typename T, typename Distance = ptrdiff_t,
@@ -56,7 +47,7 @@ namespace ft
     template < typename T >
     struct iterator_traits<T*>
     {
-        typedef random_access_iterator_tag            iterator_category;
+        typedef std::random_access_iterator_tag            iterator_category;
         typedef T                                     value_type;
         typedef ptrdiff_t                             difference_type;
         typedef T*                                    pointer;
@@ -68,7 +59,7 @@ namespace ft
     template < typename T >
     struct iterator_traits<const T*>
     {
-        typedef random_access_iterator_tag            iterator_category;
+        typedef std::random_access_iterator_tag            iterator_category;
         typedef T                                     value_type;
         typedef ptrdiff_t                             difference_type;
         typedef T*                                    pointer;
@@ -80,10 +71,11 @@ namespace ft
     template < typename Iterator, typename Container >
     class normal_iterator
     {
-    protected:
+
+    private:
         Iterator                                        _Elem;
         typedef iterator_traits<Iterator>               _traits_type;
-        
+
     public:
         typedef Iterator                                iterator_type;
         typedef typename _traits_type::iterator_category iterator_category;
@@ -96,11 +88,11 @@ namespace ft
         normal_iterator() : _Elem(Iterator()) {}
         
         //Copy Constructor
-        normal_iterator(const Iterator& elem) : _Elem(elem) {}
+        explicit normal_iterator(const Iterator& elem) : _Elem(elem) {}
         
         //iterator to const_iterator conversion
         template < typename Iter >
-        normal_iterator(const normal_iterator<Iter, typename enable_if
+        explicit normal_iterator(const normal_iterator<Iter, typename enable_if
                         <(are_same<Iter, typename Container::pointer>::_value),
                         Container>::_type>& i) : _Elem(i.base()) {} 
 

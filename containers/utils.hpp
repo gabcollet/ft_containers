@@ -14,33 +14,6 @@
 
 #include "iterator.hpp"
 
-static class nullptr_t
-{
-    public:
-        /*
-        ** @brief For conversion to any type
-        ** of null non-member pointer.
-        */
-        template<class T>
-        operator T*() const { return (0); }
-
-        /*
-        ** @brief For conversion to any type of null
-        ** member pointer.
-        */
-        template<class C, class T>
-        operator T C::*() const { return (0); }
-
-    private:
-
-        /*
-        ** @brief It's imposible to get an address of
-        ** a nullptr.
-        */
-        void operator&() const;
-
-} u_nullptr = {};
-
 namespace ft
 {
     //* ========================== Integral_constant ==========================
@@ -99,13 +72,13 @@ namespace ft
 
     //* ============================== enable_if ==============================
 
-    template<bool B, class T = void >
+    template<bool B, typename T = void >
     struct enable_if {};
 
-    template<class T>
+    template<typename T>
     struct enable_if<true, T>
     {
-        typedef T type;
+        typedef T _type;
     };
 
     //* ============================== are_same ===============================
@@ -113,27 +86,14 @@ namespace ft
     template < typename, typename >
     struct are_same
     {
-        enum {_value = 0};
+        static const bool _value = false;
         typedef false_type _type;
     };
     
     template < typename T >
     struct are_same<T, T>
     {
-        enum {_value = 1};
+        static const bool _value = true;
         typedef true_type _type;
     };
-
-    //* ================================ range ================================
-
-    template < typename InputIterator >
-    ptrdiff_t range (InputIterator first, InputIterator last)
-    {
-        ptrdiff_t n = 0;
-        while (first != last){
-            first++;
-            n++;
-        }
-        return (n);
-    }
 }

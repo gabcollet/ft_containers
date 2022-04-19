@@ -6,15 +6,17 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/12 14:07:36 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/19 14:42:30 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <string>
-#include "vector.hpp"
-#include "iterator.hpp"
-#include "utils.hpp"
+#include <vector.hpp>
+#include <iterator.hpp>
+#include <utils.hpp>
+#include <istream>
+#include <sstream>
 
 template<typename T>
 void printVector(const ft::vector<T>& vector) {
@@ -33,10 +35,15 @@ int main(){
 	std::cout << "float: " << ft::is_integral<float>::value << std::endl; */
 
 //	typedef ft::vector<std::string>::iterator stringIterator;
+    std::istringstream commetuveux("string");
+    std::istreambuf_iterator<char> it(commetuveux),end;
 
 	ft::vector<std::string> vector;
+	ft::vector<char> vector3(it, end);
+    printVector(vector3);
 	ft::vector<int> vector2;
 	ft::vector<std::string> vector_fill(5, "hello");
+
 //	ft::vector<std::string> vector_copy(vector_fill);
 
     vector.push_back("hello");
@@ -49,13 +56,13 @@ int main(){
     vector2.push_back(3);
 	vector2.push_back(4);
 
-    ft::vector<std::string> vector_range(&vector[0], &vector[3]);
 //    ft::vector<int> vector_range2(5, 3);
 
 
     printVector(vector);
     printVector(vector2);
     printVector(vector_fill);
+    ft::vector<std::string> vector_range(&vector[0], &vector[3]);
     printVector(vector_range);
 //    printVector(vector_range2);
     return 0;
