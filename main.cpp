@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/19 14:42:30 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/19 14:48:25 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,36 +34,40 @@ int main(){
 	std::cout << "int: " << ft::is_integral<int>::value << std::endl;
 	std::cout << "float: " << ft::is_integral<float>::value << std::endl; */
 
-//	typedef ft::vector<std::string>::iterator stringIterator;
-    std::istringstream commetuveux("string");
-    std::istreambuf_iterator<char> it(commetuveux),end;
+//    std::istringstream commetuveux("string");
+//    std::istreambuf_iterator<char> it(commetuveux),end;
+//	ft::vector<char> vector3(it, end);
 
 	ft::vector<std::string> vector;
-	ft::vector<char> vector3(it, end);
-    printVector(vector3);
-	ft::vector<int> vector2;
-	ft::vector<std::string> vector_fill(5, "hello");
+//    printVector(vector3);
 
-//	ft::vector<std::string> vector_copy(vector_fill);
+//	ft::vector<int> vector2;
+//	ft::vector<std::string> vector_fill(5, "hello");
+
 
     vector.push_back("hello");
-	vector.push_back(" ");
-	vector.push_back("world");
-	vector.push_back("!");
+//	vector.push_back(" ");
+//	vector.push_back("world");
+//	vector.push_back("!");
 
-    vector2.push_back(1);
-    vector2.push_back(2);
-    vector2.push_back(3);
-	vector2.push_back(4);
+//    vector.clear();
+    vector.erase(vector.begin() + 1);
+//    vector.erase(vector.begin(), vector.end());
+//	ft::vector<std::string> vector_copy(vector);
+
+//    vector2.push_back(1);
+//    vector2.push_back(2);
+//    vector2.push_back(3);
+//	vector2.push_back(4);
 
 //    ft::vector<int> vector_range2(5, 3);
 
-
     printVector(vector);
-    printVector(vector2);
-    printVector(vector_fill);
-    ft::vector<std::string> vector_range(&vector[0], &vector[3]);
-    printVector(vector_range);
+//    printVector(vector2);
+//    printVector(vector_fill);
+//    ft::vector<std::string> vector_range(&vector[0], &vector[3]);
+//    printVector(vector_range);
+//    printVector(vector_copy);
 //    printVector(vector_range2);
     return 0;
 }

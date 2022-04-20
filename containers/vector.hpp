@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/19 14:36:28 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/19 16:15:52 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,18 @@ namespace ft
         }
 
         //copy constructor
-        vector (const vector& x) : _alloc(x._alloc)
+        vector (const vector& x) :
+            _alloc(x._alloc), _start(), _end(), _capacity()
         {
-            
+            typedef typename iterator_traits<vector::iterator>::iterator_category category;
+            _range_construct(x._start, x._end, category());
+        }
+
+        //destructor
+        ~vector()
+        {
+            clear();
+            _alloc.deallocate(_start, capacity());
         }
 
         //member overload
@@ -92,7 +101,13 @@ namespace ft
 
         //* ============================ Iterators ============================
 
+        iterator begin() {return iterator(_start);}
 
+        const_iterator begin() const {return const_iterator(_start);}
+
+        iterator end() {return iterator(_end);}
+
+        const_iterator end() const {return const_iterator(_end);}
 
         //* ============================ Capacity =============================
 
@@ -126,6 +141,8 @@ namespace ft
 
         //* ============================ Modifier =============================
 
+        void clear() {erase(begin(), end());}
+
         void push_back (const value_type& val)
         {
             if (_end == _capacity){
@@ -138,6 +155,39 @@ namespace ft
             }
             _alloc.construct(_end, val);
             _end++;
+        }
+
+        iterator erase (iterator position)
+        {
+            if (position == end())
+                return end();
+            pointer ptr_first = position.base();
+            _alloc.destroy(position.base());
+            ++position;
+            size_type size_right = _end - position.base();
+            for (size_type i = 0; i < size_right; i++){
+                _alloc.construct(ptr_first + i, *position.base());
+                _alloc.destroy(position.base());
+                ++position;
+            }
+            _end = ptr_first + size_right;
+            return iterator(ptr_first);
+        }
+
+        iterator erase (iterator first, iterator last)
+        {
+            pointer ptr_first = first.base();
+            for (; first != last; ++first) {
+                _alloc.destroy(first.base());
+            }
+            size_type size_right = _end - last.base();
+            for (size_type i = 0; i < size_right; i++){
+                _alloc.construct(ptr_first + i, *last.base());
+                _alloc.destroy(last.base());
+                ++last;
+            }
+            _end = ptr_first + size_right;
+            return iterator(ptr_first);
         }
 
     private:
