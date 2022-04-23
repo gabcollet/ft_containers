@@ -62,8 +62,8 @@ namespace ft
         typedef std::random_access_iterator_tag       iterator_category;
         typedef T                                     value_type;
         typedef ptrdiff_t                             difference_type;
-        typedef T*                                    pointer;
-        typedef T&                                    reference;
+        typedef const T*                              pointer;
+        typedef const T&                              reference;
     };
 
      //* ======================= Random access iterator =======================
@@ -92,13 +92,13 @@ namespace ft
         
         //iterator to const_iterator conversion
         template < typename Iter >
-        explicit normal_iterator(const normal_iterator<Iter, typename enable_if
-                        <(are_same<Iter, typename Container::pointer>::_value),
-                        Container>::_type>& i) : _Elem(i.base()) {} 
+        normal_iterator(const normal_iterator<Iter, typename enable_if
+                        <are_same<Iter, typename Container::pointer>::_value,
+                        Container>::_type>& i) : _Elem(i.base()) {}
 
         //member overloading operator
         reference operator*() const { return *_Elem; }
-        
+
         pointer operator->() const { return _Elem; }
         
         normal_iterator& operator++() 
@@ -138,7 +138,7 @@ namespace ft
         { return normal_iterator(_Elem - n); }
        
         const Iterator& base() const { return _Elem; }
-        
+
     };
     //non-member overloading operator
     template < typename IteratorL, typename IteratorR, typename Container >

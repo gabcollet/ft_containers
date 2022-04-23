@@ -13,10 +13,7 @@
 #include <iostream>
 #include <string>
 #include <vector.hpp>
-#include <iterator.hpp>
-#include <utils.hpp>
 #include <istream>
-#include <sstream>
 
 template<typename T>
 void printVector(const ft::vector<T>& vector) {
@@ -26,48 +23,106 @@ void printVector(const ft::vector<T>& vector) {
     std::cout << "-----------------------------------------------" << std::endl;
 }
 
-int main(){
+int main() {
 
-	/* std::cout << std::boolalpha;
-	std::cout << "is_integral:" << std::endl;
-	std::cout << "char: " << ft::is_integral<char>::value << std::endl;
-	std::cout << "int: " << ft::is_integral<int>::value << std::endl;
-	std::cout << "float: " << ft::is_integral<float>::value << std::endl; */
+    //* ======================= Is_integral test =======================
+    /* std::cout << std::boolalpha;
+    std::cout << "is_integral:" << std::endl;
+    std::cout << "char: " << ft::is_integral<char>::value << std::endl;
+    std::cout << "int: " << ft::is_integral<int>::value << std::endl;
+    std::cout << "float: " << ft::is_integral<float>::value << std::endl; */
 
+    //* ======================= Input iterator constructor test =======================
 //    std::istringstream commetuveux("string");
 //    std::istreambuf_iterator<char> it(commetuveux),end;
 //	ft::vector<char> vector3(it, end);
-
-	ft::vector<std::string> vector;
 //    printVector(vector3);
 
-//	ft::vector<int> vector2;
+    //* ======================= Constructor test =======================
+    ft::vector<std::string> vector;
+//    ft::vector<int> vector2;
+    ft::vector<std::string> vector4;
+
 //	ft::vector<std::string> vector_fill(5, "hello");
+//    ft::vector<int> vector_range2(5, 3);
 
-
+    //* ======================= Method test =======================
     vector.push_back("hello");
-//	vector.push_back(" ");
-//	vector.push_back("world");
-//	vector.push_back("!");
-
+    vector.push_back(" ");
+    vector.push_back("world");
+    vector.push_back("!");
+//
 //    vector.clear();
-    vector.erase(vector.begin() + 1);
+//    vector.erase(vector.begin() + 1);
 //    vector.erase(vector.begin(), vector.end());
 //	ft::vector<std::string> vector_copy(vector);
-
+//
 //    vector2.push_back(1);
 //    vector2.push_back(2);
 //    vector2.push_back(3);
 //	vector2.push_back(4);
-
-//    ft::vector<int> vector_range2(5, 3);
-
+//
+//    ft::vector<std::string>::iterator it;
+    vector4.assign(vector.begin() + 1, vector.end());
+    vector.assign(5, "hello");
+    vector4.reserve(100);
+//    vector2.assign(5, 42);
+//
     printVector(vector);
+    printVector(vector4);
 //    printVector(vector2);
 //    printVector(vector_fill);
 //    ft::vector<std::string> vector_range(&vector[0], &vector[3]);
 //    printVector(vector_range);
 //    printVector(vector_copy);
 //    printVector(vector_range2);
+
+
+    //* ======================= Assign test =======================
+//    {
+//        ft::vector<int> first;
+//        ft::vector<int> second;
+//        ft::vector<int> third;
+//
+//        first.assign(7, 100);             // 7 ints with a value of 100
+//
+//
+//        ft::vector<int>::iterator it;
+//        it = first.begin() + 1;
+//
+//        second.assign(it, first.end() - 1); // the 5 central values of first
+//
+//        int myints[] = {1776, 7, 4};
+//        third.assign(myints, myints + 3);   // assigning from array.
+//
+//        std::cout << "Size of first: " << int(first.size()) << '\n';
+//        std::cout << "Size of second: " << int(second.size()) << '\n';
+//        std::cout << "Size of third: " << int(third.size()) << '\n';
+//
+//        ft::vector<char> characters;
+//
+//        characters.assign(5, 'a');
+//        printVector(characters);
+//
+//        const std::string extra(6, 'b');
+//        characters.assign(extra.begin(), extra.end());
+//        printVector(characters);
+//    }
+
+    //* ======================= Operator = test =======================
+
+//    ft::vector<int> foo (3,0);
+//    ft::vector<int> bar (5,0);
+//
+//    bar = foo;
+//    foo = ft::vector<int>();
+//
+//    std::cout << "Size of foo: " << int(foo.size()) << '\n';
+//    std::cout << "Size of bar: " << int(bar.size()) << '\n';
+
+/*ft::vector<int> vec;
+ft::vector<int>::iterator x = vec.begin();
+    ft::vector<int>::const_iterator y = x;*/
+
     return 0;
 }

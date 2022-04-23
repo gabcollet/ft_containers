@@ -83,15 +83,15 @@ namespace ft
 
     //* ============================== are_same ===============================
      
-    template < typename, typename >
-    struct are_same
+    template < typename T, typename U>
+    struct are_same /*: public false_type*/
     {
         static const bool _value = false;
         typedef false_type _type;
     };
     
     template < typename T >
-    struct are_same<T, T>
+    struct are_same<T, T> /*: public true_type*/
     {
         static const bool _value = true;
         typedef true_type _type;

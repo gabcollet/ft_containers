@@ -50,13 +50,7 @@ namespace ft
                           const allocator_type& alloc = allocator_type()) :
             _alloc(alloc)
         {
-            _start = _alloc.allocate(n);
-            _end = _start;
-            _capacity = _start + n;
-            for (size_type i = 0; i != n; i++){
-                _alloc.construct(_end, val);
-                _end++;
-            }
+            _fill_construct(n, val);
         }
 
         //range constructor
@@ -67,7 +61,6 @@ namespace ft
             _alloc(alloc), _start(), _end(), _capacity()
         {
             typedef typename iterator_traits<InputIterator>::iterator_category category;
-
             _range_construct(first, last, category());
         }
 
@@ -83,11 +76,19 @@ namespace ft
         ~vector()
         {
             clear();
-            _alloc.deallocate(_start, capacity());
+            if (_start != _end)
+                _alloc.deallocate(_start, capacity());
         }
 
         //member overload
-//        vector& operator= (const vector& x) { return }
+        vector& operator= (const vector& x)
+        {
+            if (&x == this)
+                return *this;
+            assign(x.begin(), x.end());
+            return *this;
+        }
+
 
         allocator_type get_allocator() const {return _alloc;}
 
@@ -140,6 +141,20 @@ namespace ft
         }
 
         //* ============================ Modifier =============================
+        template <class InputIterator>
+        void assign (InputIterator first,
+                     typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)
+        {
+            clear();
+            typedef typename iterator_traits<vector::iterator>::iterator_category category;
+            _range_construct(first, last, category());
+        }
+
+        void assign (size_type n, const value_type& val)
+        {
+            clear();
+            _fill_construct(n, val);
+        }
 
         void clear() {erase(begin(), end());}
 
@@ -177,9 +192,15 @@ namespace ft
         iterator erase (iterator first, iterator last)
         {
             pointer ptr_first = first.base();
-            for (; first != last; ++first) {
-                _alloc.destroy(first.base());
+            if (first != last){
+                difference_type n = std::distance(first, last);
+                for (; first != last; ++first) {
+                    _alloc.destroy(first.base());
+                }
+                _alloc.deallocate(ptr_first, n);
             }
+            else
+                _alloc.deallocate(ptr_first, 1);
             size_type size_right = _end - last.base();
             for (size_type i = 0; i < size_right; i++){
                 _alloc.construct(ptr_first + i, *last.base());
@@ -196,8 +217,6 @@ namespace ft
         pointer             _end;
         pointer             _capacity;
 
-        //* ========================= range_construct =========================
-
         template < typename InputIterator >
         void _range_construct(InputIterator first, InputIterator last, std::input_iterator_tag)
         {
@@ -212,8 +231,19 @@ namespace ft
             _start = _alloc.allocate(n);
             _end = _start;
             _capacity = _start + n;
-            for (long i = 0; i != n; i++){
-                _alloc.construct(_end, *first++);
+            for (; first != last; ++first){
+                _alloc.construct(_end, *first);
+                _end++;
+            }
+        }
+
+        void _fill_construct(size_type n, const value_type& val = value_type())
+        {
+            _start = _alloc.allocate(n);
+            _end = _start;
+            _capacity = _start + n;
+            for (size_type i = 0; i != n; i++){
+                _alloc.construct(_end, val);
                 _end++;
             }
         }
