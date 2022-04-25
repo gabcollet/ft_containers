@@ -229,6 +229,7 @@ namespace ft
 
         iterator erase (iterator first, iterator last)
         {
+//TODO faudrait que erase gere _capacity aussi
             pointer ptr_first = first.base();
             if (first != last){
                 difference_type n = std::distance(first, last);
@@ -248,6 +249,36 @@ namespace ft
             _end = ptr_first + size_right;
             return iterator(ptr_first);
         }
+
+        iterator insert (iterator position, const value_type& val)
+        {
+            //if (_end == _capacity){
+            //                size_type newCapacity;
+            //                if (size() > 0)
+            //                    newCapacity = size() * 2;
+            //                else
+            //                    newCapacity = 1;
+            //                reserve(newCapacity);
+            //            }
+            //! ca pourrais etre une method private
+
+            //while sur un pointeur qui avance tout le contenue de 1
+            //place l'element before position de depart du ptr
+            //_end += 1;
+
+        }
+
+        void insert (iterator position, size_type n, const value_type& val)
+        {
+
+        }
+
+        template <class InputIterator>
+        void insert (iterator position, InputIterator first, InputIterator last)
+        {
+
+        }
+
 
     private:
         allocator_type      _alloc;
