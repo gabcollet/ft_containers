@@ -39,18 +39,18 @@ int main() {
 //    printVector(vector3);
 
     //* ======================= Constructor test =======================
-    ft::vector<std::string> vector;
-//    ft::vector<int> vector2;
-    ft::vector<std::string> vector4;
+//    ft::vector<std::string> vector;
+    ft::vector<int> vector2 (5);
+//    ft::vector<std::string> vector4;
 
 //	ft::vector<std::string> vector_fill(5, "hello");
 //    ft::vector<int> vector_range2(5, 3);
 
     //* ======================= Method test =======================
-    vector.push_back("hello");
-    vector.push_back(" ");
-    vector.push_back("world");
-    vector.push_back("!");
+//    vector.push_back("hello");
+//    vector.push_back(" ");
+//    vector.push_back("world");
+//    vector.push_back("!");
 //
 //    vector.clear();
 //    vector.erase(vector.begin() + 1);
@@ -61,15 +61,34 @@ int main() {
 //    vector2.push_back(2);
 //    vector2.push_back(3);
 //	vector2.push_back(4);
+
+    int i = 0;
+
+    ft::vector<int>::reverse_iterator rit = vector2.rbegin();
+    for (; rit!= vector2.rend(); ++rit)
+        *rit = ++i;
+    printVector(vector2);
+
+//    int* p = vector2.data();
+//    *p = 10;
+//    ++p;
+//    *p = 20;
+//    p[2] = 100;
+//    printVector(vector2);
 //
+//    std::cout << vector2.at(0) << std::endl;
+//    vector2.front() += vector2.back();
+//    std::cout << vector2.at(0) << std::endl;
+
 //    ft::vector<std::string>::iterator it;
-    vector4.assign(vector.begin() + 1, vector.end());
-    vector.assign(5, "hello");
-    vector4.reserve(100);
+//    vector4.assign(vector.begin() + 1, vector.end());
+//    vector.assign(5, "hello");
+//    vector4.reserve(100);
 //    vector2.assign(5, 42);
+//    std::cout << vector.at(0) << std::endl;
 //
-    printVector(vector);
-    printVector(vector4);
+//    printVector(vector);
+//    printVector(vector4);
 //    printVector(vector2);
 //    printVector(vector_fill);
 //    ft::vector<std::string> vector_range(&vector[0], &vector[3]);

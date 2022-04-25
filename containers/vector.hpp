@@ -32,10 +32,10 @@ namespace ft
         typedef const value_type&                       const_reference;
         typedef typename allocator_type::pointer        pointer;
         typedef typename allocator_type::const_pointer  const_pointer;
-        typedef typename ft::normal_iterator<pointer, vector>	iterator;
+        typedef typename ft::normal_iterator<pointer, vector> iterator;
         typedef typename ft::normal_iterator<const_pointer, vector>	const_iterator;
-        /* typedef typename ft::reverse_iterator<iterator>	reverse_iterator; //a coder
-        typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator; */
+        typedef typename ft::reverse_iterator<pointer, vector>	reverse_iterator;
+        typedef typename ft::reverse_iterator<const_pointer, vector> const_reverse_iterator;
 
         //* ========================= Member functions =========================
         //default constructor
@@ -89,16 +89,39 @@ namespace ft
             return *this;
         }
 
-
         allocator_type get_allocator() const {return _alloc;}
 
         //* ========================= Element access ==========================
+
+        reference at (size_type n)
+        {
+            if (n >= size())
+                throw std::out_of_range("at");
+            return *(_start + n);
+        }
+
+        const_reference at (size_type n) const
+        {
+            if (n >= size())
+                throw std::out_of_range("at");
+            return *(_start + n);
+        }
+
+        reference front() {return reference(*_start);}
+
+        const_reference front() const {return const_reference(*_start);}
+
+        reference back() {return reference(*(_end - 1));}
+
+        const_reference back() const {return reference(*(_end - 1));}
 
         reference operator[] (size_type n) {return *(_start + n);}
 
         const_reference  operator[] (size_type n) const {return *(_start + n);}
 
+        value_type* data() {return pointer(_start);}
 
+        const value_type* data() const {return pointer(_start);}
 
         //* ============================ Iterators ============================
 
@@ -106,11 +129,26 @@ namespace ft
 
         const_iterator begin() const {return const_iterator(_start);}
 
+        reverse_iterator rbegin() {return reverse_iterator(_end - 1);}
+
+        const_reverse_iterator rbegin() const {return const_reverse_iterator(_end - 1);}
+
         iterator end() {return iterator(_end);}
 
         const_iterator end() const {return const_iterator(_end);}
 
+        reverse_iterator rend() {return reverse_iterator(_start - 1);}
+
+        const_reverse_iterator rend() const {return const_reverse_iterator(_start - 1);}
+
         //* ============================ Capacity =============================
+
+        bool empty() const
+        {
+            if (size() == 0)
+                return true;
+            return false;
+        }
 
         size_type size() const {return _end - _start;}
 
