@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/04/16 16:03:22 by gcollet          ###   ########.fr        #
+#    Updated: 2022/04/27 11:11:33 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ END				=	\033[0m
 
 CC 				=	clang++
 CFLAGS			=	-Wall -Werror -Wextra -std=c++98
+
 RM				=	rm -rf
 
 SRCS_FILES		=	main.cpp

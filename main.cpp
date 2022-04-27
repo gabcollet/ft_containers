@@ -6,14 +6,15 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/19 14:48:25 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/27 16:52:40 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <string>
-#include <vector.hpp>
 #include <istream>
+#include <memory>
+#include <vector.hpp>
 
 template<typename T>
 void printVector(const ft::vector<T>& vector) {
@@ -39,35 +40,43 @@ int main() {
 //    printVector(vector3);
 
     //* ======================= Constructor test =======================
-//    ft::vector<std::string> vector;
-    ft::vector<int> vector2 (5);
+   ft::vector<std::string> vector;
+//     ft::vector<int> vector2 (5);
 //    ft::vector<std::string> vector4;
 
 //	ft::vector<std::string> vector_fill(5, "hello");
 //    ft::vector<int> vector_range2(5, 3);
 
     //* ======================= Method test =======================
+   vector.push_back("hello");
+   vector.push_back(" ");
+   vector.push_back("world");
+   vector.push_back("!");
+   vector.push_back("!");
+//
+//    vector.clear();
+   vector.erase(vector.begin() + 1);
+//    vector.erase(vector.begin() + 1, vector.end() - 1);
+
 //    vector.push_back("hello");
 //    vector.push_back(" ");
 //    vector.push_back("world");
 //    vector.push_back("!");
-//
-//    vector.clear();
-//    vector.erase(vector.begin() + 1);
-//    vector.erase(vector.begin(), vector.end());
+//    vector.push_back("!");
+   
 //	ft::vector<std::string> vector_copy(vector);
 //
 //    vector2.push_back(1);
 //    vector2.push_back(2);
 //    vector2.push_back(3);
-//	vector2.push_back(4);
+// 	vector2.push_back(4);
 
-    int i = 0;
+    // int i = 0;
 
-    ft::vector<int>::reverse_iterator rit = vector2.rbegin();
-    for (; rit!= vector2.rend(); ++rit)
-        *rit = ++i;
-    printVector(vector2);
+    // ft::vector<int>::reverse_iterator rit = vector2.rbegin();
+    // for (; rit!= vector2.rend(); ++rit)
+    //     *rit = ++i;
+    // printVector(vector2);
 
 //    int* p = vector2.data();
 //    *p = 10;
@@ -87,7 +96,7 @@ int main() {
 //    vector2.assign(5, 42);
 //    std::cout << vector.at(0) << std::endl;
 //
-//    printVector(vector);
+   printVector(vector);
 //    printVector(vector4);
 //    printVector(vector2);
 //    printVector(vector_fill);
@@ -143,5 +152,30 @@ int main() {
 ft::vector<int>::iterator x = vec.begin();
     ft::vector<int>::const_iterator y = x;*/
 
+    // *======================= Insert = test =======================
+    
+   /*  ft::vector<int> myvector (3,100);
+    ft::vector<int>::iterator it;
+
+    it = myvector.begin();
+    it = myvector.insert ( it , 200 );
+
+    // "it" no longer valid, get a new one:
+    it = myvector.begin();
+    myvector.insert (it,3,400);
+
+
+    // ft::vector<int> anothervector (2,400);
+    // myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+    // int myarray [] = { 501,502,503 };
+    // myvector.insert (myvector.begin(), myarray, myarray+3);
+
+    // printVector(myvector);
+    std::cout << "myvector contains:";
+    for (it=myvector.begin(); it<myvector.end(); it++)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+ */
     return 0;
 }

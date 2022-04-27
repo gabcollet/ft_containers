@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/19 16:15:52 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/27 16:58:21 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ namespace ft
         ~vector()
         {
             clear();
-            if (_start != _end)
-                _alloc.deallocate(_start, capacity());
+            _alloc.deallocate(_start, capacity());
         }
 
         //member overload
@@ -137,9 +136,9 @@ namespace ft
 
         const_iterator end() const {return const_iterator(_end);}
 
-        reverse_iterator rend() {return reverse_iterator(_start - 1);}
+        reverse_iterator rend() {return reverse_iterator(_start);}
 
-        const_reverse_iterator rend() const {return const_reverse_iterator(_start - 1);}
+        const_reverse_iterator rend() const {return const_reverse_iterator(_start);}
 
         //* ============================ Capacity =============================
 
@@ -198,14 +197,8 @@ namespace ft
 
         void push_back (const value_type& val)
         {
-            if (_end == _capacity){
-                size_type newCapacity;
-                if (size() > 0)
-                    newCapacity = size() * 2;
-                else
-                    newCapacity = 1;
-                reserve(newCapacity);
-            }
+            if (_end == _capacity)
+                _newCapacity();           
             _alloc.construct(_end, val);
             _end++;
         }
@@ -218,67 +211,69 @@ namespace ft
             _alloc.destroy(position.base());
             ++position;
             size_type size_right = _end - position.base();
-            for (size_type i = 0; i < size_right; i++){
-                _alloc.construct(ptr_first + i, *position.base());
-                _alloc.destroy(position.base());
-                ++position;
-            }
+            _move_right(ptr_first, size_right, position);
             _end = ptr_first + size_right;
             return iterator(ptr_first);
         }
 
         iterator erase (iterator first, iterator last)
         {
-//TODO faudrait que erase gere _capacity aussi
             pointer ptr_first = first.base();
             if (first != last){
-                difference_type n = std::distance(first, last);
                 for (; first != last; ++first) {
                     _alloc.destroy(first.base());
                 }
-                _alloc.deallocate(ptr_first, n);
             }
-            else
-                _alloc.deallocate(ptr_first, 1);
             size_type size_right = _end - last.base();
-            for (size_type i = 0; i < size_right; i++){
-                _alloc.construct(ptr_first + i, *last.base());
-                _alloc.destroy(last.base());
-                ++last;
-            }
+            _move_right(ptr_first, size_right, last);
             _end = ptr_first + size_right;
             return iterator(ptr_first);
         }
 
         iterator insert (iterator position, const value_type& val)
         {
-            //if (_end == _capacity){
-            //                size_type newCapacity;
-            //                if (size() > 0)
-            //                    newCapacity = size() * 2;
-            //                else
-            //                    newCapacity = 1;
-            //                reserve(newCapacity);
-            //            }
-            //! ca pourrais etre une method private
+            difference_type dist = std::distance(position.base(), _end);           
+            if (_end == _capacity)
+                _newCapacity();  
 
-            //while sur un pointeur qui avance tout le contenue de 1
-            //place l'element before position de depart du ptr
-            //_end += 1;
-
+            pointer ptr_right = _end - dist;
+            _move_right((ptr_right + 1), dist, (end() - dist));
+            _alloc.construct(ptr_right, val); 
+            _end += 1;
+            return iterator(ptr_right);
         }
 
         void insert (iterator position, size_type n, const value_type& val)
         {
-
+            difference_type dist = std::distance(position.base(), _end);
+            if (capacity() + n >= capacity())
+                reserve(capacity() + n);
+            pointer ptr_right = _end - dist;
+            _move_right((ptr_right + n), dist, (end() - dist));
+            for (size_type i = 0; i < n; i++){
+                _alloc.construct(ptr_right + i, val);
+            }
+            _end += n;
         }
 
-        template <class InputIterator>
+/*         template <class InputIterator>
         void insert (iterator position, InputIterator first, InputIterator last)
         {
-
+            difference_type dist = std::distance(position.base(), _end);
+            size_type n = last - first;
+            if (capacity() + n >= capacity())
+                reserve(capacity() + n);
+        //!ca aussi ca peux etre une fonction private
+            size_type size_right = _end - position.base();
+            _move_right();
+        //!-------------------------------
+            for (; first != last; ++first){
+                _alloc.construct(pos, *first);
+                pos++;
+            }
+            _end += n;
         }
-
+ */
 
     private:
         allocator_type      _alloc;
@@ -315,6 +310,31 @@ namespace ft
                 _alloc.construct(_end, val);
                 _end++;
             }
+        }
+
+        void _newCapacity()
+        {
+            size_type newCapacity;
+            if (size() > 0)
+                newCapacity = size() * 2;
+            else
+                newCapacity = 1;
+            reserve(newCapacity);
+        }
+
+        void _move_right(pointer position, size_type dist, iterator content)
+        {
+            pointer tmp = _alloc.allocate(dist);
+            for (size_type i = 0; i < dist; i++){
+                _alloc.construct(tmp + i, *content.base());
+                _alloc.destroy(content.base());
+                ++content;
+            }
+            for (size_type i = 0; i < dist; i++){
+                _alloc.construct(position + i, *(tmp + i));
+                _alloc.destroy(tmp + i);
+            }
+            _alloc.deallocate(tmp, dist);
         }
 	};
 }
