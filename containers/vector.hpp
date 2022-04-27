@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/27 16:58:21 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/27 19:50:17 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,24 +256,33 @@ namespace ft
             _end += n;
         }
 
-/*         template <class InputIterator>
+        template <class InputIterator>
         void insert (iterator position, InputIterator first, InputIterator last)
         {
             difference_type dist = std::distance(position.base(), _end);
-            size_type n = last - first;
+            difference_type n = last - first;
             if (capacity() + n >= capacity())
                 reserve(capacity() + n);
-        //!ca aussi ca peux etre une fonction private
             size_type size_right = _end - position.base();
-            _move_right();
-        //!-------------------------------
-            for (; first != last; ++first){
-                _alloc.construct(pos, *first);
-                pos++;
-            }
+            pointer ptr_right = _end - dist;
+            _move_right(ptr_right + n, size_right, (end() - dist));
+
+            for (; first != last; first++, position++)
+				_alloc.construct(position, first);
+            
+            // for (; first != last; ++first){
+            //     const value_type& val = *first;
+            //     _alloc.construct(ptr_right, val);
+            //     ptr_right++;
+            // }
+
+            
+            // difference_type i = 0;
+            // for (; first != last; ++first){
+            //     insert(end() - dist + i, *first);
+            // }
             _end += n;
         }
- */
 
     private:
         allocator_type      _alloc;
