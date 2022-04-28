@@ -177,6 +177,11 @@ namespace ft
             }
         }
 
+        void resize (size_type n, value_type val = value_type())
+        {
+
+        }
+
         //* ============================ Modifier =============================
         template <class InputIterator>
         void assign (InputIterator first,
@@ -202,6 +207,8 @@ namespace ft
             _alloc.construct(_end, val);
             _end++;
         }
+
+        void pop_back() {erase(end() - 1);}
 
         iterator erase (iterator position)
         {
@@ -234,8 +241,7 @@ namespace ft
         {
             difference_type dist = std::distance(position.base(), _end);           
             if (_end == _capacity)
-                _newCapacity();  
-
+                _newCapacity();
             pointer ptr_right = _end - dist;
             _move_right((ptr_right + 1), dist, (end() - dist));
             _alloc.construct(ptr_right, val); 
@@ -246,7 +252,7 @@ namespace ft
         void insert (iterator position, size_type n, const value_type& val)
         {
             difference_type dist = std::distance(position.base(), _end);
-            if (capacity() + n >= capacity())
+            if (capacity() + n > capacity())
                 reserve(capacity() + n);
             pointer ptr_right = _end - dist;
             _move_right((ptr_right + n), dist, (end() - dist));
@@ -256,32 +262,18 @@ namespace ft
             _end += n;
         }
 
-        template <class InputIterator>
-        void insert (iterator position, InputIterator first, InputIterator last)
+        template <typename InputIterator>
+        void insert (iterator position, InputIterator first,
+                     typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)
         {
             difference_type dist = std::distance(position.base(), _end);
             difference_type n = last - first;
-            if (capacity() + n >= capacity())
+            if (capacity() + n > capacity())
                 reserve(capacity() + n);
-            size_type size_right = _end - position.base();
             pointer ptr_right = _end - dist;
-            _move_right(ptr_right + n, size_right, (end() - dist));
-
-            for (; first != last; first++, position++)
-				_alloc.construct(position, first);
-            
-            // for (; first != last; ++first){
-            //     const value_type& val = *first;
-            //     _alloc.construct(ptr_right, val);
-            //     ptr_right++;
-            // }
-
-            
-            // difference_type i = 0;
-            // for (; first != last; ++first){
-            //     insert(end() - dist + i, *first);
-            // }
-            _end += n;
+            _move_right(ptr_right + n, dist, (end() - dist));
+            typedef typename iterator_traits<InputIterator>::iterator_category category;
+            _range_construct(ptr_right, first, last, category());
         }
 
     private:
@@ -306,6 +298,15 @@ namespace ft
             _capacity = _start + n;
             for (; first != last; ++first){
                 _alloc.construct(_end, *first);
+                _end++;
+            }
+        }
+
+        template < typename ForwardIterator >
+        void _range_construct(pointer position, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag)
+        {
+            for (; first != last; ++first, position++){
+                _alloc.construct(position, *first);
                 _end++;
             }
         }

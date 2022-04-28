@@ -14,6 +14,7 @@
 #include <string>
 #include <istream>
 #include <memory>
+#include <vector>
 #include <vector.hpp>
 
 template<typename T>
@@ -154,28 +155,45 @@ ft::vector<int>::iterator x = vec.begin();
 
     // *======================= Insert = test =======================
     
-    ft::vector<int> myvector (3,100);
-    ft::vector<int>::iterator it;
+//    ft::vector<int> myvector (3,100);
+//    ft::vector<int>::iterator it;
+//
+//    it = myvector.begin();
+//    it = myvector.insert ( it , 200 );
+//
+//    // "it" no longer valid, get a new one:
+//    it = myvector.begin();
+//    myvector.insert (it,2,300);
+//
+//    it = myvector.begin();
+//    ft::vector<int> anothervector (2,400);
+//    myvector.insert (it+2,anothervector.begin(),anothervector.end());
+//
+//    int myarray [] = { 501,502,503 };
+//    myvector.insert (myvector.begin(), myarray, myarray+3);
+//
+//    // printVector(myvector);
+//    std::cout << "myvector contains:";
+//    for (it=myvector.begin(); it<myvector.end(); it++)
+//        std::cout << ' ' << *it;
+//    std::cout << '\n';
 
-    it = myvector.begin();
-    it = myvector.insert ( it , 200 );
+    // *======================= Pop_back = test =======================
 
-    // "it" no longer valid, get a new one:
-    it = myvector.begin();
-    myvector.insert (it,3,400);
+    ft::vector<int> myvector;
+    int sum (0);
+    myvector.push_back (100);
+    myvector.push_back (200);
+    myvector.push_back (300);
 
+    while (!myvector.empty())
+    {
+        sum+=myvector.back();
+        myvector.pop_back();
+    }
 
-    ft::vector<int> anothervector (2,400);
-    myvector.insert (it+2,anothervector.begin(),anothervector.end());
+    std::cout << "The elements of myvector add up to " << sum << '\n';
 
-    int myarray [] = { 501,502,503 };
-    myvector.insert (myvector.begin(), myarray, myarray+3);
-
-    // printVector(myvector);
-    std::cout << "myvector contains:";
-    for (it=myvector.begin(); it<myvector.end(); it++)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
 
     return 0;
 }
