@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/29 16:48:42 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/29 17:52:00 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ ft::vector<int>::iterator x = vec.begin();
 
     // *================== Relation Operator test =====================
 
-    ft::vector<int> foo (3,100);   // three ints with a value of 100
+   /*  ft::vector<int> foo (3,100);   // three ints with a value of 100
     ft::vector<int> bar (2,200);   // two ints with a value of 200
 
     if (foo==bar) std::cout << "foo and bar are equal\n";
@@ -235,7 +235,32 @@ ft::vector<int>::iterator x = vec.begin();
     if (foo< bar) std::cout << "foo is less than bar\n";
     if (foo> bar) std::cout << "foo is greater than bar\n";
     if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
-    if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+    if (foo>=bar) std::cout << "foo is greater than or equal to bar\n"; */
 
+
+    // *================== Test a max =====================
+    
+    ft::vector<int> vec;
+
+    std::vector<int> vec2;
+
+    for (size_t i = 1; i < 14; ++i) {
+        vec.push_back(i);
+        vec2.push_back(i);
+    }
+    
+    std::cout << "\nSTD_VEC BEFORE Insert ---> Capacity: " << vec2.capacity() << std::endl;
+    std::cout << "FT_VEC BEFORE Insert ---> Capacity: " << vec.capacity() << std::endl;
+
+    ft::vector<int>::iterator it = vec.begin();
+    std::vector<int>::iterator it2 = vec2.begin();
+
+    vec.insert(it, 4, 42);
+    vec2.insert(it2, 4, 42);
+
+    std::cout << "\nSTD_VEC AFTER Insert ---> Capacity: " << vec2.capacity() << std::endl;
+    std::cout << "FT_VEC AFTER Insert ---> Capacity: " << vec.capacity() << std::endl;
+    // printVector(vec);
+    
     return 0;
 }

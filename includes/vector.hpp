@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/29 16:44:42 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/29 17:51:30 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ namespace ft
         void insert (iterator position, size_type n, const value_type& val)
         {
             difference_type dist = std::distance(position.base(), _end);
-            if (capacity() + n > capacity())
+            if (size() + n > capacity())
                 reserve(capacity() + n);
             pointer ptr_right = _end - dist;
             _move_right((ptr_right + n), dist, (end() - dist));
