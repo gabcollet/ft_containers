@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/27 19:11:12 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/28 20:48:07 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,32 +155,32 @@ ft::vector<int>::iterator x = vec.begin();
 
     // *======================= Insert = test =======================
     
-//    ft::vector<int> myvector (3,100);
-//    ft::vector<int>::iterator it;
-//
-//    it = myvector.begin();
-//    it = myvector.insert ( it , 200 );
-//
-//    // "it" no longer valid, get a new one:
-//    it = myvector.begin();
-//    myvector.insert (it,2,300);
-//
-//    it = myvector.begin();
-//    ft::vector<int> anothervector (2,400);
-//    myvector.insert (it+2,anothervector.begin(),anothervector.end());
-//
-//    int myarray [] = { 501,502,503 };
-//    myvector.insert (myvector.begin(), myarray, myarray+3);
-//
-//    // printVector(myvector);
-//    std::cout << "myvector contains:";
-//    for (it=myvector.begin(); it<myvector.end(); it++)
-//        std::cout << ' ' << *it;
-//    std::cout << '\n';
+   ft::vector<int> myvector (3,100);
+   ft::vector<int>::iterator it;
+
+   it = myvector.begin();
+   it = myvector.insert ( it , 200 );
+
+   // "it" no longer valid, get a new one:
+   it = myvector.begin();
+   myvector.insert (it,2,300);
+
+   it = myvector.begin();
+   ft::vector<int> anothervector (2,400);
+   myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+   int myarray [] = { 501,502,503 };
+   myvector.insert (myvector.begin(), myarray, myarray+3);
+
+   // printVector(myvector);
+   std::cout << "myvector contains:";
+   for (it=myvector.begin(); it<myvector.end(); it++)
+       std::cout << ' ' << *it;
+   std::cout << '\n';
 
     // *======================= Pop_back = test =======================
 
-    ft::vector<int> myvector;
+    /* ft::vector<int> myvector;
     int sum (0);
     myvector.push_back (100);
     myvector.push_back (200);
@@ -192,7 +192,7 @@ ft::vector<int>::iterator x = vec.begin();
         myvector.pop_back();
     }
 
-    std::cout << "The elements of myvector add up to " << sum << '\n';
+    std::cout << "The elements of myvector add up to " << sum << '\n'; */
 
 
     return 0;

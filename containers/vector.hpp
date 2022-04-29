@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/27 19:50:17 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/28 22:08:59 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,10 +177,10 @@ namespace ft
             }
         }
 
-        void resize (size_type n, value_type val = value_type())
+        /* void resize (size_type n, value_type val = value_type())
         {
 
-        }
+        } */
 
         //* ============================ Modifier =============================
         template <class InputIterator>
@@ -268,12 +268,11 @@ namespace ft
         {
             difference_type dist = std::distance(position.base(), _end);
             difference_type n = last - first;
-            if (capacity() + n > capacity())
+            if (size() + n > capacity())
                 reserve(capacity() + n);
             pointer ptr_right = _end - dist;
             _move_right(ptr_right + n, dist, (end() - dist));
-            typedef typename iterator_traits<InputIterator>::iterator_category category;
-            _range_construct(ptr_right, first, last, category());
+            _range_construct(ptr_right, first, last);
         }
 
     private:
@@ -303,7 +302,7 @@ namespace ft
         }
 
         template < typename ForwardIterator >
-        void _range_construct(pointer position, ForwardIterator first, ForwardIterator last, std::forward_iterator_tag)
+        void _range_construct(pointer position, ForwardIterator first, ForwardIterator last)
         {
             for (; first != last; ++first, position++){
                 _alloc.construct(position, *first);
