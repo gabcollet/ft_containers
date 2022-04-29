@@ -6,13 +6,13 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/04/27 11:11:33 by gcollet          ###   ########.fr        #
+#    Updated: 2022/04/29 16:48:19 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 			=	ft_containers
 
-INC_PATH		=	containers/
+INC_PATH		=	includes/
 OBJS_PATH		=	obj/
 
 RED				=	\033[31;1m

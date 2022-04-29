@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/28 20:48:07 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/29 16:48:42 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,9 @@ int main() {
 ft::vector<int>::iterator x = vec.begin();
     ft::vector<int>::const_iterator y = x;*/
 
-    // *======================= Insert = test =======================
+    // *======================= Insert test =======================
     
-   ft::vector<int> myvector (3,100);
+   /* ft::vector<int> myvector (3,100);
    ft::vector<int>::iterator it;
 
    it = myvector.begin();
@@ -176,9 +176,9 @@ ft::vector<int>::iterator x = vec.begin();
    std::cout << "myvector contains:";
    for (it=myvector.begin(); it<myvector.end(); it++)
        std::cout << ' ' << *it;
-   std::cout << '\n';
+   std::cout << '\n'; */
 
-    // *======================= Pop_back = test =======================
+    // *======================= Pop_back test =======================
 
     /* ft::vector<int> myvector;
     int sum (0);
@@ -194,6 +194,48 @@ ft::vector<int>::iterator x = vec.begin();
 
     std::cout << "The elements of myvector add up to " << sum << '\n'; */
 
+    // *======================= Resize test =======================
+    /* ft::vector<int> vector;
+    ft::vector<int>::iterator it;
+
+    it = vector.begin();
+    vector.resize(4, 10);
+    std::cout << "myvector contains:";
+    for (it=vector.begin(); it<vector.end(); it++)
+        std::cout << ' ' << *it;
+    std::cout << '\n'; */
+
+    // *======================= Swap test =======================
+
+/*     ft::vector<int> foo (3,100);   // three ints with a value of 100
+    ft::vector<int> bar (5,200);   // five ints with a value of 200
+
+    // foo.swap(bar);
+    ft::swap(foo, bar);
+
+    std::cout << "foo contains:";
+    for (unsigned i=0; i<foo.size(); i++)
+        std::cout << ' ' << foo[i];
+    std::cout << '\n';
+
+    std::cout << "bar contains:";
+    for (unsigned i=0; i<bar.size(); i++)
+        std::cout << ' ' << bar[i];
+    std::cout << '\n'; */
+
+    
+
+    // *================== Relation Operator test =====================
+
+    ft::vector<int> foo (3,100);   // three ints with a value of 100
+    ft::vector<int> bar (2,200);   // two ints with a value of 200
+
+    if (foo==bar) std::cout << "foo and bar are equal\n";
+    if (foo!=bar) std::cout << "foo and bar are not equal\n";
+    if (foo< bar) std::cout << "foo is less than bar\n";
+    if (foo> bar) std::cout << "foo is greater than bar\n";
+    if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
+    if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
 
     return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/28 22:08:59 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/29 16:44:42 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ namespace ft
         {
             if (&x == this)
                 return *this;
+            _alloc.deallocate(_start, capacity());
             assign(x.begin(), x.end());
             return *this;
         }
@@ -177,10 +178,13 @@ namespace ft
             }
         }
 
-        /* void resize (size_type n, value_type val = value_type())
+        void resize (size_type n, value_type val = value_type())
         {
-
-        } */
+            if (n < size())
+                assign(begin(), begin() + n);
+            if (n > size())
+                insert(end(), n, val);
+        }
 
         //* ============================ Modifier =============================
         template <class InputIterator>
@@ -275,21 +279,33 @@ namespace ft
             _range_construct(ptr_right, first, last);
         }
 
+        void swap (vector& x)
+        {
+            if (&x != this)
+            {
+                const vector<T, Alloc> tmp = *this;
+                *this = x;
+                x = tmp;
+            }
+        }
+
     private:
         allocator_type      _alloc;
         pointer             _start;
         pointer             _end;
         pointer             _capacity;
 
+        //* ============================= Private =============================
+
         template < typename InputIterator >
-        void _range_construct(InputIterator first, InputIterator last, std::input_iterator_tag)
+        void _range_construct (InputIterator first, InputIterator last, std::input_iterator_tag)
         {
             for (; first != last; ++first)
                 push_back(*first);
         }
 
         template < typename ForwardIterator >
-        void _range_construct(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag)
+        void _range_construct (ForwardIterator first, ForwardIterator last, std::forward_iterator_tag)
         {
             difference_type n = std::distance(first, last);
             _start = _alloc.allocate(n);
@@ -302,15 +318,15 @@ namespace ft
         }
 
         template < typename ForwardIterator >
-        void _range_construct(pointer position, ForwardIterator first, ForwardIterator last)
+        void _range_construct (pointer position, ForwardIterator first, ForwardIterator last)
         {
-            for (; first != last; ++first, position++){
+            for (; first != last; ++first, (void)++position){
                 _alloc.construct(position, *first);
                 _end++;
             }
         }
 
-        void _fill_construct(size_type n, const value_type& val = value_type())
+        void _fill_construct (size_type n, const value_type& val = value_type())
         {
             _start = _alloc.allocate(n);
             _end = _start;
@@ -331,7 +347,7 @@ namespace ft
             reserve(newCapacity);
         }
 
-        void _move_right(pointer position, size_type dist, iterator content)
+        void _move_right (pointer position, size_type dist, iterator content)
         {
             pointer tmp = _alloc.allocate(dist);
             for (size_type i = 0; i < dist; i++){
@@ -346,4 +362,51 @@ namespace ft
             _alloc.deallocate(tmp, dist);
         }
 	};
+
+    //* ========================= Non-member function =========================
+
+    template <typename T, typename Alloc>
+    bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+            return false;
+        for (size_t i = 0; i < lhs.size(); i++){
+            if (lhs[i] != rhs[i])
+                return false;
+        }
+        return true;
+    }
+
+    template <typename T, typename Alloc>
+    bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    template <typename T, typename Alloc>
+    bool operator< (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    }
+
+    template <typename T, typename Alloc>
+    bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return !(rhs < lhs);
+    }
+
+    template <typename T, typename Alloc>
+    bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end());
+    }
+
+    template <typename T, typename Alloc>
+    bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return !(lhs < rhs);
+    }
+
+    template <class T, class Alloc>
+    void swap (vector<T,Alloc>& x, vector<T,Alloc>& y) { x.swap(y); }
 }

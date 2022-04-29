@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 11:24:59 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/12 13:49:53 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/29 15:45:25 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ namespace ft
               const normal_iterator<Iterator, Container>& i)
     { return normal_iterator<Iterator, Container>(i.base() + n); }
 
-//* ======================= Reverse iterator =======================
+    //* ======================= Reverse iterator =======================
 
     template < typename Iterator, typename Container >
     class reverse_iterator
