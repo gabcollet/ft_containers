@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/04/29 16:48:19 by gcollet          ###   ########.fr        #
+#    Updated: 2022/04/30 17:37:45 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ RM				=	rm -rf
 SRCS_FILES		=	main.cpp
 
 OBJS_FILES		= 	$(SRCS_FILES:.cpp=.o)
-OBJS 			=	$(addprefix $(OBJS_PATH), $(OBJS_FILES))
+#OBJS 			=	$(addprefix $(OBJS_PATH), $(OBJS_FILES))
+OBJS 			=	containers_test/srcs/vector/rite2.cpp
 
 $(OBJS_PATH)%.o: %.cpp
 	@$(CC) $(CFLAGS) -I$(INC_PATH) -c $< -o $@

@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/29 17:51:30 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/04/30 17:38:58 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <memory>
 #include <cstddef>
-#include <iterator.hpp>
+#include "iterator.hpp"
 
 namespace ft
 {
@@ -34,8 +34,8 @@ namespace ft
         typedef typename allocator_type::const_pointer  const_pointer;
         typedef typename ft::normal_iterator<pointer, vector> iterator;
         typedef typename ft::normal_iterator<const_pointer, vector>	const_iterator;
-        typedef typename ft::reverse_iterator<pointer, vector>	reverse_iterator;
-        typedef typename ft::reverse_iterator<const_pointer, vector> const_reverse_iterator;
+        typedef typename ft::reverse_iterator<iterator>	reverse_iterator;
+        typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
         //* ========================= Member functions =========================
         //default constructor
@@ -271,7 +271,7 @@ namespace ft
                      typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)
         {
             difference_type dist = std::distance(position.base(), _end);
-            difference_type n = last - first;
+            difference_type n = std::distance(first, last);
             if (size() + n > capacity())
                 reserve(capacity() + n);
             pointer ptr_right = _end - dist;

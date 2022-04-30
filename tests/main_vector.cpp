@@ -15,7 +15,7 @@
 #include <istream>
 #include <memory>
 #include <vector>
-#include <vector.hpp>
+#include "vector.hpp"
 
 template<typename T>
 void printVector(const ft::vector<T>& vector) {
@@ -27,20 +27,20 @@ void printVector(const ft::vector<T>& vector) {
 
 int main() {
 
-    //* ======================= Is_integral test =======================
+    //* ======================= Is_integral tests =======================
     /* std::cout << std::boolalpha;
     std::cout << "is_integral:" << std::endl;
     std::cout << "char: " << ft::is_integral<char>::value << std::endl;
     std::cout << "int: " << ft::is_integral<int>::value << std::endl;
     std::cout << "float: " << ft::is_integral<float>::value << std::endl; */
 
-    //* ======================= Input iterator constructor test =======================
+    //* ======================= Input iterator constructor tests =======================
 //    std::istringstream commetuveux("string");
 //    std::istreambuf_iterator<char> it(commetuveux),end;
 //	ft::vector<char> vector3(it, end);
 //    printVector(vector3);
 
-    //* ======================= Constructor test =======================
+    //* ======================= Constructor tests =======================
 //    ft::vector<std::string> vector;
 //     ft::vector<int> vector2 (5);
 //    ft::vector<std::string> vector4;
@@ -48,7 +48,7 @@ int main() {
 //	ft::vector<std::string> vector_fill(5, "hello");
 //    ft::vector<int> vector_range2(5, 3);
 
-//     //* ======================= Method test =======================
+//     //* ======================= Method tests =======================
 //    vector.push_back("hello");
 //    vector.push_back(" ");
 //    vector.push_back("world");
@@ -107,7 +107,7 @@ int main() {
 //    printVector(vector_range2);
 
 
-    //* ======================= Assign test =======================
+    //* ======================= Assign tests =======================
 //    {
 //        ft::vector<int> first;
 //        ft::vector<int> second;
@@ -138,7 +138,7 @@ int main() {
 //        printVector(characters);
 //    }
 
-    //* ======================= Operator = test =======================
+    //* ======================= Operator = tests =======================
 
 //    ft::vector<int> foo (3,0);
 //    ft::vector<int> bar (5,0);
@@ -153,7 +153,7 @@ int main() {
 ft::vector<int>::iterator x = vec.begin();
     ft::vector<int>::const_iterator y = x;*/
 
-    // *======================= Insert test =======================
+    // *======================= Insert tests =======================
     
    /* ft::vector<int> myvector (3,100);
    ft::vector<int>::iterator it;
@@ -178,7 +178,7 @@ ft::vector<int>::iterator x = vec.begin();
        std::cout << ' ' << *it;
    std::cout << '\n'; */
 
-    // *======================= Pop_back test =======================
+    // *======================= Pop_back tests =======================
 
     /* ft::vector<int> myvector;
     int sum (0);
@@ -194,7 +194,7 @@ ft::vector<int>::iterator x = vec.begin();
 
     std::cout << "The elements of myvector add up to " << sum << '\n'; */
 
-    // *======================= Resize test =======================
+    // *======================= Resize tests =======================
     /* ft::vector<int> vector;
     ft::vector<int>::iterator it;
 
@@ -205,7 +205,7 @@ ft::vector<int>::iterator x = vec.begin();
         std::cout << ' ' << *it;
     std::cout << '\n'; */
 
-    // *======================= Swap test =======================
+    // *======================= Swap tests =======================
 
 /*     ft::vector<int> foo (3,100);   // three ints with a value of 100
     ft::vector<int> bar (5,200);   // five ints with a value of 200
@@ -225,7 +225,7 @@ ft::vector<int>::iterator x = vec.begin();
 
     
 
-    // *================== Relation Operator test =====================
+    // *================== Relation Operator tests =====================
 
    /*  ft::vector<int> foo (3,100);   // three ints with a value of 100
     ft::vector<int> bar (2,200);   // two ints with a value of 200
