@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 11:24:59 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/30 17:36:42 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/02 14:42:47 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,16 +238,26 @@ namespace ft
         typedef typename _traits_type::reference        reference;
 
         //Default Constructor
-        reverse_iterator() : _Elem(iterator_type()) {}
+        reverse_iterator() : _Elem() {}
+
+        reverse_iterator(const reverse_iterator& i) : _Elem(i._Elem) {}
+
+        //Initialization Constructor
+        explicit reverse_iterator(iterator_type i) : _Elem(i) {}
 
         //Copy Constructor
-        explicit reverse_iterator(const iterator_type elem) : _Elem(elem) {}
-
-        //iterator to const_iterator conversion
         template < typename Iter >
-        explicit reverse_iterator(const reverse_iterator<Iter>& i) : _Elem(i.base()) {}
+        reverse_iterator(const reverse_iterator<Iter>& i) : _Elem(i.base()) {}
         
+        ~reverse_iterator() {}
+
         //member overloading operator
+        reverse_iterator& operator=(const reverse_iterator& rit)
+        {
+            _Elem = rit._Elem;
+            return *this;
+        }
+
         reference operator*() const
         {
             iterator_type tmp = _Elem;
@@ -282,7 +292,7 @@ namespace ft
             return tmp;
         }
 
-        reference operator[](difference_type n) const { return base()[n - 1]; }
+        reference operator[](difference_type n) const { return *(*this + n); }
 
         reverse_iterator& operator+=(difference_type n)
         {

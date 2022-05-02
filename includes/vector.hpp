@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/30 17:38:58 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/02 16:17:36 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <memory>
 #include <cstddef>
+#include <algorithm>
 #include "iterator.hpp"
 
 namespace ft
@@ -32,10 +33,10 @@ namespace ft
         typedef const value_type&                       const_reference;
         typedef typename allocator_type::pointer        pointer;
         typedef typename allocator_type::const_pointer  const_pointer;
-        typedef typename ft::normal_iterator<pointer, vector> iterator;
-        typedef typename ft::normal_iterator<const_pointer, vector>	const_iterator;
-        typedef typename ft::reverse_iterator<iterator>	reverse_iterator;
-        typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
+        typedef ft::normal_iterator<pointer, vector> iterator;
+        typedef ft::normal_iterator<const_pointer, vector>	const_iterator;
+        typedef ft::reverse_iterator<iterator>	reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
         //* ========================= Member functions =========================
         //default constructor
@@ -68,8 +69,11 @@ namespace ft
         vector (const vector& x) :
             _alloc(x._alloc), _start(), _end(), _capacity()
         {
-            typedef typename iterator_traits<vector::iterator>::iterator_category category;
-            _range_construct(x._start, x._end, category());
+            if (x.size() > 0)
+            {
+                typedef typename iterator_traits<vector::iterator>::iterator_category category;
+                _range_construct(x._start, x._end, category());
+            }
         }
 
         //destructor
@@ -82,7 +86,7 @@ namespace ft
         //member overload
         vector& operator= (const vector& x)
         {
-            if (&x == this)
+            if (&x == this || x.size() == 0)
                 return *this;
             _alloc.deallocate(_start, capacity());
             assign(x.begin(), x.end());
@@ -129,17 +133,17 @@ namespace ft
 
         const_iterator begin() const {return const_iterator(_start);}
 
-        reverse_iterator rbegin() {return reverse_iterator(_end - 1);}
+        reverse_iterator rbegin() {return reverse_iterator(end());}
 
-        const_reverse_iterator rbegin() const {return const_reverse_iterator(_end - 1);}
+        const_reverse_iterator rbegin() const {return const_reverse_iterator(end());}
 
         iterator end() {return iterator(_end);}
 
         const_iterator end() const {return const_iterator(_end);}
 
-        reverse_iterator rend() {return reverse_iterator(_start);}
+        reverse_iterator rend() {return reverse_iterator(begin());}
 
-        const_reverse_iterator rend() const {return const_reverse_iterator(_start);}
+        const_reverse_iterator rend() const {return const_reverse_iterator(begin());}
 
         //* ============================ Capacity =============================
 
@@ -152,7 +156,11 @@ namespace ft
 
         size_type size() const {return _end - _start;}
 
-        size_type max_size() const {return _alloc.max_size();}
+        size_type max_size() const 
+        {
+            return std::min(_alloc.max_size(),
+                    static_cast<size_type>(std::numeric_limits<difference_type>::max()));
+        }
 
         size_type capacity() const {return _capacity - _start;}
 
@@ -183,7 +191,7 @@ namespace ft
             if (n < size())
                 assign(begin(), begin() + n);
             if (n > size())
-                insert(end(), n, val);
+                insert(end(), n - size(), val);
         }
 
         //* ============================ Modifier =============================
@@ -199,6 +207,7 @@ namespace ft
         void assign (size_type n, const value_type& val)
         {
             clear();
+            _alloc.deallocate(_start, capacity());
             _fill_construct(n, val);
         }
 
@@ -283,9 +292,17 @@ namespace ft
         {
             if (&x != this)
             {
-                const vector<T, Alloc> tmp = *this;
-                *this = x;
-                x = tmp;
+                pointer tmp_s = x._start;
+                pointer tmp_e = x._end;
+                pointer tmp_c = x._capacity;
+                
+                x._start = _start;
+                x._end = _end;
+                x._capacity = _capacity;
+
+                _start = tmp_s;
+                _end = tmp_e;
+                _capacity = tmp_c;
             }
         }
 
