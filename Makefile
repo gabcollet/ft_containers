@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/05/03 12:31:41 by gcollet          ###   ########.fr        #
+#    Updated: 2022/05/03 15:27:44 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ SRCS_FILES		=	main.cpp
 
 OBJS_FILES		= 	$(SRCS_FILES:.cpp=.o)
 #OBJS 			=	$(addprefix $(OBJS_PATH), $(OBJS_FILES))
-OBJS 			=	/Users/gcollet/ft_containers/containers_test/srcs/stack/list_copy.cpp
+OBJS 			=	/Users/gcollet/ft_containers/tests/main_vector.cpp
 
 $(OBJS_PATH)%.o: %.cpp
 	@$(CC) $(CFLAGS) -I$(INC_PATH) -c $< -o $@
