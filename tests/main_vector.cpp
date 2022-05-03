@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   main_vector.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/04/29 17:52:00 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/03 11:03:30 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <istream>
 #include <memory>
 #include <vector>
-#include "vector.hpp"
+#include "../includes/vector.hpp"
 
 template<typename T>
 void printVector(const ft::vector<T>& vector) {

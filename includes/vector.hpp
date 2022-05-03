@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/02 16:17:36 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/03 10:52:29 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,21 @@ namespace ft
 		//* =========================== Member types ==========================
 
     public:
-        typedef T   									value_type;
-        typedef Alloc                                   allocator_type;
-        typedef size_t                                  size_type;
-        typedef ptrdiff_t                               difference_type;
-        typedef value_type&                             reference;
-        typedef const value_type&                       const_reference;
-        typedef typename allocator_type::pointer        pointer;
-        typedef typename allocator_type::const_pointer  const_pointer;
-        typedef ft::normal_iterator<pointer, vector> iterator;
+        typedef T   									    value_type;
+        typedef Alloc                                       allocator_type;
+        typedef size_t                                      size_type;
+        typedef ptrdiff_t                                   difference_type;
+        typedef value_type&                                 reference;
+        typedef const value_type&                           const_reference;
+        typedef typename allocator_type::pointer            pointer;
+        typedef typename allocator_type::const_pointer      const_pointer;
+        typedef ft::normal_iterator<pointer, vector>        iterator;
         typedef ft::normal_iterator<const_pointer, vector>	const_iterator;
-        typedef ft::reverse_iterator<iterator>	reverse_iterator;
-        typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+        typedef ft::reverse_iterator<iterator>      	    reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
 
         //* ========================= Member functions =========================
+        
         //default constructor
         vector() : _alloc(), _start(), _end(), _capacity() {}
 
@@ -195,6 +196,7 @@ namespace ft
         }
 
         //* ============================ Modifier =============================
+       
         template <class InputIterator>
         void assign (InputIterator first,
                      typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)

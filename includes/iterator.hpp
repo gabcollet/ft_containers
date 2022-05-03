@@ -6,13 +6,14 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 11:24:59 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/02 14:42:47 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/03 12:26:16 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <cstddef>
+#include <iterator>
 #include "utils.hpp"
 
 namespace ft
@@ -292,7 +293,8 @@ namespace ft
             return tmp;
         }
 
-        reference operator[](difference_type n) const { return *(*this + n); }
+        // reference operator[](difference_type n) const { return *(*this + n); }
+        reference operator[](difference_type n) const { return base()[-n-1]; }
 
         reverse_iterator& operator+=(difference_type n)
         {
