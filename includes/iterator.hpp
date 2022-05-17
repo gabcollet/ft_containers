@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 11:24:59 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/03 15:23:45 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/17 15:13:02 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,16 @@ namespace ft
         normal_iterator(const normal_iterator<Iter, typename enable_if
                         <are_same<Iter, typename Container::pointer>::_value,
                         Container>::_type>& i) : _Elem(i.base()) {}
+
+        //Destructor
+        ~normal_iterator() {}
+
+        //Assignment operator
+        normal_iterator& operator=(const normal_iterator& other)
+        {
+            _Elem = other._Elem;
+            return *this;
+        }
 
         //member overloading operator
         reference operator*() const { return *_Elem; }

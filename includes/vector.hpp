@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/03 15:26:34 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/17 11:26:01 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ namespace ft
             _alloc.deallocate(_start, capacity());
         }
 
-        //member overload
+        //assignement operator
         vector& operator= (const vector& x)
         {
             if (&x == this || x.size() == 0)

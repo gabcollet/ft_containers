@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:17:24 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/03 15:24:01 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/04 12:57:23 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ namespace ft
             return tmp;
         }
 
-        // reference operator[](difference_type n) const { return *(*this + n); }
         reference operator[](difference_type n) const { return base()[-n-1]; }
 
         reverse_iterator& operator+=(difference_type n)
@@ -103,7 +102,7 @@ namespace ft
         {
             _Elem += n;
             return *this;
-        }
+        } 
 
         reverse_iterator operator-(difference_type n) const
         { return reverse_iterator(_Elem + n); }
