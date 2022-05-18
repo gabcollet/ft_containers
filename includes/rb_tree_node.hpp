@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:04:07 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/17 14:17:46 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/18 15:36:32 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ namespace ft
     
     public:
         rb_tree_node(const value_type& val = value_type(), Color c = red) :
-            left(nullptr), right(nullptr), parent(nullptr), data(val), color(c) {}
+            left(nullptr),
+            right(nullptr),
+            parent(nullptr),
+            data(val), 
+            color(c) {}
         
         rb_tree_node<value_type>* left;
         rb_tree_node<value_type>* right;

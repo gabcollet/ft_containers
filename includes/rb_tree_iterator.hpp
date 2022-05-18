@@ -6,16 +6,15 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:49:46 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/17 15:55:03 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/18 13:56:10 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-
 #include "rb_tree_node.hpp"
-#include <cstddef>
 #include <iterator>
+
 namespace ft
 {
     template < typename value_type >
@@ -54,18 +53,52 @@ namespace ft
         iterator& operator++()
         {
             increment();
-        }        
+            return *this;
+        }
+        
+        iterator operator++(int) { return iterator(increment()); }
+        
+        iterator& operator--()
+        {
+            decrement();
+            return *this;
+        }
+        
+        iterator operator--(int) { return iterator(decrement()); }
 
-        // ==
-        // !=
-        // ++
-        // --
+        bool operator== (const iterator& it) { return _ptr_node == it._ptr_node; }
+
+        bool operator!= (const iterator& it) { return _ptr_node != it._ptr_node; }
         
     private:
         node* _ptr_node;
-
+        
         void increment(){
-            
+            if (_ptr_node->right != nullptr){
+                _ptr_node = _ptr_node->right;
+                while (_ptr_node->left != nullptr)
+                    _ptr_node = _ptr_node->left;
+            }
+            else{
+                node* tmp = _ptr_node;
+                _ptr_node = _ptr_node->parent;
+                if (_ptr_node->right->data == tmp->data)
+                    _ptr_node = _ptr_node->parent;
+            }
+        }
+
+        void decrement(){
+            if (_ptr_node->left != nullptr){
+                _ptr_node = _ptr_node->left;
+                while (_ptr_node->right != nullptr)
+                    _ptr_node = _ptr_node->right;
+            }
+            else{
+                node* tmp = _ptr_node;
+                _ptr_node = _ptr_node->parent;
+                if (_ptr_node->left->data == tmp->data)
+                    _ptr_node = _ptr_node->parent;
+            }
         }
     };
 }

@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/05/03 15:27:44 by gcollet          ###   ########.fr        #
+#    Updated: 2022/05/18 18:30:58 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ SRCS_FILES		=	main.cpp
 
 OBJS_FILES		= 	$(SRCS_FILES:.cpp=.o)
 #OBJS 			=	$(addprefix $(OBJS_PATH), $(OBJS_FILES))
-OBJS 			=	/Users/gcollet/ft_containers/tests/main_vector.cpp
+OBJS 			=	/home/gcollet/ft_containers/tests/main_map.cpp
 
 $(OBJS_PATH)%.o: %.cpp
 	@$(CC) $(CFLAGS) -I$(INC_PATH) -c $< -o $@
@@ -45,7 +45,7 @@ $(OBJS_PATH):
 
 all:	$(NAME)
 
-debug:	CFLAGS += -g -fstandalone-debug
+debug:	CFLAGS += -g
 debug:	$(NAME)
 
 clean:
