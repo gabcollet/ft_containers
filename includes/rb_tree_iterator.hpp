@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:49:46 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/18 13:56:10 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/19 15:52:23 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,29 +74,29 @@ namespace ft
         node* _ptr_node;
         
         void increment(){
-            if (_ptr_node->right != nullptr){
+            if (_ptr_node->right){
                 _ptr_node = _ptr_node->right;
-                while (_ptr_node->left != nullptr)
+                while (_ptr_node->left)
                     _ptr_node = _ptr_node->left;
             }
             else{
                 node* tmp = _ptr_node;
                 _ptr_node = _ptr_node->parent;
-                if (_ptr_node->right->data == tmp->data)
+                if (_ptr_node->right == tmp)
                     _ptr_node = _ptr_node->parent;
             }
         }
 
         void decrement(){
-            if (_ptr_node->left != nullptr){
+            if (_ptr_node->left){
                 _ptr_node = _ptr_node->left;
-                while (_ptr_node->right != nullptr)
+                while (_ptr_node->right)
                     _ptr_node = _ptr_node->right;
             }
             else{
                 node* tmp = _ptr_node;
                 _ptr_node = _ptr_node->parent;
-                if (_ptr_node->left->data == tmp->data)
+                if (_ptr_node->left == tmp)
                     _ptr_node = _ptr_node->parent;
             }
         }

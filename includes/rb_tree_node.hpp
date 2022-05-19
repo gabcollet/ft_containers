@@ -6,11 +6,14 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:04:07 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/18 15:36:32 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/19 14:44:49 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
+#include "utils.hpp"
+#include <cstddef>
 
 enum Color {red, black};
 
@@ -22,9 +25,9 @@ namespace ft
     
     public:
         rb_tree_node(const value_type& val = value_type(), Color c = red) :
-            left(nullptr),
-            right(nullptr),
-            parent(nullptr),
+            left(NULL),
+            right(NULL),
+            parent(NULL),
             data(val), 
             color(c) {}
         

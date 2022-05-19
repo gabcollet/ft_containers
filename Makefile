@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/05/18 18:30:58 by gcollet          ###   ########.fr        #
+#    Updated: 2022/05/19 10:08:43 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,22 +26,23 @@ CFLAGS			=	-Wall -Werror -Wextra -std=c++98
 
 RM				=	rm -rf
 
-SRCS_FILES		=	main.cpp
+SRCS_FILES		=	main_map.cpp
 
 OBJS_FILES		= 	$(SRCS_FILES:.cpp=.o)
-#OBJS 			=	$(addprefix $(OBJS_PATH), $(OBJS_FILES))
-OBJS 			=	/home/gcollet/ft_containers/tests/main_map.cpp
+OBJS 			=	$(addprefix $(OBJS_PATH), $(OBJS_FILES))
 
 $(OBJS_PATH)%.o: %.cpp
-	@$(CC) $(CFLAGS) -I$(INC_PATH) -c $< -o $@
-	@echo "$(YELLOW) CREATING OBJECTS \n $(END)"
+	$(CC) $(CFLAGS) -I$(INC_PATH) -c $< -o $@
+	echo "$(YELLOW) CREATING OBJECTS \n $(END)"
 
 $(NAME):	$(OBJS_PATH) $(OBJS)
-	@$(CC) -o $(NAME) $(OBJS) -Ift_containers_tester/tests -Iincludes
-	@echo "\033[32;1m TESTER READY \033[0m \\n"
+	$(CC) -o $(NAME) $(OBJS) -Iincludes
+	echo "\033[32;1m TESTER READY \033[0m \\n"
 
 $(OBJS_PATH):
-	@mkdir -p $(OBJS_PATH)
+	mkdir -p $(OBJS_PATH)
+
+VPATH = tests
 
 all:	$(NAME)
 
@@ -49,12 +50,12 @@ debug:	CFLAGS += -g
 debug:	$(NAME)
 
 clean:
-	@$(RM) $(OBJS_FILES) $(OBJS_PATH) 
-	@echo "\\n$(RED) CLEAN DONE $(END)"
+	$(RM) $(OBJS_FILES) $(OBJS_PATH) 
+	echo "$(RED) CLEAN DONE $(END)\\n"
 
 fclean: clean
-	@$(RM) $(NAME)
-	@echo "$(RED) FCLEAN DONE $(END)\\n"
+	$(RM) $(NAME)
+	echo "$(RED) FCLEAN DONE $(END)\\n"
 
 re: fclean all
 

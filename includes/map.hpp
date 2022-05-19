@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/17 14:28:59 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/19 15:53:12 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,6 @@ namespace ft
         map& operator= (const map& x) {}
         
     private:
-        rb_tree      _tree;
+        rb_tree<Compare, value_type>     _tree;
     };
 }
