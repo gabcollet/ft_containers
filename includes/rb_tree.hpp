@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/19 15:53:43 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/20 15:35:28 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 
 #define RED "\033[31;1m"
 #define END "\033[0m"
+
+enum {LEFT, RIGHT};
 
 namespace ft
 {
@@ -74,14 +76,63 @@ namespace ft
             fixinsert(newnode);
         }
 
-        void remove()
+        void deleteNode(value_type val)
         {
+            if (val == _rootN->data)
+                return;
+
+            node_pointer node = _rootN;
+            //Find node with value
+            while (true)
+            {
+                if (node->data == val)
+                    break;
+                if (node->right && comp(node->data, val))
+                    node = node->right;
+                else if (node->left && comp(val, node->data))
+                    node = node->left;
+                else
+                    return;
+            }
             
+            node_pointer tmp = node;
+            //case with two child
+            if (node->left && node->right)
+            {
+                tmp = minValueNode(node->right);
+                node->data = tmp->data;
+                if (tmp->parent != node)
+                    tmp->parent->left = NULL;
+                if (tmp->parent->right == tmp && 
+                    tmp->left == NULL && tmp->right == NULL)
+                    tmp->parent->right = NULL;
+                if (tmp->right)
+                    tmp = copyBranch(tmp, RIGHT);
+            
+            }
+            //case with only one child
+            else if (node->left || node->right)
+            {    
+                if (node->left)
+                    tmp = copyBranch(tmp, LEFT);
+                else
+                    tmp = copyBranch(tmp, RIGHT);
+            }
+            //case with no child
+            else
+            {
+                if (tmp->parent->left == tmp)
+                    tmp->parent->left = NULL;
+                else if (tmp->parent->right == tmp)
+                    tmp->parent->right = NULL;
+            }
+            free(tmp);
         }
 
         void treePrint()
         {
-            if (_rootN) {
+            if (_rootN) 
+            {
                 _printTree(_rootN, "", true);
                 std::cout << std::endl;
             }
@@ -179,6 +230,38 @@ namespace ft
             a->parent = b;
         }
         
+        node_pointer minValueNode(node_pointer node)
+        {
+            node_pointer minNode = node;
+            while (minNode && minNode->left)
+                minNode = minNode->left;
+            return minNode;
+        }
+
+        node_pointer copyBranch(node_pointer node, bool side)
+        {
+            node_pointer tmp = node;
+            if (side == RIGHT)
+            {
+                while (tmp->right)
+                {
+                    tmp->data = tmp->right->data;
+                    tmp = tmp->right;
+                }
+                tmp->parent->right = NULL;
+            }
+            if (side == LEFT)
+            {
+                while (tmp->left)
+                {
+                    tmp->data = tmp->left->data;
+                    tmp = tmp->left;
+                }
+                tmp->parent->left = NULL;
+            }
+            return tmp;
+        }
+
         void _printTree(node_pointer root, std::string indent, bool last) 
         {
             if (root != NULL) {
