@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/20 15:35:28 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/24 17:24:03 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "rb_tree_node.hpp"
 #include <iostream>
+#include <memory>
 #include <string>
 #include <stdlib.h>
 
@@ -24,30 +25,37 @@ enum {LEFT, RIGHT};
 
 namespace ft
 {
-    template < typename compare, typename value_type >
+    template < typename compare, typename value_type, 
+                typename alloc = std::allocator<value_type> >
     class rb_tree
     {
         
     public:
-        typedef rb_tree_node<value_type>        node;
-        typedef rb_tree_node<value_type>*       node_pointer;
+        typedef rb_tree_node<value_type>                        node;
+        typedef rb_tree_node<value_type>*                       node_pointer;
+        typedef typename alloc::template rebind<node>::other    node_alloc;
 
         //Default constructor
-        rb_tree() { _rootN = new node(); }
+        rb_tree() { _rootN = _node_alloc.allocate(1); } //avec std::allocator
 
         //Parameterized constructor
-        rb_tree(value_type elem) { _rootN = new node(elem); }
+        rb_tree(value_type val)
+        {
+            _rootN = _node_alloc.allocate(1);
+            _alloc.construct(&_rootN->data, val);
+        }
 
         void insert(value_type val)
         {
             if (!_rootN->data)
             {
-                _rootN->data = val;
+                _alloc.construct(&_rootN->data, val);
                 _rootN->color = black;
                 return;
             }
-            node_pointer newnode = new node;
+            node_pointer newnode = _node_alloc.allocate(1);
             node_pointer tmp = _rootN;
+            //Find node position
             while (true)
             {
                 if (comp(tmp->data, val))
@@ -65,7 +73,7 @@ namespace ft
                 else
                     return;
             }
-            newnode->data = val;
+            _alloc.construct(&newnode->data, val);
             newnode->parent = tmp;
             newnode->left = NULL;
             newnode->right = NULL;
@@ -99,16 +107,12 @@ namespace ft
             //case with two child
             if (node->left && node->right)
             {
-                tmp = minValueNode(node->right);
+                tmp = minValueNode(node->left);
                 node->data = tmp->data;
                 if (tmp->parent != node)
-                    tmp->parent->left = NULL;
-                if (tmp->parent->right == tmp && 
-                    tmp->left == NULL && tmp->right == NULL)
                     tmp->parent->right = NULL;
-                if (tmp->right)
-                    tmp = copyBranch(tmp, RIGHT);
-            
+                if (tmp->left)
+                    tmp = copyBranch(tmp, LEFT);
             }
             //case with only one child
             else if (node->left || node->right)
@@ -126,7 +130,16 @@ namespace ft
                 else if (tmp->parent->right == tmp)
                     tmp->parent->right = NULL;
             }
-            free(tmp);
+
+            fixdelete(tmp);
+            
+            if (tmp->parent->left == tmp && 
+                tmp->left == NULL && tmp->right == NULL)
+                tmp->parent->left = NULL;
+                
+            // delete tmp; //destroy value + deallocate
+            _alloc.destroy(&tmp->data);
+            _node_alloc.deallocate(tmp, 1);
         }
 
         void treePrint()
@@ -140,6 +153,8 @@ namespace ft
 
     private:
         node_pointer _rootN;
+        node_alloc _node_alloc;
+        alloc _alloc;
         compare comp;
 
         void fixinsert(node_pointer newnode)
@@ -196,6 +211,73 @@ namespace ft
             _rootN->color = black;
         }
 
+        void fixdelete(node_pointer node)
+        {
+            while (node != _rootN && node->color == black){
+                if (node == node->parent->left){
+                    node_pointer sister = node->parent->right;
+                    if (sister->color == red){
+                        sister->color = black;
+                        node->parent->color = red;
+                        left_rotate(node->parent);
+                        sister = node->parent->right;
+                    }
+                    if (sister->left && sister->right &&
+                        sister->left->color == black &&
+                        sister->right->color == black){
+                        sister->color = red;
+                        node = node->parent;
+                    }
+                    else {
+                        if (sister->right && sister->right->color == black) {
+                            sister->left->color = black;
+                            sister->color = red;
+                            right_rotate(sister);
+                            sister = node->parent->right;
+                        }
+                        sister->color = node->parent->color;
+                        node->parent->color = black;
+                        if (sister->right){
+                            sister->right->color = black;
+                            left_rotate(node->parent);
+                        }
+                        node = _rootN;
+                    }
+                }
+                else {
+                    node_pointer sister = node->parent->left;
+                    if (sister->color == red){
+                        sister->color = black;
+                        node->parent->color = red;
+                        right_rotate(node->parent);
+                        sister = node->parent->left;
+                    }
+                    if (sister->right && sister->left &&
+                        sister->right->color == black &&
+                        sister->left->color == black){
+                        sister->color = red;
+                        node = node->parent;
+                    }
+                    else {
+                        if (sister->left && sister->left->color == black) {
+                            sister->right->color = black;
+                            sister->color = red;
+                            left_rotate(sister);
+                            sister = node->parent->left;
+                        }
+                        sister->color = node->parent->color;
+                        node->parent->color = black;
+                        if (sister->left){
+                            sister->left->color = black;
+                            right_rotate(node->parent);
+                        }
+                        node = _rootN;
+                    }
+                }
+            }
+            node->color = black;
+        }
+
         void right_rotate(node_pointer a)
         {
             node_pointer b = a->left;
@@ -233,8 +315,8 @@ namespace ft
         node_pointer minValueNode(node_pointer node)
         {
             node_pointer minNode = node;
-            while (minNode && minNode->left)
-                minNode = minNode->left;
+            while (minNode && minNode->right)
+                minNode = minNode->right;
             return minNode;
         }
 
