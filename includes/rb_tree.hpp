@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/24 17:24:03 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/24 18:43:03 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 #include <memory>
 #include <string>
 #include <stdlib.h>
+#include <sys/qos.h>
 
 #define RED "\033[31;1m"
+#define YELLOW "\033[93;1m"
 #define END "\033[0m"
 
 enum {LEFT, RIGHT};
@@ -36,21 +38,29 @@ namespace ft
         typedef typename alloc::template rebind<node>::other    node_alloc;
 
         //Default constructor
-        rb_tree() { _rootN = _node_alloc.allocate(1); } //avec std::allocator
+        rb_tree() { _rootN = NULL; }
 
         //Parameterized constructor
         rb_tree(value_type val)
         {
             _rootN = _node_alloc.allocate(1);
             _alloc.construct(&_rootN->data, val);
+            _rootN->color = black;
+            _rootN->left = NULL;
+            _rootN->right = NULL;
+            _rootN->parent = NULL;
         }
 
         void insert(value_type val)
         {
-            if (!_rootN->data)
+            if (!_rootN)
             {
+                _rootN = _node_alloc.allocate(1);
                 _alloc.construct(&_rootN->data, val);
                 _rootN->color = black;
+                _rootN->left = NULL;
+                _rootN->right = NULL;
+                _rootN->parent = NULL;
                 return;
             }
             node_pointer newnode = _node_alloc.allocate(1);
@@ -77,6 +87,7 @@ namespace ft
             newnode->parent = tmp;
             newnode->left = NULL;
             newnode->right = NULL;
+            newnode->color = red;
             if (comp(val, tmp->data))
                 tmp->left = newnode;
             else
@@ -123,21 +134,20 @@ namespace ft
                     tmp = copyBranch(tmp, RIGHT);
             }
             //case with no child
-            else
+            else //!ca fuck ici avant d'aller dans fixdelete 
             {
                 if (tmp->parent->left == tmp)
-                    tmp->parent->left = NULL;
+                    tmp->parent->left = NULL; 
                 else if (tmp->parent->right == tmp)
                     tmp->parent->right = NULL;
             }
 
-            fixdelete(tmp);
+                fixdelete(tmp);
             
             if (tmp->parent->left == tmp && 
                 tmp->left == NULL && tmp->right == NULL)
                 tmp->parent->left = NULL;
                 
-            // delete tmp; //destroy value + deallocate
             _alloc.destroy(&tmp->data);
             _node_alloc.deallocate(tmp, 1);
         }
@@ -360,11 +370,13 @@ namespace ft
                     std::cout << "L----";
                     indent += "     ";
                 }
-                std::string sColor = root->color?"BLACK":"RED";
-                if (sColor == "BLACK")
+                // std::string sColor = root->color?"BLACK":"RED";
+                if (root->color == black)
                     std::cout << root->data << std::endl;
-                else
+                else if (root->color == red)
                     std::cout << RED << root->data << END << std::endl;
+                else
+                    std::cout << YELLOW << root->data << END << std::endl;;
                 _printTree(root->right, indent, true);
                 _printTree(root->left, indent, false);
             }
