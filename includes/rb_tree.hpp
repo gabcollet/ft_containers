@@ -6,14 +6,17 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/26 13:55:58 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/26 19:00:11 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "rb_tree_node.hpp"
+#include "rb_tree_iterator.hpp"
+#include "pair.hpp"
 #include <iostream>
+#include <functional>
 #include <memory>
 #include <string>
 #include <stdlib.h>
@@ -36,6 +39,7 @@ namespace ft
         typedef rb_tree_node<value_type>                        node;
         typedef rb_tree_node<value_type>*                       node_pointer;
         typedef typename alloc::template rebind<node>::other    node_alloc;
+        typedef rb_tree_iterator<value_type>                    iterator;
 
         //Default constructor
         rb_tree() { _rootN = NULL; }
@@ -43,58 +47,30 @@ namespace ft
         //Parameterized constructor
         rb_tree(value_type val)
         {
-            _rootN = _node_alloc.allocate(1);
-            _alloc.construct(&_rootN->data, val);
-            _rootN->color = black;
-            _rootN->left = NULL;
-            _rootN->right = NULL;
-            _rootN->parent = NULL;
+            _rootN = construct_node(val, NULL, black);
         }
 
-        void insert(value_type val)
+        pair<iterator, bool> insert(const value_type& val)
         {
             if (!_rootN)
             {
-                _rootN = _node_alloc.allocate(1);
-                _alloc.construct(&_rootN->data, val);
-                _rootN->color = black;
-                _rootN->left = NULL;
-                _rootN->right = NULL;
-                _rootN->parent = NULL;
-                return;
+                *this = rb_tree(val);
+                return ft::make_pair(_rootN, true);
             }
-            node_pointer newnode = _node_alloc.allocate(1);
             node_pointer tmp = _rootN;
-            //Find node position
-            while (true)
-            {
-                if (comp(tmp->data, val))
-                {
-                    if (tmp->right == NULL)
-                        break;
-                    tmp = tmp->right;
-                }
-                else if (comp(val, tmp->data))
-                {
-                    if (tmp->left == NULL)
-                        break;
-                    tmp = tmp->left;
-                }
-                else
-                    return;
-            }
-            _alloc.construct(&newnode->data, val);
-            newnode->parent = tmp;
-            newnode->left = NULL;
-            newnode->right = NULL;
-            newnode->color = red;
-            if (comp(val, tmp->data))
+            tmp = find_parent(tmp, val);
+            if (tmp == NULL)
+                return ft::make_pair(tmp, false);  
+            node_pointer newnode = construct_node(val, tmp, red);
+            if (value_comp()(val, tmp->data))
                 tmp->left = newnode;
             else
                 tmp->right = newnode;
             fixinsert(newnode);
+            return pair<iterator, bool>(newnode, true);
         }
 
+        //!va devoir etre corriger comme le insert
         void deleteNode(value_type val)
         {
             node_pointer node = _rootN;
@@ -132,11 +108,32 @@ namespace ft
             }
         }
 
+        compare& value_comp()
+        {
+            return _comp;
+        }
+        
+        const compare& value_comp() const
+        {
+            return _comp;
+        }
+
     private:
         node_pointer _rootN;
         node_alloc _node_alloc;
         alloc _alloc;
-        compare comp;
+        compare _comp;
+
+        node_pointer construct_node(value_type val, node_pointer parent, Color c)
+        {
+            node_pointer newnode = _node_alloc.allocate(1);
+            _alloc.construct(&newnode->data, val);
+            newnode->parent = parent;
+            newnode->left = NULL;
+            newnode->right = NULL;
+            newnode->color = c;
+            return newnode;
+        }
 
         void fixinsert(node_pointer newnode)
         {   
@@ -183,6 +180,29 @@ namespace ft
                     break;
             }
             _rootN->color = black;
+        }
+
+        template <typename Key>
+        node_pointer& find_parent(node_pointer node, const Key& val) const
+        {
+            while (true)
+            {
+                if (value_comp()(node->data, val))
+                {
+                    if (node->right == NULL)
+                        break;
+                    node = node->right;
+                }
+                else if (value_comp()(val, node->data))
+                {
+                    if (node->left == NULL)
+                        break;
+                    node = node->left;
+                }
+                else
+                    return NULL;
+            }
+            return node;
         }
 
         node_pointer find_node(node_pointer node, value_type val)
@@ -385,7 +405,6 @@ namespace ft
                     std::cout << "L----";
                     indent += "     ";
                 }
-                // std::string sColor = root->color?"BLACK":"RED";
                 if (root->color == black)
                     std::cout << root->data << std::endl;
                 else if (root->color == red)

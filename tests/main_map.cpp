@@ -1,11 +1,17 @@
+#include "map.hpp"
+#include "pair.hpp"
 #include "rb_tree.hpp"
+#include "rb_tree_iterator.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <memory>
 
 int main() {
 	
-	ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
+    //* ========================= RBTree test =========================
+
+	/* ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
+	ft::rb_tree_iterator<int> it;
 	// srand(123);
 	// for (int i = 0; i < 100; i++){
 	// 	// std::cout << i << std::endl;
@@ -32,18 +38,30 @@ int main() {
 	// 	bst.treePrint();
 	// 	bst.deleteNode(rand() % 100);
 	// }
-	bst.deleteNode(38);
-	bst.deleteNode(25);
-	bst.deleteNode(1);
-	bst.deleteNode(15);
-	bst.deleteNode(40);
-	bst.deleteNode(37);
-	bst.deleteNode(80);
-	bst.deleteNode(11);
-	
-	// bst.deleteNode(69);
-	// bst.deleteNode(420);
+	// bst.deleteNode(38);
+	// bst.deleteNode(25);
+	// bst.deleteNode(1);
+	// bst.deleteNode(15);
+	// bst.deleteNode(40);
+	// bst.deleteNode(37);
+	// bst.deleteNode(80);
+	// bst.deleteNode(11);
 
 	bst.treePrint();
+ */
+	//* ========================= Constructor Test =========================
+
+	ft::map<int, std::string> m1;
+	ft::map<int, std::string>::iterator it;	
+
+	// ft::pair<int, std::string> p1(1, "allo");
+	// ft::pair<int, std::string> p1(1, "allo");
+	// ft::pair<int, std::string> = ft::make_pair(1, "allo");
+
+	bool test = m1.insert(ft::make_pair(1, "allo")).second;
+	bool test2 = m1.insert(ft::make_pair(1, "pouet")).second;
+	std::cout << std::boolalpha << test << std::endl;
+	std::cout << std::boolalpha << test2 << std::endl;
+
 	return 0;
 }
