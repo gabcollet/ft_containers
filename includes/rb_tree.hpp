@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/24 18:43:03 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/26 13:55:58 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,35 +97,18 @@ namespace ft
 
         void deleteNode(value_type val)
         {
-            if (val == _rootN->data)
-                return;
-
             node_pointer node = _rootN;
-            //Find node with value
-            while (true)
-            {
-                if (node->data == val)
-                    break;
-                if (node->right && comp(node->data, val))
-                    node = node->right;
-                else if (node->left && comp(val, node->data))
-                    node = node->left;
-                else
-                    return;
-            }
-            
+            node = find_node(node, val);
             node_pointer tmp = node;
             //case with two child
             if (node->left && node->right)
             {
                 tmp = minValueNode(node->left);
                 node->data = tmp->data;
-                if (tmp->parent != node)
-                    tmp->parent->right = NULL;
                 if (tmp->left)
                     tmp = copyBranch(tmp, LEFT);
             }
-            //case with only one child
+            //case with one child
             else if (node->left || node->right)
             {    
                 if (node->left)
@@ -133,23 +116,11 @@ namespace ft
                 else
                     tmp = copyBranch(tmp, RIGHT);
             }
-            //case with no child
-            else //!ca fuck ici avant d'aller dans fixdelete 
-            {
-                if (tmp->parent->left == tmp)
-                    tmp->parent->left = NULL; 
-                else if (tmp->parent->right == tmp)
-                    tmp->parent->right = NULL;
-            }
-
+            //if there is a sister fix for rbtree
+            if ((tmp == tmp->parent->right && tmp->parent->left) ||
+                (tmp == tmp->parent->left && tmp->parent->right))
                 fixdelete(tmp);
-            
-            if (tmp->parent->left == tmp && 
-                tmp->left == NULL && tmp->right == NULL)
-                tmp->parent->left = NULL;
-                
-            _alloc.destroy(&tmp->data);
-            _node_alloc.deallocate(tmp, 1);
+            remove_node(tmp, node);
         }
 
         void treePrint()
@@ -168,49 +139,42 @@ namespace ft
         compare comp;
 
         void fixinsert(node_pointer newnode)
-        {
-            // Red/Black Property: Every node is colored, either red or black.
-            // Root Property: The root is black.
-            // Leaf Property: Every leaf (NIL) is black.
-            // Red Property: If a red node has children then, the children are always black.
-            // Depth Property: For each node, any simple path from this node to any of its descendant leaf has the same black-depth (the number of black nodes).
-            // https://algorithmtutor.com/Data-Structures/Tree/Red-Black-Trees/
-            
+        {   
             node_pointer uncle;
             
             while (newnode->parent->color == red){
                 if (newnode->parent == newnode->parent->parent->right){
                     uncle = newnode->parent->parent->left;
-                    if (uncle && uncle->color == red){
+                    if (uncle && uncle->color == red){ //case 3.1
                         uncle->color = black;
                         newnode->parent->color = black;
                         newnode->parent->parent->color = red;
                         newnode = newnode->parent->parent;
                     }
                     else {
-                        if (newnode == newnode->parent->left){
+                        if (newnode == newnode->parent->left){ //case 3.3.1
                             newnode = newnode->parent;
                             right_rotate(newnode);
                         }
-                        newnode->parent->color = black;
+                        newnode->parent->color = black; //case 3.3.2
                         newnode->parent->parent->color = red;
                         left_rotate(newnode->parent->parent);
                     }
                 }
                 else {
                     uncle = newnode->parent->parent->right;
-                    if (uncle && uncle->color == red){
+                    if (uncle && uncle->color == red){ //case 3.1
                         uncle->color = black;
                         newnode->parent->color = black;
                         newnode->parent->parent->color = red;
                         newnode = newnode->parent->parent;
                     }
                     else {
-                        if (newnode == newnode->parent->right){
+                        if (newnode == newnode->parent->right){ //case 3.3.1
                             newnode = newnode->parent;
                             left_rotate(newnode);
                         }
-                        newnode->parent->color = black;
+                        newnode->parent->color = black; //case 3.3.2
                         newnode->parent->parent->color = red;
                         right_rotate(newnode->parent->parent);
                     }
@@ -221,31 +185,53 @@ namespace ft
             _rootN->color = black;
         }
 
+        node_pointer find_node(node_pointer node, value_type val)
+        {
+            while (true)
+            {
+                if (node->data == val)
+                    break;
+                if (node->right && comp(node->data, val))
+                    node = node->right;
+                else if (node->left && comp(val, node->data))
+                    node = node->left;
+                else
+                    return node;
+            }
+            return node;
+        }
+
         void fixdelete(node_pointer node)
         {
+            //https://algorithmtutor.com/Data-Structures/Tree/Red-Black-Trees/
             while (node != _rootN && node->color == black){
+                //if node is left child
                 if (node == node->parent->left){
                     node_pointer sister = node->parent->right;
-                    if (sister->color == red){
+                    if (sister->color == red){ //case 3.1
                         sister->color = black;
                         node->parent->color = red;
                         left_rotate(node->parent);
-                        sister = node->parent->right;
+                        if (node->parent->right)
+                            sister = node->parent->right;
+                        else
+                            break;
                     }
-                    if (sister->left && sister->right &&
+                    if ((sister->left && sister->right &&
                         sister->left->color == black &&
-                        sister->right->color == black){
+                        sister->right->color == black) ||
+                        (sister->right == NULL && sister->left == NULL)){ //case 3.2
                         sister->color = red;
                         node = node->parent;
                     }
                     else {
-                        if (sister->right && sister->right->color == black) {
+                        if (sister->right && sister->right->color == black) { //case 3.3
                             sister->left->color = black;
                             sister->color = red;
                             right_rotate(sister);
                             sister = node->parent->right;
                         }
-                        sister->color = node->parent->color;
+                        sister->color = node->parent->color; //case 3.4
                         node->parent->color = black;
                         if (sister->right){
                             sister->right->color = black;
@@ -254,28 +240,33 @@ namespace ft
                         node = _rootN;
                     }
                 }
-                else {
+                //if node is right child
+                else if (node == node->parent->right){
                     node_pointer sister = node->parent->left;
-                    if (sister->color == red){
+                    if (sister->color == red){ //case 3.1
                         sister->color = black;
                         node->parent->color = red;
                         right_rotate(node->parent);
-                        sister = node->parent->left;
+                        if (node->parent->left)
+                            sister = node->parent->left;
+                        else
+                            break;
                     }
-                    if (sister->right && sister->left &&
+                    if ((sister->right && sister->left &&
                         sister->right->color == black &&
-                        sister->left->color == black){
+                        sister->left->color == black) ||
+                        (sister->right == NULL && sister->left == NULL)){ //case 3.2
                         sister->color = red;
                         node = node->parent;
                     }
                     else {
-                        if (sister->left && sister->left->color == black) {
+                        if (sister->left && sister->left->color == black) { //case 3.3
                             sister->right->color = black;
                             sister->color = red;
                             left_rotate(sister);
                             sister = node->parent->left;
                         }
-                        sister->color = node->parent->color;
+                        sister->color = node->parent->color; //case 3.4
                         node->parent->color = black;
                         if (sister->left){
                             sister->left->color = black;
@@ -284,8 +275,32 @@ namespace ft
                         node = _rootN;
                     }
                 }
+                else 
+                    return;
             }
             node->color = black;
+        }
+
+        void remove_node(node_pointer tmp, node_pointer node)
+        {
+            //case with no child
+            if (tmp->left == NULL && tmp->right == NULL)
+            {
+                if (tmp->parent->left == tmp)
+                        tmp->parent->left = NULL; 
+                else if (tmp->parent->right == tmp)
+                    tmp->parent->right = NULL;
+            }
+            //case with one child
+            if (tmp->parent->left == tmp && 
+                tmp->left == NULL && tmp->right == NULL)
+                tmp->parent->left = NULL;
+            //case with two child
+            if (tmp->parent != node)
+                tmp->parent->right = NULL;
+                
+            _alloc.destroy(&tmp->data);
+            _node_alloc.deallocate(tmp, 1);
         }
 
         void right_rotate(node_pointer a)
