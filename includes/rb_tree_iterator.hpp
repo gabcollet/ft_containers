@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:49:46 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/30 11:22:17 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/30 16:59:23 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "rb_tree_node.hpp"
 #include <iterator>
 
+
+//! valider ou creer une version const pour l'iterator
 namespace ft
 {
     template < typename value_type >
@@ -69,6 +71,8 @@ namespace ft
         bool operator== (const iterator& it) { return _ptr_node == it._ptr_node; }
 
         bool operator!= (const iterator& it) { return _ptr_node != it._ptr_node; }
+
+        node* base() {return _ptr_node;}
         
     private:
         node* _ptr_node;

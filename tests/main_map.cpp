@@ -10,7 +10,7 @@ int main() {
 	
     //* ========================= RBTree test =========================
 
-	/* ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
+/* 	ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
 	ft::rb_tree_iterator<int> it;
 	// srand(123);
 	// for (int i = 0; i < 100; i++){
@@ -18,19 +18,19 @@ int main() {
 	// 	// bst.treePrint();
 	// 	bst.insert(rand() % 100);
 	// }
-	bst.insert(11);
-	bst.insert(18);
-	bst.insert(15);
-	bst.insert(17);
-	bst.insert(25);
-	bst.insert(40);
-	bst.insert(80);
-	bst.insert(3);
-	bst.insert(1);
-	bst.insert(2);
-	bst.insert(39);
-	bst.insert(38);
-	bst.insert(37);
+	// bst.insert(11);
+	// bst.insert(18);
+	// bst.insert(15);
+	// bst.insert(17);
+	// bst.insert(25);
+	// bst.insert(40);
+	// bst.insert(80);
+	// bst.insert(3);
+	// bst.insert(1);
+	// bst.insert(2);
+	// bst.insert(39);
+	// bst.insert(38);
+	// bst.insert(37);
 
 	// srand(123);
 	// for (int i = 0; i < 50; i++){
@@ -51,7 +51,7 @@ int main() {
 
 	//* ========================= Constructor Test =========================
 
-	/* ft::map<int, std::string> m1;
+	ft::map<int, std::string> m1;
 	ft::map<int, std::string>::iterator it;	
 
 	// ft::pair<int, std::string> p1(1, "allo");
@@ -60,15 +60,17 @@ int main() {
 
 	bool test = m1.insert(ft::make_pair(1, "allo")).second;
 	bool test2 = m1.insert(ft::make_pair(1, "pouet")).second;
-	std::string str = m1[2] = "blabla";
+	std::string str = m1[3] = "blabla";
 	std::cout << std::boolalpha << test << std::endl;
 	std::cout << std::boolalpha << test2 << std::endl;
 	std::cout << str << std::endl;
 
 	it = m1.end();
 	--it;
-	// --it;
-	std::cout << it->second << std::endl;  */
+	--it;
+	ft::pair<int, std::string> p(2, "test");
+	m1.insert(it, p);
+	std::cout << it->second << std::endl; 
 
 	return 0;
 }
