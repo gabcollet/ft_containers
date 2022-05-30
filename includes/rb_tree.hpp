@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/27 12:18:06 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/30 12:27:42 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,22 @@ namespace ft
     public:
         typedef rb_tree_node<value_type>                        node;
         typedef rb_tree_node<value_type>*                       node_pointer;
+        // typedef rb_tree_endNode                                 endNode;
+        // typedef rb_tree_endNode*                                endNode_pointer;
         typedef typename alloc::template rebind<node>::other    node_alloc;
         typedef rb_tree_iterator<value_type>                    iterator;
 
         //Default constructor
-        rb_tree() { _rootN = NULL; }
+        rb_tree() : _rootN(), _endN() {}
 
         //Parameterized constructor
         rb_tree(value_type val)
         {
             _rootN = construct_node(val, NULL, black);
+            _endN = construct_node(val, NULL, black);
+            _endN->end = true;
+            _rootN->right = _endN;
+            _endN->parent = _rootN;
         }
 
         pair<iterator, bool> insert(const value_type& val)
@@ -67,10 +73,10 @@ namespace ft
             else
                 tmp->right = newnode;
             fixinsert(newnode);
+            fixendNode();
             return pair<iterator, bool>(newnode, true);
         }
 
-        //!va devoir etre corriger comme le insert
         void deleteNode(value_type val)
         {
             node_pointer node = _rootN;
@@ -119,10 +125,11 @@ namespace ft
         }
 
     private:
-        node_pointer _rootN;
-        node_alloc _node_alloc;
-        alloc _alloc;
-        compare _comp;
+        node_pointer    _rootN;
+        node_pointer    _endN;
+        node_alloc      _node_alloc;
+        alloc           _alloc;
+        compare         _comp;
 
         node_pointer construct_node(value_type val, node_pointer parent, Color c)
         {
@@ -132,7 +139,17 @@ namespace ft
             newnode->left = NULL;
             newnode->right = NULL;
             newnode->color = c;
+            newnode->end = false;
             return newnode;
+        }
+
+        void fixendNode()
+        {
+            node_pointer tmp = _rootN;
+            while (tmp->end == false && tmp->right)
+                tmp = tmp->right;
+            tmp->right = _endN;
+            _endN->parent = tmp;
         }
 
         void fixinsert(node_pointer newnode)
@@ -185,8 +202,11 @@ namespace ft
         template <typename Key>
         node_pointer find_parent(node_pointer node, const Key& val) const
         {
+            // while (node->right->end == false)
             while (true)
             {
+                if (node->right && node->right->end == true)
+                    break;
                 if (value_comp()(node->data, val))
                 {
                     if (node->right == NULL)
@@ -207,13 +227,14 @@ namespace ft
 
         node_pointer find_node(node_pointer node, value_type val)
         {
+            // while (node->right->end == false)
             while (true)
             {
-                if (node->data == val)
+                if ((node->right && node->right->end == true) || node->data == val)
                     break;
-                if (node->right && comp(node->data, val))
+                if (node->right && value_comp()(node->data, val))
                     node = node->right;
-                else if (node->left && comp(val, node->data))
+                else if (node->left && value_comp()(val, node->data))
                     node = node->left;
                 else
                     return node;
@@ -240,15 +261,16 @@ namespace ft
                     if ((sister->left && sister->right &&
                         sister->left->color == black &&
                         sister->right->color == black) ||
-                        (sister->right == NULL && sister->left == NULL)){ //case 3.2
+                        (sister->right == NULL && sister->left == NULL) ||
+                        (sister->right->end == true && sister->left == NULL)){ //case 3.2
                         sister->color = red;
                         node = node->parent;
                     }
                     else {
                         if (sister->right && sister->right->color == black) { //case 3.3
                             sister->left->color = black;
-                            sister->color = red;
                             right_rotate(sister);
+                            sister->color = red;
                             sister = node->parent->right;
                         }
                         sister->color = node->parent->color; //case 3.4
@@ -282,8 +304,8 @@ namespace ft
                     else {
                         if (sister->left && sister->left->color == black) { //case 3.3
                             sister->right->color = black;
-                            sister->color = red;
                             left_rotate(sister);
+                            sister->color = red;
                             sister = node->parent->left;
                         }
                         sister->color = node->parent->color; //case 3.4
@@ -370,7 +392,7 @@ namespace ft
             node_pointer tmp = node;
             if (side == RIGHT)
             {
-                while (tmp->right)
+                while (tmp->right && tmp->right->end == false)
                 {
                     tmp->data = tmp->right->data;
                     tmp = tmp->right;
@@ -391,7 +413,7 @@ namespace ft
 
         void _printTree(node_pointer root, std::string indent, bool last) 
         {
-            if (root != NULL) {
+            if (root != NULL && root->end == false) {
                 std::cout << indent;
                 if (root == _rootN){
                     std::cout << "-----";
