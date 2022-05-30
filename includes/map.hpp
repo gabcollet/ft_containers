@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/27 15:03:34 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/30 15:08:00 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ namespace ft
         typedef typename allocator_type::pointer            pointer;
         typedef typename allocator_type::const_pointer      const_pointer;
         typedef ft::rb_tree_iterator<value_type>            iterator;
-        typedef ft::rb_tree_iterator<value_type>            const_iterator;
+        typedef ft::rb_tree_iterator<const value_type>      const_iterator;
         typedef ft::reverse_iterator<iterator>              reverse_iterator;
         typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
         
@@ -133,10 +133,9 @@ namespace ft
         
         //* ============================ Iterators ============================
 
-        //!va me falloir un end node pour etre capable de 
-       /*  iterator end() {return _tree.end()}
+        iterator end() {return _tree.end();}
 
-        const_iterator end() const {} */
+        const_iterator end() const {return _tree.end();}
         
         //* ============================ Modifiers ============================
         
@@ -145,20 +144,12 @@ namespace ft
             return _tree.insert(val);
         }
 
-        /* iterator insert (iterator position, const value_type& val)
+        iterator insert (iterator hint, const value_type& val)
         {
-            if(lb != m.end() && // if Ib points to a pair
-                !(m.key_comp()(k, lb->first))) { // whose key is equiv to k...
-                lb->second = v; // update the pair's value
-                return Ib; // and return an iterator
-            } //to that pair
-            else{
-                typedef typename MapType::value_type MVT;
-                return m.insert(lb, MVT(k, v)); // add pair(k, v) to m and
-            } //return an iterator to the
+            return _tree.insert(hint, val);
         }
 
-        template <class InputIterator>
+        /* template <class InputIterator>
         void insert (InputIterator first, InputIterator last)
         {
             

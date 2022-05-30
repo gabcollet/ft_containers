@@ -10,7 +10,7 @@ int main() {
 	
     //* ========================= RBTree test =========================
 
-	ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
+	/* ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
 	ft::rb_tree_iterator<int> it;
 	// srand(123);
 	// for (int i = 0; i < 100; i++){
@@ -38,16 +38,16 @@ int main() {
 	// 	bst.treePrint();
 	// 	bst.deleteNode(rand() % 100);
 	// }
-	bst.deleteNode(38);
-	bst.deleteNode(25);
-	bst.deleteNode(1);
+	// bst.deleteNode(38);
+	// bst.deleteNode(25);
+	// bst.deleteNode(1);
+	// bst.deleteNode(15);
+	// bst.deleteNode(40);
+	// bst.deleteNode(37);
+	// bst.deleteNode(80);
 	bst.deleteNode(15);
-	bst.deleteNode(40);
-	bst.deleteNode(37);
-	bst.deleteNode(80);
-	bst.deleteNode(11);
 
-	bst.treePrint();
+	bst.treePrint(); */
 
 	//* ========================= Constructor Test =========================
 
@@ -63,7 +63,12 @@ int main() {
 	std::string str = m1[2] = "blabla";
 	std::cout << std::boolalpha << test << std::endl;
 	std::cout << std::boolalpha << test2 << std::endl;
-	std::cout << str << std::endl; */
+	std::cout << str << std::endl;
+
+	it = m1.end();
+	--it;
+	// --it;
+	std::cout << it->second << std::endl;  */
 
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:04:07 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/30 11:38:27 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/30 14:49:33 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,5 @@ namespace ft
         node_pointer    parent;
         value_type      data;
         Color           color;
-        bool            end;
     };
-
-    // struct rb_tree_endNode
-    // {
-    //     typedef rb_tree_endNode*       node_pointer;
-        
-    //     node_pointer    parent;
-    //     bool            end;
-    // };
 }
