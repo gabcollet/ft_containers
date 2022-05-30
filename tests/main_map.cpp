@@ -47,8 +47,8 @@ int main() {
 	// bst.deleteNode(80);
 	// bst.deleteNode(11);
 
-	bst.treePrint();
- */
+	bst.treePrint(); */
+
 	//* ========================= Constructor Test =========================
 
 	ft::map<int, std::string> m1;
@@ -60,8 +60,10 @@ int main() {
 
 	bool test = m1.insert(ft::make_pair(1, "allo")).second;
 	bool test2 = m1.insert(ft::make_pair(1, "pouet")).second;
+	std::string str = m1[2] = "blabla";
 	std::cout << std::boolalpha << test << std::endl;
 	std::cout << std::boolalpha << test2 << std::endl;
+	std::cout << str << std::endl;
 
 	return 0;
 }

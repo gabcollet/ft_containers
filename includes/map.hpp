@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/26 19:13:10 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/27 15:03:34 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <functional>
 #include <iterator>
+#include <algorithm>
 #include <sys/_types/_key_t.h>
 #include "iterator.hpp"
 #include "rb_tree_iterator.hpp"
@@ -24,6 +25,42 @@
 
 namespace ft
 {
+
+    template<typename Key, typename T, typename Compare>
+    class map_value_compare
+    {
+    
+    public:
+        map_value_compare() : _comp() {}
+        
+        map_value_compare(Compare c) : _comp(c) {}
+        
+        const Compare& key_comp() const { return _comp; }
+
+        bool operator() (const T& x, const T& y) const
+        {
+            return _comp(x.first, y.first);
+        }
+
+        bool operator() (const T& x, const Key& y) const
+        {
+            return _comp(x.first, y);    
+        }
+
+        bool operator() (const Key& x, const T& y) const
+        {
+            return _comp(x, y.first);
+        }
+
+        void swap (map_value_compare& y)
+        {
+            std::swap(_comp, y._comp);
+        }
+
+    private:
+        Compare _comp;
+    };
+    
     template< typename Key, 
               typename T, 
               typename Compare = std::less<Key>,
@@ -94,6 +131,13 @@ namespace ft
             
         } */
         
+        //* ============================ Iterators ============================
+
+        //!va me falloir un end node pour etre capable de 
+       /*  iterator end() {return _tree.end()}
+
+        const_iterator end() const {} */
+        
         //* ============================ Modifiers ============================
         
         pair<iterator, bool> insert (const value_type& val)
@@ -103,7 +147,15 @@ namespace ft
 
         /* iterator insert (iterator position, const value_type& val)
         {
-            
+            if(lb != m.end() && // if Ib points to a pair
+                !(m.key_comp()(k, lb->first))) { // whose key is equiv to k...
+                lb->second = v; // update the pair's value
+                return Ib; // and return an iterator
+            } //to that pair
+            else{
+                typedef typename MapType::value_type MVT;
+                return m.insert(lb, MVT(k, v)); // add pair(k, v) to m and
+            } //return an iterator to the
         }
 
         template <class InputIterator>
@@ -113,9 +165,10 @@ namespace ft
         } */
         
     private:
-    //! compare doit etre une classe qui overload le () pour mettre val.first
-        rb_tree<Compare, value_type>    _tree;
-        Compare                         _comp;
-        allocator_type                  _alloc;
+        typedef map_value_compare<key_type, value_type, key_compare> _map_compare;
+        
+        rb_tree<_map_compare, value_type>   _tree;
+        key_compare                         _comp;
+        allocator_type                      _alloc;
     };
 }

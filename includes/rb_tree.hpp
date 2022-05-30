@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/26 19:00:11 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/27 12:18:06 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ namespace ft
         }
 
         template <typename Key>
-        node_pointer& find_parent(node_pointer node, const Key& val) const
+        node_pointer find_parent(node_pointer node, const Key& val) const
         {
             while (true)
             {
