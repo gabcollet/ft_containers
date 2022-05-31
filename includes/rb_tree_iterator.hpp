@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:49:46 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/31 15:55:59 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/31 16:06:46 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@
 
 namespace ft
 {
-    template < typename value_type >
+    template < typename T >
     class rb_tree_iterator 
     {
     
     public: 
+        typedef T                                   value_type;
         typedef rb_tree_node<value_type>            node;
         typedef rb_tree_node<value_type>*           node_pointer;
         typedef rb_tree_iterator<value_type>        iterator;
@@ -110,11 +111,12 @@ namespace ft
         }
     };
 
-    template < typename value_type >
+    template < typename T >
     class rb_tree_const_iterator 
     {
     
     public: 
+        typedef T                                   value_type;
         typedef rb_tree_node<value_type>            node;
         typedef rb_tree_node<value_type>*           node_pointer;
         typedef rb_tree_const_iterator<value_type>  iterator;

@@ -78,9 +78,6 @@ int main() {
 	const ft::map<int, std::string> m2 = m1;
 	std::cout << m2.at(3) << std::endl;
 	std::cout << m1.size() << std::endl;
-	// std::iterator_traits<ft::map<int, std::string>::iterator>::
-
-
 
 	return 0;
 }
