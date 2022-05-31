@@ -59,8 +59,10 @@ int main() {
 	// ft::pair<int, std::string> p1(1, "allo");
 	// ft::pair<int, std::string> = ft::make_pair(1, "allo");
 
-	std::cout << std::boolalpha << m1.empty() << std::endl;
+	// std::cout << std::boolalpha << m1.empty() << std::endl;
 	bool test = m1.insert(ft::make_pair(1, "allo")).second;
+	it = m1.begin();
+	m1.erase(it);
 	bool test2 = m1.insert(ft::make_pair(1, "pouet")).second;
 	m1[3] = "blabla";
 	std::cout << std::boolalpha << test << std::endl;
@@ -78,6 +80,8 @@ int main() {
 	const ft::map<int, std::string> m2 = m1;
 	std::cout << m2.at(3) << std::endl;
 	std::cout << m1.size() << std::endl;
+	// std::cout << m1.max_size() << std::endl;
+
 
 	return 0;
 }

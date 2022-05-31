@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/31 16:02:23 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/31 18:23:41 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,8 +167,18 @@ namespace ft
 
         size_type size() const {return std::distance(begin(), end());}
 
+        size_type max_size() const 
+        {
+            return std::min(_alloc.max_size(), 
+                            static_cast<size_type>(std::numeric_limits<difference_type>::max()));
+        }
         
         //* ============================ Modifiers ============================
+        
+       /*  void clear() 
+        {
+            
+        } */
         
         pair<iterator, bool> insert (const value_type& val)
         {
@@ -186,6 +196,16 @@ namespace ft
             for (; first != last; ++first)
                 _tree.insert(*first);
         }
+
+        /* void erase (iterator position) 
+        {
+            return _tree.deleteNode(position.base()->data);
+        } */
+
+        /* size_type erase (const key_type& k);
+
+        void erase (iterator first, iterator last); */
+
         
         //* ============================= Lookup ==============================
 
