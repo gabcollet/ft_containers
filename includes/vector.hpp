@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/26 15:42:57 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/31 15:32:48 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,12 +149,7 @@ namespace ft
 
         //* ============================ Capacity =============================
 
-        bool empty() const
-        {
-            if (size() == 0)
-                return true;
-            return false;
-        }
+        bool empty() const {return (size() == 0) ? true : false;}
 
         size_type size() const {return _end - _start;}
 

@@ -4,6 +4,7 @@
 #include "rb_tree_iterator.hpp"
 #include <iostream>
 #include <cstdlib>
+#include <iterator>
 #include <memory>
 
 int main() {
@@ -58,19 +59,28 @@ int main() {
 	// ft::pair<int, std::string> p1(1, "allo");
 	// ft::pair<int, std::string> = ft::make_pair(1, "allo");
 
+	std::cout << std::boolalpha << m1.empty() << std::endl;
 	bool test = m1.insert(ft::make_pair(1, "allo")).second;
 	bool test2 = m1.insert(ft::make_pair(1, "pouet")).second;
-	std::string str = m1[3] = "blabla";
+	m1[3] = "blabla";
 	std::cout << std::boolalpha << test << std::endl;
 	std::cout << std::boolalpha << test2 << std::endl;
-	std::cout << str << std::endl;
+	// std::cout << m1[3] << std::endl;
 
 	it = m1.end();
 	--it;
 	--it;
 	ft::pair<int, std::string> p(2, "test");
 	m1.insert(it, p);
-	std::cout << it->second << std::endl; 
+	// std::cout << it->second << std::endl; 
+
+	// std::cout << m1.find(3)->second << std::endl;
+	const ft::map<int, std::string> m2 = m1;
+	std::cout << m2.at(3) << std::endl;
+	std::cout << m1.size() << std::endl;
+	// std::iterator_traits<ft::map<int, std::string>::iterator>::
+
+
 
 	return 0;
 }

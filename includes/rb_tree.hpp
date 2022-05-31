@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/30 17:07:16 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/05/31 15:50:13 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ namespace ft
         typedef rb_tree_node<value_type>*                       node_pointer;
         typedef typename alloc::template rebind<node>::other    node_alloc;
         typedef rb_tree_iterator<value_type>                    iterator;
-        typedef rb_tree_iterator<const value_type>              const_iterator;
+        typedef rb_tree_const_iterator<value_type>              const_iterator;
 
         //Default constructor
-        rb_tree() : _rootN(), _endN() {}
+        rb_tree() : _rootN(), _endN(_rootN) {}
 
         //Parameterized constructor
         rb_tree(value_type val)
@@ -87,17 +87,33 @@ namespace ft
             node_pointer tmp = p.first;
             node_pointer newnode = construct_node(val, tmp, red);
             if (value_comp()(val, tmp->data))
+            {
+                if (tmp->left)
+                {
+                    tmp->left->parent = newnode;
+                    newnode->left = tmp->left;
+                }
                 tmp->left = newnode;
+            }
             else
+            {
+                if (tmp->right)
+                {
+                    tmp->right->parent = newnode;
+                    newnode->right = tmp->right;
+                }
                 tmp->right = newnode;
+            }
             fixinsert(newnode);
             return iterator(newnode);
         }
 
         void deleteNode(value_type val)
         {
-            node_pointer node = _rootN;
-            node = find_node(node, val);
+            pair<node_pointer,bool> p = find_node(_rootN, val);
+            if (!p.second)
+                return;
+            node_pointer node = p.first;
             node_pointer tmp = node;
             //case with two child
             if (node->left && node->right)
@@ -144,6 +160,42 @@ namespace ft
         iterator end() {return iterator(_endN);}
         
         const_iterator end() const {return const_iterator(_endN);}
+
+        iterator begin()
+        {
+            node_pointer node = _rootN;
+            while (node->left){
+                node = node->left;
+            }
+            return iterator(node);
+        }
+
+        const_iterator begin() const
+        {
+            node_pointer node = _rootN;
+            while (node && node->left){
+                node = node->left;
+            }
+            return const_iterator(node);
+        }
+
+        template <typename Key>
+        iterator find (const Key& k)
+        {
+            pair<node_pointer,bool> p = find_node(_rootN, k);
+            if (!p.second)
+                return end();
+            return iterator(p.first);
+        }
+        
+        template <typename Key>
+        const_iterator find (const Key& k) const
+        {
+            pair<node_pointer,bool> p = find_node(_rootN, k);
+            if (!p.second)
+                return end();
+            return const_iterator(p.first);
+        }
 
     private:
         node_pointer    _rootN;
@@ -215,7 +267,6 @@ namespace ft
                         }
                         newnode->parent->color = black; //case 3.3.2
                         newnode->parent->parent->color = red;
-                        // if (newnode->parent->parent->parent != _endN)
                         left_rotate(newnode->parent->parent);
                     }
                 }
@@ -349,31 +400,33 @@ namespace ft
         template <typename Key>
         pair<node_pointer, bool> find_parent(iterator node, const Key& val) const
         {
-            if (value_comp()(*node, val) /* && node.base()->right == NULL */)
+            if (value_comp()(node.base()->data, val))
+            {
+                if (node.base()->right && value_comp()(node.base()->right->data, val))
+                    return find_parent(_rootN, val);
                 return ft::make_pair(node.base(), true);
-            else
-                return find_parent(_rootN, val);
+            } 
+            return find_parent(_rootN, val);
         }
 
-        node_pointer find_node(node_pointer node, value_type val)
+        template <typename Key>
+        pair<node_pointer, bool> find_node(node_pointer node, const Key& val) const
         {
             while (true)
             {
-                if (node->data == val)
-                    break;
                 if (node->right && value_comp()(node->data, val))
                     node = node->right;
                 else if (node->left && value_comp()(val, node->data))
                     node = node->left;
-                else
-                    return node;
+                else{
+                    if (node->data == val)
+                        return ft::make_pair(node, true);
+                    else
+                        break;
+                }
             }
-            return node;
+            return ft::make_pair(_endN, false);
         }
-
-   
-
-        
 
         void right_rotate(node_pointer a)
         {
@@ -466,6 +519,19 @@ namespace ft
                 _printTree(root->right, indent, true);
                 _printTree(root->left, indent, false);
             }
-        }
+        }   
     };
+    
+    //overload == for key compare
+    template <typename U, typename V>
+    bool operator== (const pair<U,V>& lhs, const U& rhs)
+    {
+        return lhs.first == rhs;
+    }
+    
+    template <typename U, typename V>
+    bool operator== (const pair<U,V>& lhs, U& rhs)
+    {
+        return lhs.first == rhs;
+    }
 }
