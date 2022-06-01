@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/31 16:01:30 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/01 18:47:34 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,38 @@ namespace ft
             return iterator(newnode);
         }
 
-        void deleteNode(value_type val)
+        void deleteNode(iterator first, iterator last)
+        {
+            while (first != last){
+                first = deleteNode(first);
+            }
+        }
+        
+        iterator deleteNode(iterator first)
+        {
+            iterator ret(first);
+            ++ret;
+            deleteNode(first.base()->data);
+            return ret;
+        }
+
+        template<typename Key>
+        bool deleteNode(const Key& val)
         {
             pair<node_pointer,bool> p = find_node(_rootN, val);
             if (!p.second)
-                return;
+                return false;
             node_pointer node = p.first;
             node_pointer tmp = node;
             //case with two child
             if (node->left && node->right)
             {
                 tmp = minValueNode(node->left);
-                node->data = tmp->data;
+//! va falloir valider que j'ai pas scrapper le exchange node
+
+//! maintenant pour une raison x le remove_node pense que y
+//! reste plus de node apres et met tt a NULL
+                exchange_node(node, tmp);
                 if (tmp->left)
                     tmp = copyBranch(tmp, LEFT);
             }
@@ -135,7 +155,8 @@ namespace ft
             if ((tmp == tmp->parent->right && tmp->parent->left) ||
                 (tmp == tmp->parent->left && tmp->parent->right))
                 fixdelete(tmp);
-            remove_node(tmp, node);
+            remove_node(node, tmp);
+            return true;
         }
 
         void treePrint()
@@ -180,7 +201,7 @@ namespace ft
         }
 
         template <typename Key>
-        iterator find (const Key& k)
+        iterator find(const Key& k)
         {
             pair<node_pointer,bool> p = find_node(_rootN, k);
             if (!p.second)
@@ -189,13 +210,53 @@ namespace ft
         }
         
         template <typename Key>
-        const_iterator find (const Key& k) const
+        const_iterator find(const Key& k) const
         {
             pair<node_pointer,bool> p = find_node(_rootN, k);
             if (!p.second)
                 return end();
             return const_iterator(p.first);
         }
+
+        void swap(rb_tree& x)
+        {
+            std::swap(_rootN, x._rootN);
+            std::swap(_endN, x._endN);
+            std::swap(_node_alloc, x._node_alloc);
+            std::swap(_alloc, x._alloc);
+            std::swap(_comp, x._comp);
+        }
+
+        template <typename Key>
+        bool count(const Key& k) const
+        {
+            return find_node(_rootN, k).second;
+        }
+
+        template <typename Key>
+        iterator lower_bound (const Key& k)
+        {
+            return iterator(lbound(k));
+        }
+        
+        template <typename Key>
+        const_iterator lower_bound (const Key& k) const
+        {
+            return const_iterator(lbound(k));
+        }
+        
+        template <typename Key>
+        iterator upper_bound (const Key& k)
+        {
+            return iterator(ubound(k));
+        }
+        
+        template <typename Key>
+        const_iterator upper_bound (const Key& k) const
+        {
+            return const_iterator(ubound(k));
+        }
+        
 
     private:
         node_pointer    _rootN;
@@ -225,26 +286,63 @@ namespace ft
             return newnode;
         }
 
-        void remove_node(node_pointer tmp, node_pointer node)
+        void remove_node(node_pointer oldN, node_pointer tmp)
         {
             //case with no child
-            if (tmp->left == NULL && tmp->right == NULL)
+            if (oldN->left == NULL && oldN->right == NULL)
             {
-                if (tmp->parent->left == tmp)
-                        tmp->parent->left = NULL; 
-                else if (tmp->parent->right == tmp)
-                    tmp->parent->right = NULL;
+                if (oldN == _rootN){
+                    _rootN = NULL;
+                    _node_alloc.deallocate(_endN, 1);
+                    _endN = NULL;
+                }
+                else if (oldN->parent->left == oldN)
+                    oldN->parent->left = NULL; 
+                else
+                    oldN->parent->right = NULL;
             }
             //case with one child
-            if (tmp->parent->left == tmp && 
-                tmp->left == NULL && tmp->right == NULL)
-                tmp->parent->left = NULL;
+            if (oldN->parent->left == oldN && 
+                oldN->left == NULL && oldN->right == NULL)
+                oldN->parent->left = NULL;
             //case with two child
-            if (tmp->parent != node)
-                tmp->parent->right = NULL;
+            if (oldN->parent != tmp)
+                oldN->parent->right = NULL;
                 
-            _alloc.destroy(&tmp->data);
-            _node_alloc.deallocate(tmp, 1);
+            _alloc.destroy(&oldN->data);
+            _node_alloc.deallocate(oldN, 1);
+        }
+
+        void exchange_node(node_pointer a, node_pointer b)
+        {
+            node tmp = *a;
+            a->left = b->left;
+            a->right = b->right;
+            if (a->parent->right == a)
+                a->parent->right = b;
+            else
+                a->parent->left = b;
+            if (b->parent == a)
+                a->parent = b;
+            else
+                a->parent = b->parent;
+            if (b->parent != a)
+            {
+                if (b->parent->right == b)
+                    b->parent->right = a;
+                else
+                    b->parent->left = a;
+            }
+            if (a->left != b)
+                b->left = a->left;
+            else
+                b->left = a;
+            if (a->right != b)
+                b->right = tmp.right;
+            else
+                b->right = a;
+            b->parent = tmp.parent;
+
         }
 
         void fixinsert(node_pointer newnode)
@@ -412,6 +510,8 @@ namespace ft
         template <typename Key>
         pair<node_pointer, bool> find_node(node_pointer node, const Key& val) const
         {
+            if (!_rootN)
+                return ft::make_pair(_endN, false);
             while (true)
             {
                 if (node->right && value_comp()(node->data, val))
@@ -422,10 +522,59 @@ namespace ft
                     if (node->data == val)
                         return ft::make_pair(node, true);
                     else
-                        break;
+                        return ft::make_pair(_endN, false);
                 }
             }
-            return ft::make_pair(_endN, false);
+        }
+
+        template <typename Key>
+        node_pointer lbound(const Key& val)
+        {
+            if (!_rootN)
+                return _endN;
+            node_pointer tmp = _rootN;
+            node_pointer pos = _rootN;
+            while (true)
+            {
+                if (tmp->right && value_comp()(tmp->data, val))
+                    tmp = tmp->right;
+                else if (tmp->left && value_comp()(val, tmp->data))
+                {
+                    pos = tmp; 
+                    tmp = tmp->left;
+                }
+                else{
+                    if (tmp->data == val)
+                        return tmp;
+                    else
+                        return pos;
+                }
+            }
+        }
+        
+        template <typename Key>
+        node_pointer ubound(const Key& val)
+        {
+            if (!_rootN)
+                return _endN;
+            node_pointer tmp = _rootN;
+            node_pointer pos = _rootN;
+            while (true)
+            {
+                if (tmp->right && value_comp()(tmp->data, val))
+                {
+                    pos = tmp; 
+                    tmp = tmp->right;
+                }
+                else if (tmp->left && value_comp()(val, tmp->data))
+                    tmp = tmp->left;
+                else{
+                    if (tmp->data == val)
+                        return tmp;
+                    else
+                        return pos;
+                }
+            }
         }
 
         void right_rotate(node_pointer a)
@@ -476,19 +625,13 @@ namespace ft
             if (side == RIGHT)
             {
                 while (tmp->right)
-                {
-                    tmp->data = tmp->right->data;
-                    tmp = tmp->right;
-                }
+                    exchange_node(tmp, tmp->right);
                 tmp->parent->right = NULL;
             }
             if (side == LEFT)
             {
                 while (tmp->left)
-                {
-                    tmp->data = tmp->left->data;
-                    tmp = tmp->left;
-                }
+                    exchange_node(tmp, tmp->right);
                 tmp->parent->left = NULL;
             }
             return tmp;

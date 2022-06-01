@@ -11,14 +11,14 @@ int main() {
 	
     //* ========================= RBTree test =========================
 
-/* 	ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
+	/* ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
 	ft::rb_tree_iterator<int> it;
-	// srand(123);
-	// for (int i = 0; i < 100; i++){
-	// 	// std::cout << i << std::endl;
-	// 	// bst.treePrint();
-	// 	bst.insert(rand() % 100);
-	// }
+	srand(123);
+	for (int i = 0; i < 100; i++){
+		// std::cout << i << std::endl;
+		// bst.treePrint();
+		bst.insert(rand() % 100);
+	}
 	// bst.insert(11);
 	// bst.insert(18);
 	// bst.insert(15);
@@ -46,13 +46,13 @@ int main() {
 	// bst.deleteNode(40);
 	// bst.deleteNode(37);
 	// bst.deleteNode(80);
-	bst.deleteNode(15);
+	// bst.deleteNode(15);
 
 	bst.treePrint(); */
 
 	//* ========================= Constructor Test =========================
 
-	ft::map<int, std::string> m1;
+	/* ft::map<int, std::string> m1;
 	ft::map<int, std::string>::iterator it;	
 
 	// ft::pair<int, std::string> p1(1, "allo");
@@ -60,28 +60,74 @@ int main() {
 	// ft::pair<int, std::string> = ft::make_pair(1, "allo");
 
 	// std::cout << std::boolalpha << m1.empty() << std::endl;
-	bool test = m1.insert(ft::make_pair(1, "allo")).second;
+	m1.insert(ft::make_pair(1, "allo"));
 	it = m1.begin();
-	m1.erase(it);
-	bool test2 = m1.insert(ft::make_pair(1, "pouet")).second;
+	// std::cout << m1.erase(1) << std::endl;
+	// m1.erase(it);
+	// bool test2 = m1.insert(ft::make_pair(1, "pouet")).second;
 	m1[3] = "blabla";
-	std::cout << std::boolalpha << test << std::endl;
-	std::cout << std::boolalpha << test2 << std::endl;
+	m1[6] = "blabla";
+	// std::cout << std::boolalpha << test2 << std::endl;
 	// std::cout << m1[3] << std::endl;
 
 	it = m1.end();
 	--it;
-	--it;
-	ft::pair<int, std::string> p(2, "test");
-	m1.insert(it, p);
+	// --it;
 	// std::cout << it->second << std::endl; 
+	ft::pair<int, std::string> p(5, "test");
+	m1.insert(it, p);
 
+	// m1.erase(m1.begin(), m1.end());
 	// std::cout << m1.find(3)->second << std::endl;
 	const ft::map<int, std::string> m2 = m1;
-	std::cout << m2.at(3) << std::endl;
+	// std::cout << m2.at(3) << std::endl;
 	std::cout << m1.size() << std::endl;
-	// std::cout << m1.max_size() << std::endl;
+	std::cout << m1.count(4) << std::endl;
+	std::cout << m1.lower_bound(2)->first << std::endl; 
+	std::cout << m1.upper_bound(7)->first << std::endl; 
+	// std::cout << m1.max_size() << std::endl; */
 
+	//* ========================= Swap Test =========================
+
+	/* ft::map<char,int> foo,bar;
+
+	foo['x']=100;
+	foo['y']=200;
+
+	bar['a']=11;
+	bar['b']=22;
+	bar['c']=33;
+
+	foo.swap(bar);
+
+	std::cout << "foo contains:\n";
+	for (ft::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	std::cout << "bar contains:\n";
+	for (ft::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n'; */
+
+	//* ========================= bound Test =========================
+
+	ft::map<char,int> mymap;
+	ft::map<char,int>::iterator itlow,itup;
+
+	mymap['l']=20;
+	mymap['m']=40;
+	mymap['n']=60;
+	mymap['o']=80;
+	mymap['p']=100;
+
+	itlow=mymap.lower_bound ('m');  // itlow points to b
+	itup=mymap.upper_bound ('o');   // itup points to e (not d!)
+
+	mymap.erase(itlow,itup);        // erases [itlow,itup)
+
+	std::cout << mymap.size() << std::endl;
+	// print content:
+	// for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+	// 	std::cout << it->first << " => " << it->second << '\n';
 
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/31 18:23:41 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/01 18:33:19 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,54 +169,97 @@ namespace ft
 
         size_type max_size() const 
         {
-            return std::min(_alloc.max_size(), 
+            return std::min(_alloc.max_size(),
                             static_cast<size_type>(std::numeric_limits<difference_type>::max()));
         }
         
         //* ============================ Modifiers ============================
         
-       /*  void clear() 
-        {
-            
-        } */
+        void clear() {erase(begin(), end());}
         
-        pair<iterator, bool> insert (const value_type& val)
+        pair<iterator, bool> insert(const value_type& val)
         {
             return _tree.insert(val);
         }
 
-        iterator insert (iterator hint, const value_type& val)
+        iterator insert(iterator hint, const value_type& val)
         {
             return _tree.insert(hint, val);
         }
 
         template <class InputIterator>
-        void insert (InputIterator first, InputIterator last)
+        void insert(InputIterator first, InputIterator last)
         {
             for (; first != last; ++first)
                 _tree.insert(*first);
         }
 
-        /* void erase (iterator position) 
+        void erase(iterator position) 
         {
-            return _tree.deleteNode(position.base()->data);
-        } */
+            _tree.deleteNode(position.base()->data);
+            return; 
+        }
 
-        /* size_type erase (const key_type& k);
+        size_type erase(const key_type& k)
+        {
+            return _tree.deleteNode(k);
+        }
 
-        void erase (iterator first, iterator last); */
+        void erase(iterator first, iterator last)
+        {
+//! va falloir un deletenode qui retourne le bon iterator
+            return _tree.deleteNode(first, last);
+        }
 
-        
+        void swap(map& x) {return _tree.swap(x._tree);}
+
         //* ============================= Lookup ==============================
 
-        iterator find (const key_type& k) 
+        size_type count(const key_type& k) const
+        {
+            return _tree.count(k);
+        }
+
+        iterator find(const key_type& k) 
         {
             return _tree.find(k);
         }
 
-        const_iterator find (const key_type& k) const
+        const_iterator find(const key_type& k) const
         {
             return _tree.find(k);
+        }
+
+        /* pair<iterator,iterator> equal_range(const key_type& k)
+        {
+            
+        } 
+        
+        pair<const_iterator,const_iterator> equal_range(const key_type& k) const
+        {
+            const_iterator it = find(k);
+            if (it != end())
+                
+        } */
+        
+        iterator lower_bound (const key_type& k)
+        {
+            return _tree.lower_bound(k);
+        }
+        
+        const_iterator lower_bound (const key_type& k) const
+        {
+            return _tree.lower_bound(k);
+        }
+
+        iterator upper_bound (const key_type& k)
+        {
+            return _tree.upper_bound(k);
+        }
+        
+        const_iterator upper_bound (const key_type& k) const
+        {
+            return _tree.upper_bound(k);
         }
         
     private:
