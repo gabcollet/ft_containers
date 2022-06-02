@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/02 13:00:38 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/02 16:34:21 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ namespace ft
         typedef typename alloc::template rebind<node>::other    node_alloc;
         typedef rb_tree_iterator<value_type>                    iterator;
         typedef rb_tree_const_iterator<value_type>              const_iterator;
+        typedef size_t                                          size_type;
+        typedef ptrdiff_t                                       difference_type;
 
         //Default constructor
         rb_tree() : _rootN(), _endN(_rootN) {}
@@ -253,6 +255,11 @@ namespace ft
             return const_iterator(ubound(k));
         }
         
+        size_type max_size() const 
+        {
+            return std::min(_node_alloc.max_size(),
+                            static_cast<size_type>(std::numeric_limits<difference_type>::max()));
+        }
 
     private:
         node_pointer    _rootN;
@@ -533,12 +540,12 @@ namespace ft
         }
 
         template <typename Key>
-        node_pointer lbound(const Key& val)
+        node_pointer lbound(const Key& val) const
         {
             if (!_rootN)
                 return _endN;
             node_pointer tmp = _rootN;
-            node_pointer pos = _rootN;
+            node_pointer pos = _endN;
             while (tmp != NULL)
             {
                 if (!value_comp()(tmp->data, val))
@@ -553,12 +560,12 @@ namespace ft
         }
         
         template <typename Key>
-        node_pointer ubound(const Key& val)
+        node_pointer ubound(const Key& val) const
         {
             if (!_rootN)
                 return _endN;
             node_pointer tmp = _rootN;
-            node_pointer pos = _rootN;
+            node_pointer pos = _endN;
             while (tmp != NULL)
             {
                 if (value_comp()(val, tmp->data))

@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:49:46 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/31 16:06:46 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/02 16:22:10 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ namespace ft
             return *this;
         }
 
-        reference operator*() { return _ptr_node->data; }
+        reference operator*() const { return _ptr_node->data; }
         
-        pointer operator->() { return &(_ptr_node->data); }
+        pointer operator->() const { return &(_ptr_node->data); }
 
         iterator& operator++()
         {
@@ -141,9 +141,9 @@ namespace ft
             return *this;
         }
 
-        reference operator*() { return _ptr_node->data; }
+        reference operator*() const { return _ptr_node->data; }
         
-        pointer operator->() { return &(_ptr_node->data); }
+        pointer operator->() const { return &(_ptr_node->data); }
 
         iterator& operator++()
         {

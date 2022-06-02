@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/02 15:12:05 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/02 16:30:12 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ namespace ft
             const allocator_type& alloc = allocator_type()) :
             _tree(), _comp(comp), _alloc(alloc)
         {
-            _tree.insert(first, last);
+            insert(first, last);
         }
 
         //copy constructor
@@ -190,8 +190,7 @@ namespace ft
 
         size_type max_size() const 
         {
-            return std::min(_alloc.max_size(),
-                            static_cast<size_type>(std::numeric_limits<difference_type>::max()));
+            return _tree.max_size();
         }
         
         //* ============================ Modifiers ============================
@@ -293,6 +292,7 @@ namespace ft
         key_compare                         _comp;
         allocator_type                      _alloc;
     };
+    
     template< class Key, class T, class Compare, class Alloc >
     bool operator==(const ft::map<Key,T,Compare,Alloc>& lhs,
                     const ft::map<Key,T,Compare,Alloc>& rhs)
