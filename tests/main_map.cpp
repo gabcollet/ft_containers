@@ -11,7 +11,7 @@ int main() {
 	
     //* ========================= RBTree test =========================
 
-	/* ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
+/* 	ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
 	ft::rb_tree_iterator<int> it;
 	srand(123);
 	for (int i = 0; i < 100; i++){
@@ -52,7 +52,7 @@ int main() {
 
 	//* ========================= Constructor Test =========================
 
-	/* ft::map<int, std::string> m1;
+/* 	ft::map<int, std::string> m1;
 	ft::map<int, std::string>::iterator it;	
 
 	// ft::pair<int, std::string> p1(1, "allo");
@@ -89,7 +89,7 @@ int main() {
 
 	//* ========================= Swap Test =========================
 
-	/* ft::map<char,int> foo,bar;
+/* 	ft::map<char,int> foo,bar;
 
 	foo['x']=100;
 	foo['y']=200;
@@ -110,7 +110,7 @@ int main() {
 
 	//* ========================= bound Test =========================
 
-	ft::map<char,int> mymap;
+/* 	ft::map<char,int> mymap;
 	ft::map<char,int>::iterator itlow,itup;
 
 	mymap['l']=20;
@@ -119,15 +119,15 @@ int main() {
 	mymap['o']=80;
 	mymap['p']=100;
 
-	itlow=mymap.lower_bound ('m');  // itlow points to b
-	itup=mymap.upper_bound ('o');   // itup points to e (not d!)
+	itlow=mymap.lower_bound ('m');  // itlow points to m
+	itup=mymap.upper_bound ('o');   // itup points to p (not o!)
 
 	mymap.erase(itlow,itup);        // erases [itlow,itup)
 
 	std::cout << mymap.size() << std::endl;
 	// print content:
-	// for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-	// 	std::cout << it->first << " => " << it->second << '\n';
-
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+ */
 	return 0;
 }

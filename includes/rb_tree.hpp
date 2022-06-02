@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/01 18:47:34 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/02 13:00:38 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,13 +135,9 @@ namespace ft
             if (node->left && node->right)
             {
                 tmp = minValueNode(node->left);
-//! va falloir valider que j'ai pas scrapper le exchange node
-
-//! maintenant pour une raison x le remove_node pense que y
-//! reste plus de node apres et met tt a NULL
                 exchange_node(node, tmp);
-                if (tmp->left)
-                    tmp = copyBranch(tmp, LEFT);
+                if (node->left)
+                    node = copyBranch(node, LEFT);
             }
             //case with one child
             else if (node->left || node->right)
@@ -298,15 +294,15 @@ namespace ft
                 }
                 else if (oldN->parent->left == oldN)
                     oldN->parent->left = NULL; 
-                else
+                else if (oldN->parent->right == oldN)
                     oldN->parent->right = NULL;
             }
             //case with one child
-            if (oldN->parent->left == oldN && 
+            else if (oldN->parent->left == oldN && 
                 oldN->left == NULL && oldN->right == NULL)
                 oldN->parent->left = NULL;
             //case with two child
-            if (oldN->parent != tmp)
+            else if (oldN->parent != tmp)
                 oldN->parent->right = NULL;
                 
             _alloc.destroy(&oldN->data);
@@ -316,8 +312,13 @@ namespace ft
         void exchange_node(node_pointer a, node_pointer b)
         {
             node tmp = *a;
-            a->left = b->left;
-            a->right = b->right;
+            //exchange color
+            a->color = b->color;
+            b->color = tmp.color;
+            //check if root
+            if (a == _rootN)
+                _rootN = b;
+            //change de parent child
             if (a->parent->right == a)
                 a->parent->right = b;
             else
@@ -333,16 +334,20 @@ namespace ft
                 else
                     b->parent->left = a;
             }
-            if (a->left != b)
-                b->left = a->left;
+            //change left child
+            a->left = b->left;
+            if (tmp.left != b)
+                b->left = tmp.left;
             else
                 b->left = a;
-            if (a->right != b)
-                b->right = tmp.right;
-            else
-                b->right = a;
+            if (b->left)
+                b->left->parent = b;
+            //change right child
+            a->right = b->right;
+            b->right = tmp.right;
+            if (b->right)
+                b->right->parent = b;
             b->parent = tmp.parent;
-
         }
 
         void fixinsert(node_pointer newnode)
@@ -534,22 +539,17 @@ namespace ft
                 return _endN;
             node_pointer tmp = _rootN;
             node_pointer pos = _rootN;
-            while (true)
+            while (tmp != NULL)
             {
-                if (tmp->right && value_comp()(tmp->data, val))
-                    tmp = tmp->right;
-                else if (tmp->left && value_comp()(val, tmp->data))
+                if (!value_comp()(tmp->data, val))
                 {
                     pos = tmp; 
                     tmp = tmp->left;
                 }
-                else{
-                    if (tmp->data == val)
-                        return tmp;
-                    else
-                        return pos;
-                }
+                else
+                    tmp = tmp->right;
             }
+            return pos;
         }
         
         template <typename Key>
@@ -559,22 +559,17 @@ namespace ft
                 return _endN;
             node_pointer tmp = _rootN;
             node_pointer pos = _rootN;
-            while (true)
+            while (tmp != NULL)
             {
-                if (tmp->right && value_comp()(tmp->data, val))
+                if (value_comp()(val, tmp->data))
                 {
                     pos = tmp; 
-                    tmp = tmp->right;
-                }
-                else if (tmp->left && value_comp()(val, tmp->data))
                     tmp = tmp->left;
-                else{
-                    if (tmp->data == val)
-                        return tmp;
-                    else
-                        return pos;
                 }
+                else
+                    tmp = tmp->right;
             }
+            return pos;
         }
 
         void right_rotate(node_pointer a)
