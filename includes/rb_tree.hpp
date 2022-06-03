@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/02 16:34:21 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/03 16:23:21 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ namespace ft
     public:
         typedef rb_tree_node<value_type>                        node;
         typedef rb_tree_node<value_type>*                       node_pointer;
+        typedef compare                                         value_compare;
         typedef typename alloc::template rebind<node>::other    node_alloc;
         typedef rb_tree_iterator<value_type>                    iterator;
         typedef rb_tree_const_iterator<value_type>              const_iterator;
@@ -56,11 +57,33 @@ namespace ft
             _endN->left = _rootN;
         }
 
+        //Copy constructor
+        rb_tree(const rb_tree& other) : _rootN(), _endN(_rootN)
+        {
+            const_iterator first = other.begin();
+            const_iterator last = other.end();
+            for (; first != last; ++first)
+                insert(*first);
+        }
+
+        rb_tree& operator=(const rb_tree& other)
+        {
+            if (this == &other) {
+                return *this;
+            }
+            rb_tree tmp(other);
+            swap(tmp);
+            return *this;
+        }
+
         pair<iterator, bool> insert(const value_type& val)
         {
             if (!_rootN)
             {
-                *this = rb_tree(val);
+                _rootN = construct_node(val, NULL, black);
+                _endN = construct_node();
+                _rootN->parent = _endN;
+                _endN->left = _rootN;
                 return ft::make_pair(_rootN, true);
             }
             pair<node_pointer,bool> p = find_parent(_rootN, val);
@@ -80,7 +103,10 @@ namespace ft
         {
             if (!_rootN)
             {
-                *this = rb_tree(val);
+                _rootN = construct_node(val, NULL, black);
+                _endN = construct_node();
+                _rootN->parent = _endN;
+                _endN->left = _rootN;
                 return iterator(_rootN);
             }
             pair<node_pointer,bool> p = find_parent(pos, val);
@@ -132,12 +158,10 @@ namespace ft
             if (!p.second)
                 return false;
             node_pointer node = p.first;
-            node_pointer tmp = node;
             //case with two child
             if (node->left && node->right)
             {
-                tmp = minValueNode(node->left);
-                exchange_node(node, tmp);
+                exchange_node(node, minValueNode(node->left));
                 if (node->left)
                     node = copyBranch(node, LEFT);
             }
@@ -145,15 +169,15 @@ namespace ft
             else if (node->left || node->right)
             {    
                 if (node->left)
-                    tmp = copyBranch(tmp, LEFT);
+                    node = copyBranch(node, LEFT);
                 else
-                    tmp = copyBranch(tmp, RIGHT);
+                    node = copyBranch(node, RIGHT);
             }
             //if there is a sister fix for rbtree
-            if ((tmp == tmp->parent->right && tmp->parent->left) ||
-                (tmp == tmp->parent->left && tmp->parent->right))
-                fixdelete(tmp);
-            remove_node(node, tmp);
+            if ((node == node->parent->right && node->parent->left) ||
+                (node == node->parent->left && node->parent->right))
+                fixdelete(node);
+            remove_node(node);
             return true;
         }
 
@@ -182,7 +206,7 @@ namespace ft
 
         iterator begin()
         {
-            node_pointer node = _rootN;
+            node_pointer node = _endN;
             while (node->left){
                 node = node->left;
             }
@@ -191,7 +215,7 @@ namespace ft
 
         const_iterator begin() const
         {
-            node_pointer node = _rootN;
+            node_pointer node = _endN;
             while (node && node->left){
                 node = node->left;
             }
@@ -289,7 +313,7 @@ namespace ft
             return newnode;
         }
 
-        void remove_node(node_pointer oldN, node_pointer tmp)
+        void remove_node(node_pointer oldN)
         {
             //case with no child
             if (oldN->left == NULL && oldN->right == NULL)
@@ -308,9 +332,6 @@ namespace ft
             else if (oldN->parent->left == oldN && 
                 oldN->left == NULL && oldN->right == NULL)
                 oldN->parent->left = NULL;
-            //case with two child
-            else if (oldN->parent != tmp)
-                oldN->parent->right = NULL;
                 
             _alloc.destroy(&oldN->data);
             _node_alloc.deallocate(oldN, 1);
@@ -319,13 +340,19 @@ namespace ft
         void exchange_node(node_pointer a, node_pointer b)
         {
             node tmp = *a;
-            //exchange color
             a->color = b->color;
             b->color = tmp.color;
-            //check if root
             if (a == _rootN)
                 _rootN = b;
-            //change de parent child
+            exchange_parent(a, b);
+            exchange_child(a, b, tmp, LEFT);
+            exchange_child(a, b, tmp, RIGHT);
+            b->parent = tmp.parent;
+        }
+        
+        void exchange_parent(node_pointer a, node_pointer b)
+        {
+            //change parent child
             if (a->parent->right == a)
                 a->parent->right = b;
             else
@@ -341,20 +368,37 @@ namespace ft
                 else
                     b->parent->left = a;
             }
+        }
+
+        void exchange_child(node_pointer a, node_pointer b, node tmp, bool side)
+        {
             //change left child
-            a->left = b->left;
-            if (tmp.left != b)
-                b->left = tmp.left;
-            else
-                b->left = a;
-            if (b->left)
-                b->left->parent = b;
+            if (side == LEFT)
+            {
+                a->left = b->left;
+                if (a->left)
+                    a->left->parent = a;
+                if (tmp.left != b)
+                    b->left = tmp.left;
+                else
+                    b->left = a;
+                if (b->left)
+                    b->left->parent = b;
+            }
             //change right child
-            a->right = b->right;
-            b->right = tmp.right;
-            if (b->right)
-                b->right->parent = b;
-            b->parent = tmp.parent;
+            if (side == RIGHT)
+            {    
+                a->right = b->right;
+                if (a->right)
+                    a->right->parent = a;
+                if (tmp.right != b)
+                    b->right = tmp.right;
+                else
+                    b->right = a;
+                if (b->right)
+                    b->right->parent = b;
+                b->parent = tmp.parent;
+            }
         }
 
         void fixinsert(node_pointer newnode)
@@ -402,6 +446,7 @@ namespace ft
                     break;
             }
             _rootN->color = black;
+            _endN->left = _rootN;
         }
 
         void fixdelete(node_pointer node)
@@ -428,7 +473,8 @@ namespace ft
                         node = node->parent;
                     }
                     else {
-                        if (sister->right && sister->right->color == black) { //case 3.3
+                        if (sister->right && sister->left &&
+                            sister->right->color == black) { //case 3.3
                             sister->left->color = black;
                             right_rotate(sister);
                             sister->color = red;
@@ -463,7 +509,8 @@ namespace ft
                         node = node->parent;
                     }
                     else {
-                        if (sister->left && sister->left->color == black) { //case 3.3
+                        if (sister->left && sister->right &&
+                            sister->left->color == black) { //case 3.3
                             sister->right->color = black;
                             left_rotate(sister);
                             sister->color = red;
@@ -633,7 +680,7 @@ namespace ft
             if (side == LEFT)
             {
                 while (tmp->left)
-                    exchange_node(tmp, tmp->right);
+                    exchange_node(tmp, tmp->left);
                 tmp->parent->left = NULL;
             }
             return tmp;

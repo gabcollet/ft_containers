@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:49:46 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/02 16:22:10 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/03 16:35:03 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,12 @@ namespace ft
             return *this;
         }
         
-        iterator operator++(int) { return iterator(increment()); }
+        iterator operator++(int) 
+        { 
+            iterator it = *this;
+            ++(*this);
+            return it;
+        }
         
         iterator& operator--()
         {
@@ -66,7 +71,12 @@ namespace ft
             return *this;
         }
         
-        iterator operator--(int) { return iterator(decrement()); }
+        iterator operator--(int) 
+        {
+            iterator it = *this;
+            --(*this);
+            return it;
+        }
 
         bool operator== (const iterator& it) { return _ptr_node == it._ptr_node; }
 
@@ -119,7 +129,8 @@ namespace ft
         typedef T                                   value_type;
         typedef rb_tree_node<value_type>            node;
         typedef rb_tree_node<value_type>*           node_pointer;
-        typedef rb_tree_const_iterator<value_type>  iterator;
+        typedef rb_tree_iterator<value_type>        iterator;
+        typedef rb_tree_const_iterator<value_type>  const_iterator;
         typedef std::bidirectional_iterator_tag     iterator_category;
         typedef ptrdiff_t                           difference_type;
         typedef const value_type*                   pointer;
@@ -127,6 +138,9 @@ namespace ft
         
         //Default constructor
         rb_tree_const_iterator() : _ptr_node() {}
+
+        //Iterator constructor
+        rb_tree_const_iterator(iterator it) : _ptr_node(it.base()) {}
 
         //Copy constructor
         rb_tree_const_iterator(node_pointer elem) : _ptr_node(elem) {}
@@ -145,25 +159,35 @@ namespace ft
         
         pointer operator->() const { return &(_ptr_node->data); }
 
-        iterator& operator++()
+        const_iterator& operator++()
         {
             increment();
             return *this;
         }
         
-        iterator operator++(int) { return iterator(increment()); }
+        const_iterator operator++(int)
+        { 
+            const_iterator it = *this;
+            ++(*this);
+            return it;
+        }
         
-        iterator& operator--()
+        const_iterator& operator--()
         {
             decrement();
             return *this;
         }
         
-        iterator operator--(int) { return iterator(decrement()); }
+        const_iterator operator--(int)
+        { 
+            const_iterator it = *this;
+            --(*this);
+            return it;
+        }
 
-        bool operator== (const iterator& it) { return _ptr_node == it._ptr_node; }
+        bool operator== (const const_iterator& it) { return _ptr_node == it._ptr_node; }
 
-        bool operator!= (const iterator& it) { return _ptr_node != it._ptr_node; }
+        bool operator!= (const const_iterator& it) { return _ptr_node != it._ptr_node; }
 
         node* base() {return _ptr_node;}
         

@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/05/24 17:56:16 by gcollet          ###   ########.fr        #
+#    Updated: 2022/06/03 16:30:45 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ CFLAGS			=	-Wall -Werror -Wextra -std=c++98
 
 RM				=	rm -rf
 
-SRCS_FILES		=	main_map.cpp
+# SRCS_FILES		=	main_map.cpp
+SRCS_FILES		=	empty.cpp
 
 OBJS_FILES		= 	$(SRCS_FILES:.cpp=.o)
 OBJS 			=	$(addprefix $(OBJS_PATH), $(OBJS_FILES))

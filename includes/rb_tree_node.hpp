@@ -6,14 +6,13 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:04:07 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/30 14:49:33 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/03 14:10:21 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "utils.hpp"
-#include <cstddef>
 
 enum Color {red, black};
 

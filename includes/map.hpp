@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/02 16:30:12 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/03 15:33:56 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,7 @@ namespace ft
 
         key_compare key_comp() const {return _comp;}
 
-        value_compare value_comp() const {return value_compare();}
+        value_compare value_comp() const {return _tree.value_comp().key_comp();}
         
     private:
         typedef map_value_compare<key_type, value_type, key_compare> _map_compare;
