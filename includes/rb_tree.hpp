@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/03 16:23:21 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/04 16:28:27 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 #include "rb_tree_node.hpp"
 #include "rb_tree_iterator.hpp"
 #include "pair.hpp"
+
 #include <iostream>
-#include <functional>
-#include <memory>
-#include <string>
-#include <stdlib.h>
-#include <sys/qos.h>
+#include <limits>
 
 #define RED "\033[31;1m"
 #define YELLOW "\033[93;1m"
@@ -46,15 +43,19 @@ namespace ft
         typedef ptrdiff_t                                       difference_type;
 
         //Default constructor
-        rb_tree() : _rootN(), _endN(_rootN) {}
+        rb_tree() : _rootN(), _endN(_rootN) 
+        {
+            _endN = construct_node();
+        }
 
         //Parameterized constructor
         rb_tree(value_type val)
         {
-            _rootN = construct_node(val, NULL, black);
-            _endN = construct_node();
-            _rootN->parent = _endN;
-            _endN->left = _rootN;
+            // _rootN = construct_node(val, NULL, black);
+            // _endN = construct_node();
+            // _rootN->parent = _endN;
+            // _endN->left = _rootN;
+            construct_root(val);
         }
 
         //Copy constructor
@@ -80,10 +81,13 @@ namespace ft
         {
             if (!_rootN)
             {
-                _rootN = construct_node(val, NULL, black);
-                _endN = construct_node();
-                _rootN->parent = _endN;
-                _endN->left = _rootN;
+//! ca sa devrait etre une fonction apart pour les 2 insert et le copy constructor
+                construct_root(val);
+                // _rootN = construct_node(val, NULL, black);
+                // if (!_endN)
+                //     _endN = construct_node();
+                // _rootN->parent = _endN;
+                // _endN->left = _rootN;
                 return ft::make_pair(_rootN, true);
             }
             pair<node_pointer,bool> p = find_parent(_rootN, val);
@@ -103,10 +107,12 @@ namespace ft
         {
             if (!_rootN)
             {
-                _rootN = construct_node(val, NULL, black);
-                _endN = construct_node();
-                _rootN->parent = _endN;
-                _endN->left = _rootN;
+                construct_root(val);
+                // _rootN = construct_node(val, NULL, black);
+                // if (!_endN)
+                //     _endN = construct_node();
+                // _rootN->parent = _endN;
+                // _endN->left = _rootN;
                 return iterator(_rootN);
             }
             pair<node_pointer,bool> p = find_parent(pos, val);
@@ -291,6 +297,15 @@ namespace ft
         node_alloc      _node_alloc;
         alloc           _alloc;
         compare         _comp;
+
+        void construct_root(value_type val)
+        {
+            _rootN = construct_node(val, NULL, black);
+            if (!_endN)
+                _endN = construct_node();
+            _rootN->parent = _endN;
+            _endN->left = _rootN;
+        }
 
         node_pointer construct_node(value_type val, node_pointer parent, Color c)
         {
@@ -559,7 +574,11 @@ namespace ft
         {
             if (value_comp()(node.base()->data, val))
             {
-                if (node.base()->right && value_comp()(node.base()->right->data, val))
+                if (node.base() == _endN)
+                    --node;
+                iterator it(node);
+                ++it;
+                if (value_comp()(it.base()->data, val))
                     return find_parent(_rootN, val);
                 return ft::make_pair(node.base(), true);
             } 
@@ -634,7 +653,10 @@ namespace ft
                 b->right->parent = a;
             b->parent = a->parent;
             if (a->parent == _endN)
+            {
                 _rootN = b;
+                _endN->left = b;
+            }
             else if (a == a->parent->right)
                 a->parent->right = b;
             else
@@ -651,7 +673,10 @@ namespace ft
                 b->left->parent = a;
             b->parent = a->parent;
             if (a->parent == _endN)
+            {
                 _rootN = b;
+                _endN->left = b;
+            }
             else if (a == a->parent->left)
                 a->parent->left = b;
             else
