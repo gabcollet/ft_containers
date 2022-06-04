@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/31 15:32:48 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/04 17:07:36 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <memory>
 #include <cstddef>
 #include <algorithm>
+#include <limits>
 #include "iterator.hpp"
 #include "reverse_iterator.hpp"
 

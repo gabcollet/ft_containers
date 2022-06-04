@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:49:46 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/03 16:35:03 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/04 18:02:54 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 namespace ft
 {
     template < typename T >
+    class rb_tree_const_iterator;
+
+    template < typename T >
     class rb_tree_iterator 
     {
     
@@ -27,6 +30,7 @@ namespace ft
         typedef rb_tree_node<value_type>            node;
         typedef rb_tree_node<value_type>*           node_pointer;
         typedef rb_tree_iterator<value_type>        iterator;
+        typedef rb_tree_const_iterator<value_type>  const_iterator;
         typedef std::bidirectional_iterator_tag     iterator_category;
         typedef ptrdiff_t                           difference_type;
         typedef value_type*                         pointer;
@@ -78,11 +82,29 @@ namespace ft
             return it;
         }
 
-        bool operator== (const iterator& it) { return _ptr_node == it._ptr_node; }
+        bool operator== (const iterator& it) const
+        { 
+            return _ptr_node == it._ptr_node; 
+        }
+        
+        bool operator== (const const_iterator& it) const
+        { 
+            return _ptr_node == it.base(); 
+        }
 
-        bool operator!= (const iterator& it) { return _ptr_node != it._ptr_node; }
+        bool operator!= (const iterator& it) const 
+        { 
+            return _ptr_node != it._ptr_node; 
+        }
+        
+        bool operator!= (const const_iterator& it) const 
+        { 
+            return _ptr_node != it.base(); 
+        }
 
         node* base() {return _ptr_node;}
+        
+        const node* base() const {return _ptr_node;}
         
     private:
         node* _ptr_node;
@@ -185,11 +207,29 @@ namespace ft
             return it;
         }
 
-        bool operator== (const const_iterator& it) { return _ptr_node == it._ptr_node; }
+        bool operator== (const iterator& it) const 
+        { 
+            return _ptr_node == it.base(); 
+        }
+        
+        bool operator== (const const_iterator& it) const 
+        { 
+            return _ptr_node == it._ptr_node; 
+        }
 
-        bool operator!= (const const_iterator& it) { return _ptr_node != it._ptr_node; }
+        bool operator!= (const iterator& it) const 
+        { 
+            return _ptr_node != it.base(); 
+        }
+        
+        bool operator!= (const const_iterator& it) const 
+        { 
+            return _ptr_node != it._ptr_node; 
+        }
 
         node* base() {return _ptr_node;}
+        
+        const node* base() const {return _ptr_node;}
         
     private:
         node* _ptr_node;

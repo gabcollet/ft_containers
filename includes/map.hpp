@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/04 15:11:04 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/04 17:12:40 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,12 +250,12 @@ namespace ft
 
         pair<iterator,iterator> equal_range(const key_type& k)
         {
-            return make_pair(lower_bound(k), upper_bound(k));
+            return ft::make_pair(lower_bound(k), upper_bound(k));
         } 
         
         pair<const_iterator,const_iterator> equal_range(const key_type& k) const
         {
-            return make_pair(lower_bound(k), upper_bound(k));
+            return ft::make_pair(lower_bound(k), upper_bound(k));
         }
         
         iterator lower_bound (const key_type& k)
