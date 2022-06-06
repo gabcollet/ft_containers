@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/18 12:25:45 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/06 15:39:42 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <istream>
 #include <memory>
 #include <vector>
+#include <iosfwd>
+#include <sstream>
 #include "../includes/vector.hpp"
 
 template<typename T>
@@ -23,6 +25,15 @@ void printVector(const ft::vector<T>& vector) {
         std::cout << vector[i] << std::endl;
 
     std::cout << "-----------------------------------------------" << std::endl;
+}
+
+template <typename Iter>
+void print_range(Iter first, Iter last)
+{
+    for (Iter it = first; it != last; ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
 }
 
 int main() {
@@ -240,7 +251,7 @@ ft::vector<int>::iterator x = vec.begin();
 
     // *================== Test a max =====================
     
-    ft::vector<int> vec;
+   /*  ft::vector<int> vec;
 
     std::vector<int> vec2;
 
@@ -260,7 +271,36 @@ ft::vector<int>::iterator x = vec.begin();
 
     std::cout << "\nSTD_VEC AFTER Insert ---> Capacity: " << vec2.capacity() << std::endl;
     std::cout << "FT_VEC AFTER Insert ---> Capacity: " << vec.capacity() << std::endl;
-    // printVector(vec);
+    // printVector(vec); */
+
+    ft::vector<std::string> v;
+    // double s_double[32] = {3.1416};
+    // size_t s_size = 32;
+    // double b_double[64] = {123.456};
+    // size_t b_size = 64;
+
+    // v.assign(b_double, b_double + b_size);
+    // v.assign(65, 1.234567);
+    // v.assign(65, 8765.234567);
+    // v.assign(s_double, s_double + s_size);
+
+    // std::istringstream str("1 2 3 4 5 6 7");
+    // std::istreambuf_iterator<char> it(str), end;
+    // v.assign(it, end);
+
+    v.resize(14, "HelloWorld");
+    print_range(v.begin(), v.end());
+
+    v.resize(6, "ABC");
+    print_range(v.begin(), v.end());
+
+    // v.resize(14, b_string[18]);
+
+    // v.resize(15, b_string[57]);
+
+    v.resize(64, "I-like-vectors");
+
+    // printVector(v);
     
     return 0;
 }

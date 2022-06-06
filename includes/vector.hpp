@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/04 17:07:36 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/06 15:59:05 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ namespace ft
         ~vector()
         {
             clear();
-            _alloc.deallocate(_start, capacity());
+            if (_start != NULL)
+                _alloc.deallocate(_start, capacity());
         }
 
         //assignement operator
@@ -91,7 +92,6 @@ namespace ft
         {
             if (&x == this || x.size() == 0)
                 return *this;
-            _alloc.deallocate(_start, capacity());
             assign(x.begin(), x.end());
             return *this;
         }
@@ -180,16 +180,18 @@ namespace ft
                     _end++;
                     oldStart++;
                 }
-                _alloc.deallocate(oldStart - size(), oldCapacity);
+                if (oldStart != NULL)
+                    _alloc.deallocate(oldStart - size(), oldCapacity);
             }
         }
 
         void resize (size_type n, value_type val = value_type())
         {
-            if (n < size())
-                assign(begin(), begin() + n);
-            if (n > size())
-                insert(end(), n - size(), val);
+            const size_type len = size();
+            if (n < len)
+                erase(begin() + n, end());
+            else if (n > len)
+                insert(end(), n - len, val);
         }
 
         //* ============================ Modifier =============================
@@ -199,14 +201,17 @@ namespace ft
                      typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)
         {
             clear();
-            typedef typename iterator_traits<vector::iterator>::iterator_category category;
+            if (_start != NULL)
+                _alloc.deallocate(_start, capacity());
+            typedef typename iterator_traits<InputIterator>::iterator_category category;
             _range_construct(first, last, category());
         }
 
         void assign (size_type n, const value_type& val)
         {
             clear();
-            _alloc.deallocate(_start, capacity());
+            if (_start != NULL)
+                _alloc.deallocate(_start, capacity());
             _fill_construct(n, val);
         }
 
@@ -278,13 +283,8 @@ namespace ft
         void insert (iterator position, InputIterator first,
                      typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)
         {
-            difference_type dist = std::distance(position.base(), _end);
-            difference_type n = std::distance(first, last);
-            if (size() + n > capacity())
-                reserve(capacity() + n);
-            pointer ptr_right = _end - dist;
-            _move_right(ptr_right + n, dist, (end() - dist));
-            _range_construct(ptr_right, first, last);
+            typedef typename iterator_traits<InputIterator>::iterator_category category;
+            _range_insert(position, first, last, category());
         }
 
         void swap (vector& x)
@@ -340,6 +340,28 @@ namespace ft
                 _alloc.construct(position, *first);
                 _end++;
             }
+        }
+        
+        template < typename InputIterator >
+        void _range_insert (iterator position, InputIterator first, InputIterator last, 
+                            std::input_iterator_tag)
+        {
+            if (position == end())
+            for (; first != last; ++first)
+                push_back(*first);
+        }
+
+        template < typename ForwardIterator >
+        void _range_insert (iterator position, ForwardIterator first, ForwardIterator last, 
+                            std::forward_iterator_tag)
+        {
+            difference_type dist = std::distance(position.base(), _end);
+            difference_type n = std::distance(first, last);
+            if (size() + n > capacity())
+                reserve(capacity() + n);
+            pointer ptr_right = _end - dist;
+            _move_right(ptr_right + n, dist, (end() - dist));
+            _range_construct(ptr_right, first, last);
         }
 
         void _fill_construct (size_type n, const value_type& val = value_type())
