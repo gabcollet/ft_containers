@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/04 16:28:27 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/06 19:39:14 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,6 @@ namespace ft
         //Parameterized constructor
         rb_tree(value_type val)
         {
-            // _rootN = construct_node(val, NULL, black);
-            // _endN = construct_node();
-            // _rootN->parent = _endN;
-            // _endN->left = _rootN;
             construct_root(val);
         }
 
@@ -81,13 +77,7 @@ namespace ft
         {
             if (!_rootN)
             {
-//! ca sa devrait etre une fonction apart pour les 2 insert et le copy constructor
                 construct_root(val);
-                // _rootN = construct_node(val, NULL, black);
-                // if (!_endN)
-                //     _endN = construct_node();
-                // _rootN->parent = _endN;
-                // _endN->left = _rootN;
                 return ft::make_pair(_rootN, true);
             }
             pair<node_pointer,bool> p = find_parent(_rootN, val);
@@ -108,11 +98,6 @@ namespace ft
             if (!_rootN)
             {
                 construct_root(val);
-                // _rootN = construct_node(val, NULL, black);
-                // if (!_endN)
-                //     _endN = construct_node();
-                // _rootN->parent = _endN;
-                // _endN->left = _rootN;
                 return iterator(_rootN);
             }
             pair<node_pointer,bool> p = find_parent(pos, val);
@@ -173,7 +158,7 @@ namespace ft
             }
             //case with one child
             else if (node->left || node->right)
-            {    
+            {
                 if (node->left)
                     node = copyBranch(node, LEFT);
                 else
@@ -213,7 +198,7 @@ namespace ft
         iterator begin()
         {
             node_pointer node = _endN;
-            while (node->left){
+            while (node && node->left){
                 node = node->left;
             }
             return iterator(node);
@@ -700,12 +685,23 @@ namespace ft
             {
                 while (tmp->right)
                     exchange_node(tmp, tmp->right);
+        //! valider si ce tmp la va a gauche ou droite??
+                // if (tmp->left)
+                // {
+                //     tmp->parent->left = tmp->left;
+                //     tmp->left = NULL;
+                // }
                 tmp->parent->right = NULL;
             }
             if (side == LEFT)
             {
                 while (tmp->left)
                     exchange_node(tmp, tmp->left);
+                // if (tmp->right)
+                // {
+                //     tmp->parent->right = tmp->right;
+                //     tmp->right = NULL;
+                // }
                 tmp->parent->left = NULL;
             }
             return tmp;

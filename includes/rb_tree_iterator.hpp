@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:49:46 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/04 18:02:54 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/06 19:31:07 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,11 @@ namespace ft
             else{
                 node* tmp = _ptr_node;
                 _ptr_node = _ptr_node->parent;
-                if (_ptr_node->left == tmp)
+                while (_ptr_node->left == tmp)
+                {
+                    tmp = _ptr_node;
                     _ptr_node = _ptr_node->parent;
+                }
             }
             return _ptr_node;
         }
@@ -261,8 +264,11 @@ namespace ft
             else{
                 node* tmp = _ptr_node;
                 _ptr_node = _ptr_node->parent;
-                if (_ptr_node->left == tmp)
+                while (_ptr_node->left == tmp)
+                {
+                    tmp = _ptr_node;
                     _ptr_node = _ptr_node->parent;
+                }
             }
             return _ptr_node;
         }
