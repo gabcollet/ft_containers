@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/07 16:23:38 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 17:02:53 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,7 @@ namespace ft
     private:
         typedef map_value_compare<key_type, value_type, key_compare> _map_compare;
         
-        rb_tree<_map_compare, value_type>   _tree;
+        rb_tree<_map_compare, value_type, allocator_type>   _tree;
         key_compare                         _comp;
         allocator_type                      _alloc;
     };

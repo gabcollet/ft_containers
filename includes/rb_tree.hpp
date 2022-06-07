@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/07 16:23:01 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 17:09:46 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,9 @@ namespace ft
         //destructor
         ~rb_tree()
         {
-            destroy(_endN);
+            deleteNode(begin(), end());
+            if (_endN != NULL)
+                _node_alloc.deallocate(_endN, 1);
         }
 
         rb_tree& operator=(const rb_tree& other)
@@ -755,16 +757,6 @@ namespace ft
                     std::cout << YELLOW << root->data << END << std::endl;;
                 _printTree(root->right, indent, true);
                 _printTree(root->left, indent, false);
-            }
-        }
-
-        void destroy(node_pointer node)
-        {
-            if (node != NULL) {
-                destroy(node->left);
-                destroy(node->right);
-                _alloc.destroy(&node->data);
-                _node_alloc.deallocate(node, 1);
             }
         }
     };

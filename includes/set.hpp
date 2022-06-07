@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 14:22:20 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/07 16:24:06 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 17:03:05 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ namespace ft
         value_compare value_comp() const {return _tree.value_comp();}
 
     private:
-        rb_tree<key_compare, value_type>    _tree;
+        rb_tree<key_compare, value_type, allocator_type>    _tree;
         key_compare                         _comp;
         allocator_type                      _alloc;
     };
