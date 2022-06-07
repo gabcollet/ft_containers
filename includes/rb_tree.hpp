@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/07 14:10:42 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 15:38:44 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ namespace ft
             return ft::make_pair(newnode, true);
         }
         
-        iterator insert(iterator pos, const value_type& val)
+        iterator insert(const_iterator pos, const value_type& val)
         {
             if (!_rootN)
             {
@@ -127,19 +127,19 @@ namespace ft
             return iterator(newnode);
         }
 
-        void deleteNode(iterator first, iterator last)
+        void deleteNode(const_iterator first, const_iterator last)
         {
             while (first != last){
                 first = deleteNode(first);
             }
         }
         
-        iterator deleteNode(iterator first)
+        iterator deleteNode(const_iterator first)
         {
-            iterator ret(first);
+            const_iterator ret(first);
             ++ret;
             deleteNode(first.base()->data);
-            return ret;
+            return iterator(ret.base());
         }
 
         template<typename Key>
@@ -561,13 +561,13 @@ namespace ft
         }
 
         template <typename Key>
-        pair<node_pointer, bool> find_parent(iterator node, const Key& val) const
+        pair<node_pointer, bool> find_parent(const_iterator node, const Key& val) const
         {
             if (value_comp()(node.base()->data, val))
             {
                 if (node.base() == _endN)
                     --node;
-                iterator it(node);
+                iterator it(node.base());
                 ++it;
                 if (value_comp()(it.base()->data, val))
                     return find_parent(_rootN, val);
