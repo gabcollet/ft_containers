@@ -14,10 +14,10 @@ int main() {
 	ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
 	ft::rb_tree_iterator<int> it;
 	srand(345);
-	for (int i = 0; i < 100; i++){
+	for (int i = 0; i < 5000; i++){
 		// std::cout << i << std::endl;
 		// bst.treePrint();
-		bst.insert(rand() % 100);
+		bst.insert(rand());
 	}
 	// bst.insert(11);
 	// bst.insert(18);
@@ -33,12 +33,12 @@ int main() {
 	// bst.insert(38);
 	// bst.insert(37);
 
-	srand(678);
-	for (int i = 0; i < 50; i++){
-		std::cout << i << std::endl;
-		bst.treePrint();
-		bst.deleteNode(rand() % 100);
-	}
+	// srand(678);
+	// for (int i = 0; i < 50; i++){
+	// 	std::cout << i << std::endl;
+	// 	bst.treePrint();
+	// 	bst.deleteNode(rand() % 100);
+	// }
 	// bst.deleteNode(38);
 	// bst.deleteNode(25);
 	// bst.deleteNode(1);

@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 14:22:20 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/07 15:37:17 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 16:24:06 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ namespace ft
         
         bool empty() const {return (begin() == end()) ? true : false;}
 
-        size_type size() const {return std::distance(begin(), end());}
+        size_type size() const {return _tree.size();}
 
         size_type max_size() const 
         {

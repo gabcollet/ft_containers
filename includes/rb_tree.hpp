@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/07 15:38:44 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 16:23:01 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,30 @@ namespace ft
         typedef ptrdiff_t                                       difference_type;
 
         //Default constructor
-        rb_tree() : _rootN(), _endN(_rootN) 
+        rb_tree() : _rootN(), _endN(_rootN), _size(0) 
         {
             _endN = construct_node();
         }
 
         //Parameterized constructor
-        rb_tree(value_type val)
+        rb_tree(value_type val) : _rootN(), _endN(_rootN), _size(0)
         {
             construct_root(val);
         }
 
         //Copy constructor
-        rb_tree(const rb_tree& other) : _rootN(), _endN(_rootN)
+        rb_tree(const rb_tree& other) : _rootN(), _endN(_rootN), _size(0)
         {
             const_iterator first = other.begin();
             const_iterator last = other.end();
             for (; first != last; ++first)
                 insert(*first);
+        }
+
+        //destructor
+        ~rb_tree()
+        {
+            destroy(_endN);
         }
 
         rb_tree& operator=(const rb_tree& other)
@@ -241,6 +247,7 @@ namespace ft
             std::swap(_node_alloc, x._node_alloc);
             std::swap(_alloc, x._alloc);
             std::swap(_comp, x._comp);
+            std::swap(_size, x._size);
         }
 
         template <typename Key>
@@ -279,12 +286,18 @@ namespace ft
                             static_cast<size_type>(std::numeric_limits<difference_type>::max()));
         }
 
+        size_type size() const
+        {
+            return _size;
+        }
+
     private:
         node_pointer    _rootN;
         node_pointer    _endN;
         node_alloc      _node_alloc;
         alloc           _alloc;
         compare         _comp;
+        size_type       _size;
 
         void construct_root(value_type val)
         {
@@ -303,6 +316,7 @@ namespace ft
             newnode->left = NULL;
             newnode->right = NULL;
             newnode->color = c;
+            _size++;
             return newnode;
         }
 
@@ -338,6 +352,7 @@ namespace ft
                 
             _alloc.destroy(&oldN->data);
             _node_alloc.deallocate(oldN, 1);
+            _size--;
         }
 
         void exchange_node(node_pointer a, node_pointer b)
@@ -741,7 +756,17 @@ namespace ft
                 _printTree(root->right, indent, true);
                 _printTree(root->left, indent, false);
             }
-        }   
+        }
+
+        void destroy(node_pointer node)
+        {
+            if (node != NULL) {
+                destroy(node->left);
+                destroy(node->right);
+                _alloc.destroy(&node->data);
+                _node_alloc.deallocate(node, 1);
+            }
+        }
     };
     
     //overload == for key compare
