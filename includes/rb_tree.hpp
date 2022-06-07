@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/07 12:52:42 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 14:10:42 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,9 +170,6 @@ namespace ft
                 fixdelete(tmp);
             }
             else
-            //if there is a sister fix for rbtree
-            // if ((node == node->parent->right && node->parent->left) ||
-            //     (node == node->parent->left && node->parent->right))
                 fixdelete(node);
             remove_node(node);
             return true;
@@ -700,9 +697,7 @@ namespace ft
             }
             if (_rootN == node)
                 _rootN = child; 
-           
             // fonction pour transferer les couleurs
-            //! le child right est pas sence avoir de child left
             node_pointer tmp = child;
             tmp->color = tmp->parent->color;
             while (tmp->left || tmp->right)
@@ -712,15 +707,12 @@ namespace ft
                 else if (tmp->right)
                     tmp = tmp->right;
                 tmp->color = tmp->parent->color;
-            }
-            // child->color = black;
-            
+            }   
             child->parent = node->parent;         
             if (node->parent->left == node)
                 node->parent->left = child;
             else
                 node->parent->right = child;
-            // node->parent = NULL;
             return child;
         }
 

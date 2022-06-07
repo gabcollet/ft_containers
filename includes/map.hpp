@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:45 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/04 17:12:40 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 15:18:05 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <iterator>
 #include <algorithm>
 #include <stdexcept>
-#include "iterator.hpp"
 #include "rb_tree_iterator.hpp"
 #include "reverse_iterator.hpp"
 #include "pair.hpp"
@@ -278,7 +277,7 @@ namespace ft
             return _tree.upper_bound(k);
         }
         
-        //* ============================= Lookup ==============================
+        //* ============================ Observer =============================
 
         key_compare key_comp() const {return _comp;}
 
