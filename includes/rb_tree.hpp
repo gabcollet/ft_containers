@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:39:04 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/06 19:39:14 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/07 12:52:42 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,20 +153,26 @@ namespace ft
             if (node->left && node->right)
             {
                 exchange_node(node, minValueNode(node->left));
-                if (node->left)
-                    node = copyBranch(node, LEFT);
+                if (node->left){
+                    node_pointer tmp = copyBranch(node, LEFT);
+                    fixdelete(tmp);
+                }
+                fixdelete(node);
             }
             //case with one child
             else if (node->left || node->right)
             {
+                node_pointer tmp;
                 if (node->left)
-                    node = copyBranch(node, LEFT);
+                    tmp = copyBranch(node, LEFT);
                 else
-                    node = copyBranch(node, RIGHT);
+                    tmp = copyBranch(node, RIGHT);
+                fixdelete(tmp);
             }
+            else
             //if there is a sister fix for rbtree
-            if ((node == node->parent->right && node->parent->left) ||
-                (node == node->parent->left && node->parent->right))
+            // if ((node == node->parent->right && node->parent->left) ||
+            //     (node == node->parent->left && node->parent->right))
                 fixdelete(node);
             remove_node(node);
             return true;
@@ -323,13 +329,13 @@ namespace ft
                     _node_alloc.deallocate(_endN, 1);
                     _endN = NULL;
                 }
-                else if (oldN->parent->left == oldN)
+                else if (oldN->parent && oldN->parent->left == oldN)
                     oldN->parent->left = NULL; 
-                else if (oldN->parent->right == oldN)
+                else if (oldN->parent && oldN->parent->right == oldN)
                     oldN->parent->right = NULL;
             }
             //case with one child
-            else if (oldN->parent->left == oldN && 
+            else if ( oldN->parent->left == oldN && 
                 oldN->left == NULL && oldN->right == NULL)
                 oldN->parent->left = NULL;
                 
@@ -451,6 +457,9 @@ namespace ft
 
         void fixdelete(node_pointer node)
         {
+            if ((node == node->parent->right && node->parent->left == NULL) ||
+                (node == node->parent->left && node->parent->right == NULL))
+                return;
             //https://algorithmtutor.com/Data-Structures/Tree/Red-Black-Trees/
             while (node != _rootN && node->color == black){
                 //if node is left child
@@ -680,31 +689,39 @@ namespace ft
 
         node_pointer copyBranch(node_pointer node, bool side)
         {
-            node_pointer tmp = node;
-            if (side == RIGHT)
-            {
-                while (tmp->right)
-                    exchange_node(tmp, tmp->right);
-        //! valider si ce tmp la va a gauche ou droite??
-                // if (tmp->left)
-                // {
-                //     tmp->parent->left = tmp->left;
-                //     tmp->left = NULL;
-                // }
-                tmp->parent->right = NULL;
+            node_pointer child;
+            if (side == RIGHT){
+                child = node->right;
+                node->right = NULL;
             }
-            if (side == LEFT)
-            {
-                while (tmp->left)
-                    exchange_node(tmp, tmp->left);
-                // if (tmp->right)
-                // {
-                //     tmp->parent->right = tmp->right;
-                //     tmp->right = NULL;
-                // }
-                tmp->parent->left = NULL;
+            else{
+                child = node->left;
+                node->left = NULL;
             }
-            return tmp;
+            if (_rootN == node)
+                _rootN = child; 
+           
+            // fonction pour transferer les couleurs
+            //! le child right est pas sence avoir de child left
+            node_pointer tmp = child;
+            tmp->color = tmp->parent->color;
+            while (tmp->left || tmp->right)
+            {
+                if (tmp->left)
+                    tmp = tmp->left;
+                else if (tmp->right)
+                    tmp = tmp->right;
+                tmp->color = tmp->parent->color;
+            }
+            // child->color = black;
+            
+            child->parent = node->parent;         
+            if (node->parent->left == node)
+                node->parent->left = child;
+            else
+                node->parent->right = child;
+            // node->parent = NULL;
+            return child;
         }
 
         void _printTree(node_pointer root, std::string indent, bool last) 

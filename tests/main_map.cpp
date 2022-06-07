@@ -11,7 +11,7 @@ int main() {
 	
     //* ========================= RBTree test =========================
 
-	/* ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
+	ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
 	ft::rb_tree_iterator<int> it;
 	srand(345);
 	for (int i = 0; i < 100; i++){
@@ -48,7 +48,7 @@ int main() {
 	// bst.deleteNode(80);
 	// bst.deleteNode(15);
 
-	bst.treePrint(); */
+	bst.treePrint();
 
 	//* ========================= Constructor Test =========================
 
