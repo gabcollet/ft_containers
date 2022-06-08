@@ -1,4 +1,5 @@
 #include "map.hpp"
+#include <map>
 #include "pair.hpp"
 #include "rb_tree.hpp"
 #include "rb_tree_iterator.hpp"
@@ -11,7 +12,7 @@ int main() {
 	
     //* ========================= RBTree test =========================
 
-	ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
+	/* ft::rb_tree<std::less<int>, int, std::allocator<int> > bst;
 	ft::rb_tree_iterator<int> it;
 	srand(345);
 	for (int i = 0; i < 5000; i++){
@@ -48,19 +49,19 @@ int main() {
 	// bst.deleteNode(80);
 	// bst.deleteNode(15);
 
-	bst.treePrint();
+	bst.treePrint(); */
 
 	//* ========================= Constructor Test =========================
 
-/* 	ft::map<int, std::string> m1;
-	ft::map<int, std::string>::iterator it;	
+	NAMESPACE::map<int, std::string> m1;
+	NAMESPACE::map<int, std::string>::iterator it;	
 
 	// ft::pair<int, std::string> p1(1, "allo");
 	// ft::pair<int, std::string> p1(1, "allo");
 	// ft::pair<int, std::string> = ft::make_pair(1, "allo");
 
 	// std::cout << std::boolalpha << m1.empty() << std::endl;
-	m1.insert(ft::make_pair(1, "allo"));
+	m1.insert(NAMESPACE::make_pair(1, "allo"));
 	it = m1.begin();
 	// std::cout << m1.erase(1) << std::endl;
 	// m1.erase(it);
@@ -74,18 +75,19 @@ int main() {
 	--it;
 	// --it;
 	// std::cout << it->second << std::endl; 
-	ft::pair<int, std::string> p(5, "test");
+	NAMESPACE::pair<int, std::string> p(5, "test");
 	m1.insert(it, p);
 
 	// m1.erase(m1.begin(), m1.end());
 	// std::cout << m1.find(3)->second << std::endl;
-	const ft::map<int, std::string> m2 = m1;
+	const NAMESPACE::map<int, std::string> m2 = m1;
 	// std::cout << m2.at(3) << std::endl;
 	std::cout << m1.size() << std::endl;
 	std::cout << m1.count(4) << std::endl;
 	std::cout << m1.lower_bound(2)->first << std::endl; 
-	std::cout << m1.upper_bound(7)->first << std::endl; 
-	// std::cout << m1.max_size() << std::endl; */
+	std::cout << m1.upper_bound(5)->first << std::endl; 
+
+	// std::cout << m1.max_size() << std::endl;
 
 	//* ========================= Swap Test =========================
 

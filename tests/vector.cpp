@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_vector.cpp                                    :+:      :+:    :+:   */
+/*   vector.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/06 15:39:42 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/08 17:10:53 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "../includes/vector.hpp"
 
 template<typename T>
-void printVector(const ft::vector<T>& vector) {
+void printVector(const NAMESPACE::vector<T>& vector) {
     for (size_t i = 0; i < vector.size(); i++)
         std::cout << vector[i] << std::endl;
 
@@ -41,23 +41,23 @@ int main() {
     //* ======================= Is_integral tests =======================
     /* std::cout << std::boolalpha;
     std::cout << "is_integral:" << std::endl;
-    std::cout << "char: " << ft::is_integral<char>::value << std::endl;
-    std::cout << "int: " << ft::is_integral<int>::value << std::endl;
-    std::cout << "float: " << ft::is_integral<float>::value << std::endl; */
+    std::cout << "char: " << NAMESPACE::is_integral<char>::value << std::endl;
+    std::cout << "int: " << NAMESPACE::is_integral<int>::value << std::endl;
+    std::cout << "float: " << NAMESPACE::is_integral<float>::value << std::endl; */
 
     //* ======================= Input iterator constructor tests =======================
 //    std::istringstream commetuveux("string");
 //    std::istreambuf_iterator<char> it(commetuveux),end;
-//	ft::vector<char> vector3(it, end);
+//	NAMESPACE::vector<char> vector3(it, end);
 //    printVector(vector3);
 
     //* ======================= Constructor tests =======================
-//    ft::vector<std::string> vector;
-//     ft::vector<int> vector2 (5);
-//    ft::vector<std::string> vector4;
+//    NAMESPACE::vector<std::string> vector;
+//     NAMESPACE::vector<int> vector2 (5);
+//    NAMESPACE::vector<std::string> vector4;
 
-//	ft::vector<std::string> vector_fill(5, "hello");
-//    ft::vector<int> vector_range2(5, 3);
+//	NAMESPACE::vector<std::string> vector_fill(5, "hello");
+//    NAMESPACE::vector<int> vector_range2(5, 3);
 
 //     //* ======================= Method tests =======================
 //    vector.push_back("hello");
@@ -76,7 +76,7 @@ int main() {
 //    vector.push_back("!");
 //    vector.push_back("!");
    
-//	ft::vector<std::string> vector_copy(vector);
+//	NAMESPACE::vector<std::string> vector_copy(vector);
 //
 //    vector2.push_back(1);
 //    vector2.push_back(2);
@@ -85,7 +85,7 @@ int main() {
 
     // int i = 0;
 
-    // ft::vector<int>::reverse_iterator rit = vector2.rbegin();
+    // NAMESPACE::vector<int>::reverse_iterator rit = vector2.rbegin();
     // for (; rit!= vector2.rend(); ++rit)
     //     *rit = ++i;
     // printVector(vector2);
@@ -101,7 +101,7 @@ int main() {
 //    vector2.front() += vector2.back();
 //    std::cout << vector2.at(0) << std::endl;
 
-//    ft::vector<std::string>::iterator it;
+//    NAMESPACE::vector<std::string>::iterator it;
 //    vector4.assign(vector.begin() + 1, vector.end());
 //    vector.assign(5, "hello");
 //    vector4.reserve(100);
@@ -112,7 +112,7 @@ int main() {
 //    printVector(vector4);
 //    printVector(vector2);
 //    printVector(vector_fill);
-//    ft::vector<std::string> vector_range(&vector[0], &vector[3]);
+//    NAMESPACE::vector<std::string> vector_range(&vector[0], &vector[3]);
 //    printVector(vector_range);
 //    printVector(vector_copy);
 //    printVector(vector_range2);
@@ -120,14 +120,14 @@ int main() {
 
     //* ======================= Assign tests =======================
 //    {
-//        ft::vector<int> first;
-//        ft::vector<int> second;
-//        ft::vector<int> third;
+//        NAMESPACE::vector<int> first;
+//        NAMESPACE::vector<int> second;
+//        NAMESPACE::vector<int> third;
 //
 //        first.assign(7, 100);             // 7 ints with a value of 100
 //
 //
-//        ft::vector<int>::iterator it;
+//        NAMESPACE::vector<int>::iterator it;
 //        it = first.begin() + 1;
 //
 //        second.assign(it, first.end() - 1); // the 5 central values of first
@@ -139,7 +139,7 @@ int main() {
 //        std::cout << "Size of second: " << int(second.size()) << '\n';
 //        std::cout << "Size of third: " << int(third.size()) << '\n';
 //
-//        ft::vector<char> characters;
+//        NAMESPACE::vector<char> characters;
 //
 //        characters.assign(5, 'a');
 //        printVector(characters);
@@ -151,23 +151,23 @@ int main() {
 
     //* ======================= Operator = tests =======================
 
-//    ft::vector<int> foo (3,0);
-//    ft::vector<int> bar (5,0);
+//    NAMESPACE::vector<int> foo (3,0);
+//    NAMESPACE::vector<int> bar (5,0);
 //
 //    bar = foo;
-//    foo = ft::vector<int>();
+//    foo = NAMESPACE::vector<int>();
 //
 //    std::cout << "Size of foo: " << int(foo.size()) << '\n';
 //    std::cout << "Size of bar: " << int(bar.size()) << '\n';
 
-/*ft::vector<int> vec;
-ft::vector<int>::iterator x = vec.begin();
-    ft::vector<int>::const_iterator y = x;*/
+/*NAMESPACE::vector<int> vec;
+NAMESPACE::vector<int>::iterator x = vec.begin();
+    NAMESPACE::vector<int>::const_iterator y = x;*/
 
     // *======================= Insert tests =======================
     
-   /* ft::vector<int> myvector (3,100);
-   ft::vector<int>::iterator it;
+   /* NAMESPACE::vector<int> myvector (3,100);
+   NAMESPACE::vector<int>::iterator it;
 
    it = myvector.begin();
    it = myvector.insert ( it , 200 );
@@ -177,7 +177,7 @@ ft::vector<int>::iterator x = vec.begin();
    myvector.insert (it,2,300);
 
    it = myvector.begin();
-   ft::vector<int> anothervector (2,400);
+   NAMESPACE::vector<int> anothervector (2,400);
    myvector.insert (it+2,anothervector.begin(),anothervector.end());
 
    int myarray [] = { 501,502,503 };
@@ -191,7 +191,7 @@ ft::vector<int>::iterator x = vec.begin();
 
     // *======================= Pop_back tests =======================
 
-    /* ft::vector<int> myvector;
+    /* NAMESPACE::vector<int> myvector;
     int sum (0);
     myvector.push_back (100);
     myvector.push_back (200);
@@ -206,8 +206,8 @@ ft::vector<int>::iterator x = vec.begin();
     std::cout << "The elements of myvector add up to " << sum << '\n'; */
 
     // *======================= Resize tests =======================
-    /* ft::vector<int> vector;
-    ft::vector<int>::iterator it;
+    /* NAMESPACE::vector<int> vector;
+    NAMESPACE::vector<int>::iterator it;
 
     it = vector.begin();
     vector.resize(4, 10);
@@ -218,11 +218,11 @@ ft::vector<int>::iterator x = vec.begin();
 
     // *======================= Swap tests =======================
 
-/*     ft::vector<int> foo (3,100);   // three ints with a value of 100
-    ft::vector<int> bar (5,200);   // five ints with a value of 200
+/*     NAMESPACE::vector<int> foo (3,100);   // three ints with a value of 100
+    NAMESPACE::vector<int> bar (5,200);   // five ints with a value of 200
 
     // foo.swap(bar);
-    ft::swap(foo, bar);
+    NAMESPACE::swap(foo, bar);
 
     std::cout << "foo contains:";
     for (unsigned i=0; i<foo.size(); i++)
@@ -238,8 +238,8 @@ ft::vector<int>::iterator x = vec.begin();
 
     // *================== Relation Operator tests =====================
 
-   /*  ft::vector<int> foo (3,100);   // three ints with a value of 100
-    ft::vector<int> bar (2,200);   // two ints with a value of 200
+   /*  NAMESPACE::vector<int> foo (3,100);   // three ints with a value of 100
+    NAMESPACE::vector<int> bar (2,200);   // two ints with a value of 200
 
     if (foo==bar) std::cout << "foo and bar are equal\n";
     if (foo!=bar) std::cout << "foo and bar are not equal\n";
@@ -251,7 +251,7 @@ ft::vector<int>::iterator x = vec.begin();
 
     // *================== Test a max =====================
     
-   /*  ft::vector<int> vec;
+   /*  NAMESPACE::vector<int> vec;
 
     std::vector<int> vec2;
 
@@ -263,7 +263,7 @@ ft::vector<int>::iterator x = vec.begin();
     std::cout << "\nSTD_VEC BEFORE Insert ---> Capacity: " << vec2.capacity() << std::endl;
     std::cout << "FT_VEC BEFORE Insert ---> Capacity: " << vec.capacity() << std::endl;
 
-    ft::vector<int>::iterator it = vec.begin();
+    NAMESPACE::vector<int>::iterator it = vec.begin();
     std::vector<int>::iterator it2 = vec2.begin();
 
     vec.insert(it, 4, 42);
@@ -273,7 +273,7 @@ ft::vector<int>::iterator x = vec.begin();
     std::cout << "FT_VEC AFTER Insert ---> Capacity: " << vec.capacity() << std::endl;
     // printVector(vec); */
 
-    ft::vector<std::string> v;
+    NAMESPACE::vector<std::string> v;
     // double s_double[32] = {3.1416};
     // size_t s_size = 32;
     // double b_double[64] = {123.456};
