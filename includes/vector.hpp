@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/06 15:59:05 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/09 15:22:18 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ namespace ft
                 _alloc.deallocate(_start, capacity());
         }
 
-        //assignement operator
+        //assignment operator
         vector& operator= (const vector& x)
         {
             if (&x == this || x.size() == 0)
@@ -200,11 +200,9 @@ namespace ft
         void assign (InputIterator first,
                      typename enable_if<!is_integral<InputIterator>::value, InputIterator>::_type last)
         {
-            clear();
-            if (_start != NULL)
-                _alloc.deallocate(_start, capacity());
             typedef typename iterator_traits<InputIterator>::iterator_category category;
-            _range_construct(first, last, category());
+            _range_assign(first, last, category());
+  
         }
 
         void assign (size_type n, const value_type& val)
@@ -339,6 +337,33 @@ namespace ft
             for (; first != last; ++first, (void)++position){
                 _alloc.construct(position, *first);
                 _end++;
+            }
+        }
+
+        template < typename InputIterator >
+        void _range_assign(InputIterator first, InputIterator last, std::input_iterator_tag)
+        {
+            clear();
+            for (; first != last; ++first)
+                push_back(*first);
+        }
+
+        template <typename ForwardIterator>
+        void _range_assign(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag)
+        {
+            const size_type n = std::distance(first, last);
+
+            if (n < size()) 
+            {
+                iterator it = std::copy(first, last, begin());
+                erase(it, end());
+            } 
+            else 
+            {
+                ForwardIterator it = first;
+                std::advance(it, size());
+                std::copy(first, it, begin());
+                insert(end(), it, last);
             }
         }
         

@@ -8,6 +8,10 @@
 #include <iterator>
 #include <memory>
 
+#ifndef NAMESPACE
+#define NAMESPACE ft
+#endif
+
 int main() {
 	
     //* ========================= RBTree test =========================

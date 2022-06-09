@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/08 17:10:53 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/09 16:41:08 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,15 @@
 #include <sstream>
 #include "../includes/vector.hpp"
 
+#ifndef NAMESPACE
+#define NAMESPACE ft
+#endif
+
 template<typename T>
 void printVector(const NAMESPACE::vector<T>& vector) {
     for (size_t i = 0; i < vector.size(); i++)
-        std::cout << vector[i] << std::endl;
-
+        std::cout << vector[i] << " ";
+    std::cout << std::endl;
     std::cout << "-----------------------------------------------" << std::endl;
 }
 

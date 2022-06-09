@@ -6,14 +6,14 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/06/08 17:07:26 by gcollet          ###   ########.fr        #
+#    Updated: 2022/06/09 17:04:53 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 			=	ft_containers
 
 INC_PATH		=	includes/
-OBJS_PATH		=	obj/
+OBJS_PATH		=	tests/obj/
 OUTPUT_PATH		=	tests/output/
 
 RED				=	\033[31;1m
@@ -28,7 +28,7 @@ NAMESPACE		=	ft
 
 RM				=	rm -rf
 
-SRCS_FILES		=	map.cpp
+SRCS_FILES		=	main.cpp
 FT_OUTPUT		=	$(OUTPUT_PATH)ft.out
 STD_OUTPUT		= 	$(OUTPUT_PATH)std.out
 DIFF_OUTPUT   	=	$(OUTPUT_PATH)diff.out
@@ -61,6 +61,7 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 	$(RM) $(OUTPUT_PATH)
+	$(RM) err.log
 	echo "$(RED) FCLEAN DONE $(END)\\n"
 
 re: fclean all
@@ -75,7 +76,7 @@ test: fclean $(NAME)
 	./$(NAME) > $(FT_OUTPUT)
 	diff -u $(FT_OUTPUT) $(STD_OUTPUT) > $(DIFF_OUTPUT) || exit 0
 	@if [ -s $(DIFF_OUTPUT) ]; then\
-		echo "$(RED)======TEST FAILED======$(END)";\
+		echo "$(RED)======TEST FAILED======$(END) (Check tests/output/diff.out for more info)";\
 	else\
 		echo "$(GREEN)======TEST SUCCESS======$(END)\n";\
 	fi
