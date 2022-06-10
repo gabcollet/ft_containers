@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/06/10 12:00:11 by gcollet          ###   ########.fr        #
+#    Updated: 2022/06/10 14:58:44 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,9 @@ fclean: clean
 re: fclean all
 
 redebug: fclean debug
+
+star-wars:
+	telnet towel.blinkenlights.nl
 
 # test: NAMESPACE = std
 # test: fclean $(NAME)
