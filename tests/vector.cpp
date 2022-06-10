@@ -5,306 +5,245 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/07 21:08:40 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/09 16:41:08 by gcollet          ###   ########.fr       */
+/*   Created: 2022/06/09 11:02:03 by gcollet           #+#    #+#             */
+/*   Updated: 2022/06/10 11:24:30 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include <string>
-#include <istream>
-#include <memory>
-#include <vector>
-#include <iosfwd>
 #include <sstream>
-#include "../includes/vector.hpp"
+#include <limits>
+
+#include "vector.hpp"
+#include <vector>
 
 #ifndef NAMESPACE
 #define NAMESPACE ft
 #endif
 
 template<typename T>
-void printVector(const NAMESPACE::vector<T>& vector) {
+void printVector(const NAMESPACE::vector<T>& vector, int line) {
+    std::cout << "line: " << line << std::endl;
     for (size_t i = 0; i < vector.size(); i++)
         std::cout << vector[i] << " ";
     std::cout << std::endl;
-    std::cout << "-----------------------------------------------" << std::endl;
+    std::cout << "----------------------------------------------------------------------" << std::endl;
 }
 
-template <typename Iter>
-void print_range(Iter first, Iter last)
+int main()
 {
-    for (Iter it = first; it != last; ++it) {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
-}
-
-int main() {
-
-    //* ======================= Is_integral tests =======================
-    /* std::cout << std::boolalpha;
-    std::cout << "is_integral:" << std::endl;
-    std::cout << "char: " << NAMESPACE::is_integral<char>::value << std::endl;
-    std::cout << "int: " << NAMESPACE::is_integral<int>::value << std::endl;
-    std::cout << "float: " << NAMESPACE::is_integral<float>::value << std::endl; */
-
-    //* ======================= Input iterator constructor tests =======================
-//    std::istringstream commetuveux("string");
-//    std::istreambuf_iterator<char> it(commetuveux),end;
-//	NAMESPACE::vector<char> vector3(it, end);
-//    printVector(vector3);
-
-    //* ======================= Constructor tests =======================
-//    NAMESPACE::vector<std::string> vector;
-//     NAMESPACE::vector<int> vector2 (5);
-//    NAMESPACE::vector<std::string> vector4;
-
-//	NAMESPACE::vector<std::string> vector_fill(5, "hello");
-//    NAMESPACE::vector<int> vector_range2(5, 3);
-
-//     //* ======================= Method tests =======================
-//    vector.push_back("hello");
-//    vector.push_back(" ");
-//    vector.push_back("world");
-//    vector.push_back("!");
-//    vector.push_back("!");
-//
-//    vector.clear();
-//    vector.erase(vector.begin() + 1);
-//    vector.erase(vector.begin() + 1, vector.end() - 1);
-
-//    vector.push_back("hello");
-//    vector.push_back(" ");
-//    vector.push_back("world");
-//    vector.push_back("!");
-//    vector.push_back("!");
-   
-//	NAMESPACE::vector<std::string> vector_copy(vector);
-//
-//    vector2.push_back(1);
-//    vector2.push_back(2);
-//    vector2.push_back(3);
-// 	vector2.push_back(4);
-
-    // int i = 0;
-
-    // NAMESPACE::vector<int>::reverse_iterator rit = vector2.rbegin();
-    // for (; rit!= vector2.rend(); ++rit)
-    //     *rit = ++i;
-    // printVector(vector2);
-
-//    int* p = vector2.data();
-//    *p = 10;
-//    ++p;
-//    *p = 20;
-//    p[2] = 100;
-//    printVector(vector2);
-//
-//    std::cout << vector2.at(0) << std::endl;
-//    vector2.front() += vector2.back();
-//    std::cout << vector2.at(0) << std::endl;
-
-//    NAMESPACE::vector<std::string>::iterator it;
-//    vector4.assign(vector.begin() + 1, vector.end());
-//    vector.assign(5, "hello");
-//    vector4.reserve(100);
-//    vector2.assign(5, 42);
-//    std::cout << vector.at(0) << std::endl;
-//
-//    printVector(vector);
-//    printVector(vector4);
-//    printVector(vector2);
-//    printVector(vector_fill);
-//    NAMESPACE::vector<std::string> vector_range(&vector[0], &vector[3]);
-//    printVector(vector_range);
-//    printVector(vector_copy);
-//    printVector(vector_range2);
-
-
-    //* ======================= Assign tests =======================
-//    {
-//        NAMESPACE::vector<int> first;
-//        NAMESPACE::vector<int> second;
-//        NAMESPACE::vector<int> third;
-//
-//        first.assign(7, 100);             // 7 ints with a value of 100
-//
-//
-//        NAMESPACE::vector<int>::iterator it;
-//        it = first.begin() + 1;
-//
-//        second.assign(it, first.end() - 1); // the 5 central values of first
-//
-//        int myints[] = {1776, 7, 4};
-//        third.assign(myints, myints + 3);   // assigning from array.
-//
-//        std::cout << "Size of first: " << int(first.size()) << '\n';
-//        std::cout << "Size of second: " << int(second.size()) << '\n';
-//        std::cout << "Size of third: " << int(third.size()) << '\n';
-//
-//        NAMESPACE::vector<char> characters;
-//
-//        characters.assign(5, 'a');
-//        printVector(characters);
-//
-//        const std::string extra(6, 'b');
-//        characters.assign(extra.begin(), extra.end());
-//        printVector(characters);
-//    }
-
-    //* ======================= Operator = tests =======================
-
-//    NAMESPACE::vector<int> foo (3,0);
-//    NAMESPACE::vector<int> bar (5,0);
-//
-//    bar = foo;
-//    foo = NAMESPACE::vector<int>();
-//
-//    std::cout << "Size of foo: " << int(foo.size()) << '\n';
-//    std::cout << "Size of bar: " << int(bar.size()) << '\n';
-
-/*NAMESPACE::vector<int> vec;
-NAMESPACE::vector<int>::iterator x = vec.begin();
-    NAMESPACE::vector<int>::const_iterator y = x;*/
-
-    // *======================= Insert tests =======================
-    
-   /* NAMESPACE::vector<int> myvector (3,100);
-   NAMESPACE::vector<int>::iterator it;
-
-   it = myvector.begin();
-   it = myvector.insert ( it , 200 );
-
-   // "it" no longer valid, get a new one:
-   it = myvector.begin();
-   myvector.insert (it,2,300);
-
-   it = myvector.begin();
-   NAMESPACE::vector<int> anothervector (2,400);
-   myvector.insert (it+2,anothervector.begin(),anothervector.end());
-
-   int myarray [] = { 501,502,503 };
-   myvector.insert (myvector.begin(), myarray, myarray+3);
-
-   // printVector(myvector);
-   std::cout << "myvector contains:";
-   for (it=myvector.begin(); it<myvector.end(); it++)
-       std::cout << ' ' << *it;
-   std::cout << '\n'; */
-
-    // *======================= Pop_back tests =======================
-
-    /* NAMESPACE::vector<int> myvector;
-    int sum (0);
-    myvector.push_back (100);
-    myvector.push_back (200);
-    myvector.push_back (300);
-
-    while (!myvector.empty())
+    std::cout << "||==================================================================||" << std::endl;
+    std::cout << "||                          -VECTOR TEST-                           ||" << std::endl;
+    std::cout << "||==================================================================||" << std::endl;
     {
-        sum+=myvector.back();
-        myvector.pop_back();
+        std::cout << std::endl;
+        std::cout << "||========================== Constructor ===========================||" << std::endl;
+        //default constructor
+        NAMESPACE::vector<int> vector;
+        printVector(vector, __LINE__);
+        //empty constructor
+        NAMESPACE::vector<std::string, std::allocator<std::string> > empty_vec;
+        printVector(empty_vec, __LINE__);
+        //fill constructor
+        NAMESPACE::vector<int> fill_vector(5, 42);
+        printVector(fill_vector, __LINE__);
+        //range constructor
+        for (int i = 0; i < 10; i++)
+            vector.push_back(i);
+        NAMESPACE::vector<int>::iterator it = vector.begin();
+        NAMESPACE::vector<int>::iterator ite = vector.end();
+        NAMESPACE::vector<int> range_vector(it, ite);
+        printVector(range_vector, __LINE__);
+        //copy constructor
+        NAMESPACE::vector<int> copy_vector(range_vector);
+        printVector(copy_vector, __LINE__);
+        std::cout << std::endl;
+        std::cout << "||======================= Assignment operator ======================||" << std::endl;
+        std::cout << "before assigment :" << std::endl;
+        printVector(copy_vector, __LINE__);
+        copy_vector = fill_vector;
+        std::cout << "after assigment :" << std::endl;
+        printVector(copy_vector, __LINE__);
     }
-
-    std::cout << "The elements of myvector add up to " << sum << '\n'; */
-
-    // *======================= Resize tests =======================
-    /* NAMESPACE::vector<int> vector;
-    NAMESPACE::vector<int>::iterator it;
-
-    it = vector.begin();
-    vector.resize(4, 10);
-    std::cout << "myvector contains:";
-    for (it=vector.begin(); it<vector.end(); it++)
-        std::cout << ' ' << *it;
-    std::cout << '\n'; */
-
-    // *======================= Swap tests =======================
-
-/*     NAMESPACE::vector<int> foo (3,100);   // three ints with a value of 100
-    NAMESPACE::vector<int> bar (5,200);   // five ints with a value of 200
-
-    // foo.swap(bar);
-    NAMESPACE::swap(foo, bar);
-
-    std::cout << "foo contains:";
-    for (unsigned i=0; i<foo.size(); i++)
-        std::cout << ' ' << foo[i];
-    std::cout << '\n';
-
-    std::cout << "bar contains:";
-    for (unsigned i=0; i<bar.size(); i++)
-        std::cout << ' ' << bar[i];
-    std::cout << '\n'; */
-
-    
-
-    // *================== Relation Operator tests =====================
-
-   /*  NAMESPACE::vector<int> foo (3,100);   // three ints with a value of 100
-    NAMESPACE::vector<int> bar (2,200);   // two ints with a value of 200
-
-    if (foo==bar) std::cout << "foo and bar are equal\n";
-    if (foo!=bar) std::cout << "foo and bar are not equal\n";
-    if (foo< bar) std::cout << "foo is less than bar\n";
-    if (foo> bar) std::cout << "foo is greater than bar\n";
-    if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
-    if (foo>=bar) std::cout << "foo is greater than or equal to bar\n"; */
-
-
-    // *================== Test a max =====================
-    
-   /*  NAMESPACE::vector<int> vec;
-
-    std::vector<int> vec2;
-
-    for (size_t i = 1; i < 14; ++i) {
-        vec.push_back(i);
-        vec2.push_back(i);
+    {
+        std::cout << std::endl;
+        std::cout << "||========================== Get allocator =========================||" << std::endl;
+        NAMESPACE::vector<int> vector;
+        int *p;
+        unsigned int i;
+        p = vector.get_allocator().allocate(5);
+        for (i = 0; i < 5; i++) 
+            vector.get_allocator().construct(&p[i],i);
+        std::cout << "line: " << __LINE__ << std::endl;
+        std::cout << "The allocated array contains:";
+        for (i = 0; i < 5; i++) 
+            std::cout << ' ' << p[i];
+        std::cout << std::endl;
+        for (i=0; i<5; i++) 
+            vector.get_allocator().destroy(&p[i]);
+        vector.get_allocator().deallocate(p,5);
     }
-    
-    std::cout << "\nSTD_VEC BEFORE Insert ---> Capacity: " << vec2.capacity() << std::endl;
-    std::cout << "FT_VEC BEFORE Insert ---> Capacity: " << vec.capacity() << std::endl;
-
-    NAMESPACE::vector<int>::iterator it = vec.begin();
-    std::vector<int>::iterator it2 = vec2.begin();
-
-    vec.insert(it, 4, 42);
-    vec2.insert(it2, 4, 42);
-
-    std::cout << "\nSTD_VEC AFTER Insert ---> Capacity: " << vec2.capacity() << std::endl;
-    std::cout << "FT_VEC AFTER Insert ---> Capacity: " << vec.capacity() << std::endl;
-    // printVector(vec); */
-
-    NAMESPACE::vector<std::string> v;
-    // double s_double[32] = {3.1416};
-    // size_t s_size = 32;
-    // double b_double[64] = {123.456};
-    // size_t b_size = 64;
-
-    // v.assign(b_double, b_double + b_size);
-    // v.assign(65, 1.234567);
-    // v.assign(65, 8765.234567);
-    // v.assign(s_double, s_double + s_size);
-
-    // std::istringstream str("1 2 3 4 5 6 7");
-    // std::istreambuf_iterator<char> it(str), end;
-    // v.assign(it, end);
-
-    v.resize(14, "HelloWorld");
-    print_range(v.begin(), v.end());
-
-    v.resize(6, "ABC");
-    print_range(v.begin(), v.end());
-
-    // v.resize(14, b_string[18]);
-
-    // v.resize(15, b_string[57]);
-
-    v.resize(64, "I-like-vectors");
-
-    // printVector(v);
-    
+    {
+        std::cout << std::endl;
+        std::cout << "||========================= Element access =========================||" << std::endl;
+        //non const
+        NAMESPACE::vector<int> vector;
+        for (int i = 0; i < 10; i++)
+            vector.push_back(i + 42);
+        printVector(vector, __LINE__);
+        std::cout << "Element at 2 is: " << vector.at(2) << std::endl;
+        std::cout << "Element at 9 is: " << vector.at(9) << std::endl;
+        std::cout << "Front element is: " << vector.front() << std::endl;
+        std::cout << "Back element is: " << vector.back() << std::endl;
+        std::cout << "Element [8] is: " << vector[8] << std::endl;
+        std::cout << "Element [0] is: " << vector[0] << std::endl;
+        int *p = vector.data();
+        *p = 12345;
+        std::cout << "After data(), element [0] is now: " << vector[0] << std::endl;
+        std::cout << std::endl;
+        std::cout << "----------------------------------------------------------------------" << std::endl;
+        //const
+        const NAMESPACE::vector<int> const_vector = vector;
+        printVector(const_vector, __LINE__);
+        std::cout << "Element at 2 is: " << const_vector.at(2) << std::endl;
+        std::cout << "Element at 9 is: " << const_vector.at(9) << std::endl;
+        std::cout << "Front element is: " << const_vector.front() << std::endl;
+        std::cout << "Back element is: " << const_vector.back() << std::endl;
+        std::cout << "Element [8] is: " << const_vector[8] << std::endl;
+        std::cout << "Element [0] is: " << const_vector[0] << std::endl;
+        const int *const_p = const_vector.data();
+        std::cout << "Const element [0] cannot be modified and it still: " << *const_p << std::endl;
+    }
+    {
+        std::cout << std::endl;
+        std::cout << "||============================ Iterators ===========================||" << std::endl;
+        //non const
+        NAMESPACE::vector<float> vector;
+        for (int i = 0; i < 10; i++)
+            vector.push_back(i + 3.1416 / i);
+        printVector(vector, __LINE__);
+        NAMESPACE::vector<float>::iterator it;
+        it = vector.begin();
+        std::cout << "Iterator begin is: " << *it << std::endl;
+        it = vector.end();
+        --it;
+        std::cout << "Iterator --end is: " << *it << std::endl;
+        std::cout << std::endl;
+        //const
+        NAMESPACE::vector<float>::const_iterator cit;
+        cit = vector.begin();
+        std::cout << "Const_iterator begin is: " << *cit << std::endl;
+        cit = vector.end();
+        --cit;
+        std::cout << "Const_iterator --end is: " << *cit << std::endl;
+        std::cout << std::endl;
+        //reverse non const
+        NAMESPACE::vector<float>::reverse_iterator rit;
+        rit = vector.rbegin();
+        std::cout << "Reverse iterator rbegin is: " << *rit << std::endl;
+        rit = vector.rend();
+        --rit;
+        std::cout << "Reverse iterator --rend is: " << *rit << std::endl;
+        std::cout << std::endl;
+        //reverse const
+        NAMESPACE::vector<float>::const_reverse_iterator rcit;
+        rcit = vector.rbegin();
+        std::cout << "Reverse const_iterator begin is: " << *rcit << std::endl;
+        rcit = vector.rend();
+        --rcit;
+        std::cout << "Reverse const_iterator --rend is: " << *rcit << std::endl;
+    }
+    {
+        std::cout << std::endl;
+        std::cout << "||============================ Capacity ============================||" << std::endl;
+        NAMESPACE::vector<std::string> vector;
+        printVector(vector, __LINE__);
+        std::cout << std::boolalpha;
+        std::cout << "Is empty?: " << vector.empty() << std::endl;
+        std::cout << std::endl;
+        vector.push_back("helloworld");
+        printVector(vector, __LINE__);
+        std::cout << "Is empty?: " << vector.empty() << std::endl;
+        vector.assign(42, "Hello");
+        printVector(vector, __LINE__);
+        std::cout << "Size is: " << vector.size() << std::endl;
+        std::cout << "Max size is: " << vector.max_size() << std::endl;
+        std::cout << "Capacity is: " << vector.capacity() << std::endl;
+        vector.push_back("world");
+        std::cout << "Capacity after push_back is: " << vector.capacity() << std::endl;
+        vector.reserve(10);
+        std::cout << "Capacity after invalid reserve: " << vector.capacity() << std::endl;
+        vector.reserve(100);
+        std::cout << "Capacity after valid reserve: " << vector.capacity() << std::endl;
+        vector.resize(50, "world");
+        printVector(vector, __LINE__);
+        std::cout << "Size after larger resize is: " << vector.size() << std::endl;
+        vector.resize(30, "world");
+        printVector(vector, __LINE__);
+        std::cout << "Size after smaller resize is: " << vector.size() << std::endl;
+    }
+    {
+        std::cout << std::endl;
+        std::cout << "||============================ Modifier ============================||" << std::endl;
+        NAMESPACE::vector<double> vector;
+        NAMESPACE::vector<double> vector2;
+        NAMESPACE::vector<double>::iterator it;
+        printVector(vector, __LINE__);
+        vector.assign(42, 42.42);
+        printVector(vector, __LINE__);
+        it = vector.begin();
+        vector.assign(it, it + 10);
+        printVector(vector, __LINE__);
+        vector.clear();
+        printVector(vector, __LINE__);
+        for (int i = 0; i < 15; i++)
+            vector.push_back(i + 42);
+        printVector(vector, __LINE__);
+        vector.pop_back();
+        printVector(vector, __LINE__);
+        vector.erase(vector.begin());
+        printVector(vector, __LINE__);
+        vector.erase(vector.begin(), vector.begin() + 5);
+        printVector(vector, __LINE__);
+        vector.insert(vector.begin() + 4, 11111.2);
+        printVector(vector, __LINE__);
+        vector.insert(vector.end(), 5, 42);
+        vector2 = vector;
+        printVector(vector, __LINE__);
+        vector.insert(vector.begin(), vector.begin() + 3, vector.end() - 3);
+        printVector(vector, __LINE__);
+        std::cout << "Before swap: " << std::endl;
+        printVector(vector2, __LINE__);
+        vector2.swap(vector);
+        std::cout << "After swap: " << std::endl;
+        printVector(vector2, __LINE__);
+    }
+    {
+        std::cout << std::endl;
+        std::cout << "||============================ Operator ============================||" << std::endl;
+        NAMESPACE::vector<int> vector;
+        for (int i = 0; i < 5; i++)
+            vector.push_back(i);
+        std::cout << "Vector 1 contain: " << std::endl;
+        printVector(vector, __LINE__);
+        NAMESPACE::vector<int> vector2;
+        for (int i = 0; i < 5; i++)
+            vector2.push_back(i + 1);
+        std::cout << "Vector 2 contain: " << std::endl;
+        printVector(vector2, __LINE__);
+        std::cout << std::boolalpha;
+        std::cout << "V1 == V2?: " << (vector == vector2) << std::endl;
+        std::cout << "V1 != V2?: " << (vector != vector2) << std::endl;
+        std::cout << "V1 < V2?: " << (vector < vector2) << std::endl;
+        std::cout << "V1 <= V2?: " << (vector <= vector2) << std::endl;
+        std::cout << "V1 > V2?: " << (vector > vector2) << std::endl;
+        std::cout << "V1 >= V2?: " << (vector >= vector2) << std::endl;
+        std::cout << "Before swap: " << std::endl;
+        std::cout << std::endl;
+        printVector(vector2, __LINE__);
+        NAMESPACE::swap(vector, vector2);
+        std::cout << "After swap: " << std::endl;
+        printVector(vector2, __LINE__);
+    }
     return 0;
 }

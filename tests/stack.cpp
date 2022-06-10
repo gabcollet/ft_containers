@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_stack.cpp                                     :+:      :+:    :+:   */
+/*   stack.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 10:37:36 by gcollet           #+#    #+#             */
-/*   Updated: 2022/05/03 11:46:49 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/10 11:25:00 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include <sys/_types/_size_t.h>
-#include "../includes/stack.hpp"
+#include <sstream>
+#include <limits>
+
+#include "stack.hpp"
+#include <stack>
 
 void printStack(ft::stack<int> s)
 {

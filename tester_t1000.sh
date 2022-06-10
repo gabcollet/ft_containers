@@ -1,39 +1,77 @@
 #!/bin/bash
 
-# Verification for 2 arguments 
-# if [ "$#" -ne 2 ]; then
-#     echo "Need 2 parameters, got $#"
-#     exit 1
-# fi
+RED="\033[31;1m"
+YELLOW="\033[93;1m"
+GREEN="\033[32;1m"
+BLUE="\033[34;1m"
+END="\033[0m"
 
 # Create variables
 cppdir="tests"
 objdir="obj"
 outdir="tests/output"
+diffdir="tests/diff"
+logdir="tests/log"
 incdir="includes/"
 errlog="err.log"
 flags='-Wall -Werror -Wextra -std=c++98'
-
-# src_file_path="$PWD/$1"
-# run_file_path="$PWD/a.out"
-# in_file_path="$PWD/$2"
+container="$PWD/$1"
 
 # Remove the old dir
 if [ -d "$outdir" ]; then
     rm -rf $outdir
 fi
+if [ -d "$diffdir" ]; then
+    rm -rf $diffdir
+fi
+if [ -d "$logdir" ]; then
+    rm -rf $logdir
+fi
+if [ -f "$errlog" ]; then
+    rm $errlog
+fi
 
-# compile
 mkdir -p "$outdir"
-for f in "$cppdir"/*; do
+mkdir -p "$diffdir"
+mkdir -p "$logdir"
+
+print_output()
+{
+    b=$(echo $b | tr 'a-z' 'A-Z')
+    if [ -f "$outdir/ft_$b.out" ]; then
+        if [ -s "$diffdir/ft_$b.diff" ]; then
+            printf "$RED======TEST FAILED======= $b$END\n"
+            printf "(Check tests/output/diff.out for more info)\n";
+        else
+            printf "$GREEN======TEST SUCCESS====== $b$END\n";
+        fi
+    else
+        printf "$RED=========ERROR========== $b$END\n"
+        printf "(Check err.log for more info)\n";
+    fi
+}
+
+# Compile 2 binaries and compare the output
+compare_output()
+{
     b=$(basename "${f%.cpp}")
     printf '%s\n' "$b" >> "$errlog"
-    clang++ "$f" $flags -I"$incdir" -o "$outdir/$b.out" 2> "$errlog"
-done
+    clang++ "$f" $flags -DNAMESPACE=ft  -I"$incdir" -o "$outdir/ft_$b.out" 2>> "$errlog"
+    clang++ "$f" $flags -DNAMESPACE=std -I"$incdir" -o "$outdir/std_$b.out" 2>> "$errlog"
+    ./"$outdir/ft_$b.out" > "$logdir/ft_$b" 2>> "$errlog"
+    ./"$outdir/std_$b.out" > "$logdir/std_$b" 2>> "$errlog"
+    diff -u "$logdir/ft_$b" "$logdir/std_$b" > "$diffdir/ft_$b.diff"
+}
 
-
-
-# clang++ $src_file_path -o $run_file_path -std=c++98 -Wall -Wextra -Werror
-
-# run
-# $run_file_path < $in_file_path
+printf "\n"
+if [ "$#" -ne 1 ]; then
+    for f in "$cppdir"/*.cpp; do
+        compare_output
+        print_output
+    done
+else
+    f="$cppdir"/"$(basename $container)".cpp
+    compare_output
+    print_output
+fi
+printf "\n"

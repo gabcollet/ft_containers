@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/09 15:22:18 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/10 11:05:10 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,9 +371,15 @@ namespace ft
         void _range_insert (iterator position, InputIterator first, InputIterator last, 
                             std::input_iterator_tag)
         {
-            if (position == end())
-            for (; first != last; ++first)
-                push_back(*first);
+            if (position == end()){
+                for (; first != last; ++first)
+                    push_back(*first);
+            } 
+            else if (first != last) 
+            {
+                vector tmp(first, last);
+                insert(position, tmp.begin(), tmp.end());
+            }
         }
 
         template < typename ForwardIterator >
