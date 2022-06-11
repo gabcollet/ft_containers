@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:29:17 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/10 14:49:35 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/11 15:40:56 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,7 @@ int main()
         printMap(map, __LINE__);
         NAMESPACE::map<int, int> map2;
         for (int i = 0; i < 10; i++)
-            map2.insert(NAMESPACE::make_pair(i, i + 2));
+            map2.insert(NAMESPACE::make_pair(i + 1, i + 2));
         std::cout << "Map 2 contain: " << std::endl;
         printMap(map2, __LINE__);
         std::cout << std::boolalpha;

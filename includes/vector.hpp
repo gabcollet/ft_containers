@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 21:08:43 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/10 11:05:10 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/11 12:22:51 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,7 @@ namespace ft
         //destructor
         ~vector()
         {
-            clear();
-            if (_start != NULL)
-                _alloc.deallocate(_start, capacity());
+            _clear_vector();
         }
 
         //assignment operator
@@ -202,14 +200,11 @@ namespace ft
         {
             typedef typename iterator_traits<InputIterator>::iterator_category category;
             _range_assign(first, last, category());
-  
         }
 
         void assign (size_type n, const value_type& val)
         {
-            clear();
-            if (_start != NULL)
-                _alloc.deallocate(_start, capacity());
+            _clear_vector();
             _fill_construct(n, val);
         }
 
@@ -266,15 +261,30 @@ namespace ft
 
         void insert (iterator position, size_type n, const value_type& val)
         {
-            difference_type dist = std::distance(position.base(), _end);
-            if (size() + n > capacity())
-                reserve(capacity() + n);
-            pointer ptr_right = _end - dist;
-            _move_right((ptr_right + n), dist, (end() - dist));
-            for (size_type i = 0; i < n; i++){
-                _alloc.construct(ptr_right + i, val);
+            if (n <= 0)
+                return;
+            if (capacity() - size() < n) {
+                size_type new_cap = (!empty()) ? get_newcap(size() + n) : capacity() + n;
+                pointer new_start = _alloc.allocate(new_cap);
+                pointer new_end = _range_construct(new_start, _start, position.base());
+                new_end = _range_construct(new_end, new_end + n, val);
+                new_end = _range_construct(new_end, position.base(), _end);
+                _clear_vector();
+                _start = new_start;
+                _end = new_end;
+                _capacity = _start + new_cap;
+            } 
+            else 
+            {
+                iterator cpy_end = _move_right(position, n);
+                for (; position != cpy_end; ++position) {
+                    if (position.base() < _end) {
+                        *position = val;
+                    } else
+                        _alloc.construct(position.base(), val);
+                }
+                _end += n;
             }
-            _end += n;
         }
 
         template <typename InputIterator>
@@ -330,14 +340,19 @@ namespace ft
                 _end++;
             }
         }
+        
+        template <typename Iter>
+        pointer _range_construct(pointer dest, Iter start, Iter end) {
 
-        template < typename ForwardIterator >
-        void _range_construct (pointer position, ForwardIterator first, ForwardIterator last)
-        {
-            for (; first != last; ++first, (void)++position){
-                _alloc.construct(position, *first);
-                _end++;
-            }
+            for (; start != end; ++dest, (void)++start)
+                _alloc.construct(dest, *start);
+            return dest;
+        }
+
+        pointer _range_construct(pointer dest, const_pointer end, const_reference value) {
+            for (; dest != end; ++dest) 
+                _alloc.construct(dest, value);  
+            return dest;
         }
 
         template < typename InputIterator >
@@ -352,12 +367,11 @@ namespace ft
         void _range_assign(ForwardIterator first, ForwardIterator last, std::forward_iterator_tag)
         {
             const size_type n = std::distance(first, last);
-
             if (n < size()) 
             {
                 iterator it = std::copy(first, last, begin());
                 erase(it, end());
-            } 
+            }
             else 
             {
                 ForwardIterator it = first;
@@ -383,16 +397,34 @@ namespace ft
         }
 
         template < typename ForwardIterator >
-        void _range_insert (iterator position, ForwardIterator first, ForwardIterator last, 
+        void _range_insert (iterator pos, ForwardIterator first, ForwardIterator last, 
                             std::forward_iterator_tag)
         {
-            difference_type dist = std::distance(position.base(), _end);
-            difference_type n = std::distance(first, last);
-            if (size() + n > capacity())
-                reserve(capacity() + n);
-            pointer ptr_right = _end - dist;
-            _move_right(ptr_right + n, dist, (end() - dist));
-            _range_construct(ptr_right, first, last);
+            if (first == last)
+                return;
+            size_type n = std::distance(first, last);
+            if (capacity() - size() < n) {
+                size_type new_cap = (!empty()) ? get_newcap(size() + n) : capacity() + n;
+                pointer new_start = _alloc.allocate(new_cap);
+                pointer new_end = _range_construct(new_start, _start, pos.base());
+                new_end = _range_construct(new_end, first, last);
+                new_end = _range_construct(new_end, pos.base(), _end);
+                _clear_vector();
+                _start = new_start;
+                _end = new_end;
+                _capacity = _start + new_cap;
+            } 
+            else 
+            {
+                iterator cpy_end = _move_right(pos, n);
+                for (; first != last; ++first, ++pos) {
+                    if (pos < end()) {
+                        *pos = *first;
+                    } else
+                        _alloc.construct(pos.base(), *first);
+                }
+                _end += n;
+            }
         }
 
         void _fill_construct (size_type n, const value_type& val = value_type())
@@ -429,6 +461,42 @@ namespace ft
                 _alloc.destroy(tmp + i);
             }
             _alloc.deallocate(tmp, dist);
+        }
+
+        iterator _move_right(iterator& pos, size_type& n) 
+        {
+            iterator cpy = end() - 1;
+            iterator dest = cpy + n;
+            if (_start != _end) 
+            {
+                if (_end == _capacity)
+                    cpy = end();
+                for (; dest != pos && cpy >= pos; --cpy, --dest) 
+                {
+                    if (dest < end())
+                        *dest = *cpy;
+                    else
+                        _alloc.construct(dest.base(), *cpy);
+                }
+            }
+            return ++dest;
+        }
+
+        void _clear_vector()
+        {
+            clear();
+            if (_start != NULL)
+                _alloc.deallocate(_start, capacity());
+        }
+
+        size_type get_newcap(const size_type& total_elems) 
+        {
+            size_type new_cap = capacity();
+
+            if (new_cap >= max_size() / 2)
+                return max_size();
+
+            return std::max(total_elems, new_cap * 2);
         }
 	};
 

@@ -6,7 +6,7 @@
 #    By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/07 21:09:53 by gcollet           #+#    #+#              #
-#    Updated: 2022/06/10 14:58:44 by gcollet          ###   ########.fr        #
+#    Updated: 2022/06/11 15:47:32 by gcollet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ NAMESPACE		=	ft
 
 RM				=	rm -rf
 
-SRCS_FILES		=	map.cpp
+SRCS_FILES		=	set.cpp
 FT_OUTPUT		=	$(OUTPUT_PATH)ft.out
 STD_OUTPUT		= 	$(OUTPUT_PATH)std.out
 DIFF_OUTPUT   	=	$(OUTPUT_PATH)diff.out

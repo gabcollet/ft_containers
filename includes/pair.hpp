@@ -6,7 +6,7 @@
 /*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:37:05 by gcollet           #+#    #+#             */
-/*   Updated: 2022/06/01 13:15:43 by gcollet          ###   ########.fr       */
+/*   Updated: 2022/06/11 14:01:59 by gcollet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ namespace ft
     template <class T1, class T2>
     bool operator== (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
     { 
-        return lhs.first == rhs.first && lhs.second == rhs.second; 
+        return (lhs.first == rhs.first); 
     }
-
+    
     template <class T1, class T2>
     bool operator!= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
     { 
