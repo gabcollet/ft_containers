@@ -58,20 +58,19 @@ compare_output()
     printf '%s\n' "$b" >> "$errlog"
     clang++ "$f" $flags -DNAMESPACE=ft  -I"$incdir" -o "$outdir/ft_$b.out" 2>> "$errlog"
     clang++ "$f" $flags -DNAMESPACE=std -I"$incdir" -o "$outdir/std_$b.out" 2>> "$errlog"
-    ./"$outdir/ft_$b.out" > "$logdir/ft_$b" 2>> "$errlog"
-    ./"$outdir/std_$b.out" > "$logdir/std_$b" 2>> "$errlog"
-    diff -u "$logdir/ft_$b" "$logdir/std_$b" > "$diffdir/ft_$b.diff"
+    printf "$YELLOW========TIME FT========= $b$END\n"
+    time -p bash -c "for (( i=0; i<1000; i++ )); do ./"$outdir/ft_$b.out" > "$logdir/ft_$b"; done;"
+    printf "$YELLOW========TIME STD======== $b$END\n"
+    time -p bash -c "for (( i=0; i<1000; i++ )); do ./"$outdir/std_$b.out" > "$logdir/std_$b"; done;"
 }
 
 printf "\n"
 if [ "$#" -ne 1 ]; then
     for f in "$cppdir"/*.cpp; do
         compare_output
-        print_output
     done
 else
     f="$cppdir"/"$(basename $container)".cpp
     compare_output
-    print_output
 fi
 printf "\n"

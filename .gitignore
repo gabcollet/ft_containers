@@ -4,3 +4,4 @@ ft_containers.dSYM
 compile_flags.txt
 ft_containers-terminator/
 .DS_Store
+.gitignore
